@@ -11,14 +11,10 @@ CREATE TABLE vocabulaire (
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 )
 
-INSERT INTO vocabulaire (id,mot_fr,mot_en,note,modified,created -u) VALUES
+INSERT INTO vocabulaire (id,mot_fr,mot_en,note,CURRENT_TIMESTAMP) VALUES
 ("pharisiens", "pharisees"),
 ("juifs","Jews"),
 ("Flavius Josèphe","Flavius Josephus"),
 ("Gethsémané","Gethsemane")
-
-
-
-INSERT INTO vocabulaire(modified,created)
 
 
