@@ -7,128 +7,145 @@
    <!-- <link rel="stylesheet" href="styles.css"> -->
 
     <style type="text/css">
-  /*  @media (min-width:300px){  
-    
-    .tableau{
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        color: rgb(0, 0, 0);
-        font-family:Arial, Helvetica, sans-serif;
-        grid-template-columns: auto;
-        max-width: 100%;
+    @media (min-width:300px){  
+
+        .tableau{
+            display: flex;
+            flex-direction:row;
+            flex-wrap : wrap;
+            color: rgb(0, 0, 0);
+            font-family:Arial, Helvetica, sans-serif;
+            grid-template-columns: auto;
+            max-width: 100%;
 
 
-    }
-    .categories,.francais,.anglais,.notes{
-        display: flex;
-        flex-grow: 1;
-        padding-top: 5px;
-        padding-bottom: 5px;
-        font-size: 20px;
-        align-items: center;
-        justify-content: center;
-    
-    }
+        }
+        .categories,.francais,.anglais,.notes,.date{
+            display: flex;
+            flex-grow: 1;
+            padding-top: 2px;
+            padding-bottom: 2px;
+            font-size: 20px;
+            align-items: center;
+            justify-content: center;
+        }
 
-    .categories{
-        display: flex;
-        color: white;
-        justify-content: center;
-        flex-wrap: wrap;
-        background-color: #674df3;      
-        align-items: center;
-
-    }
-
-    .francais{
-        text-align: center;
-        width: 30%;
-    }
-
-    .anglais{
-        text-align: center;
-        width: 40%;
+        .categories{
         
-    }
+            color: white;
+            justify-content: center;
+            flex-wrap: wrap;
+            background-color: #674df3;      
+            align-items: center;
 
-    .notes{
-        text-align: center;
-        width: 30%;
-    }
-    
-}*/
-    
-    
-    .tableau{
-        display: flex;
-        flex-direction:row;
-        flex-wrap : wrap;
-        color: rgb(0, 0, 0);
-        font-family:Arial, Helvetica, sans-serif;
-        grid-template-columns: auto;
-        max-width: 100%;
+        }
 
+        .francais{
+            text-align: center;
+            width: 30%;
+            font-size:15px;
+        }
 
-    }
-    .categories,.francais,.anglais,.notes,.date{
-        display: flex;
-        flex-grow: 1;
-        padding-top: 5px;
-        padding-bottom: 5px;
-        font-size: 20px;
-        align-items: center;
-        justify-content: center;
-    }
+        .anglais{
+            text-align: center;
+            width: 30%;
+            font-size:15px;
+        }
 
-    .categories{
-    
-        color: white;
-        justify-content: center;
-        /*flex-wrap: wrap;*/
-        background-color: #674df3;      
-        align-items: center;
-
-    }
-
-    .francais{
-
-        text-align: center;
-        width: 30%;
-    }
-
-    .anglais{
-        text-align: center;
-        width: 30%;
+        .notes{
+            text-align: center;
+            width: 20%;
+            font-size:15px;
+        }  
+        .date{
+            text-align: center;
+            width:20%;
+            font-size:15px;
+        }
+        .odd{
+            background-color: #efefef;
+            justify-items: end;
+            margin: 0;    
+        }
+        .even{
+            background-color:rgb(247, 247, 249);
+            justify-items: end;
+            margin:0;
         
+        }
     }
 
-    .notes{
-        text-align: center;
-        width: 20%;
-        padding-top: 5px;
-        padding-bottom: 5px;
+    @media (min-width:1025px){  
 
-    }  
-    .date{
-        text-align: center;
-        width:20%;
-        font-size: 15px;
-        padding-top: 2px;
-        padding-bottom: 2px;
-    }
-    .odd{
-        background-color: #efefef;
-        justify-items: end;
-      
+        .tableau{
+            display: flex;
+            flex-direction:row;
+            flex-wrap : wrap;
+            color: rgb(0, 0, 0);
+            font-family:Arial, Helvetica, sans-serif;
+            grid-template-columns: auto;
+            max-width: 100%;
+
+
+        }
+        .categories,.francais,.anglais,.notes,.date{
+            display: flex;
+            flex-grow: 1;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            font-size: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .categories{
+
+            color: white;
+            justify-content: center;
+            flex-wrap: wrap;
+            background-color: #674df3;      
+            align-items: center;
+
+        }
+
+        .francais{
+
+            text-align: center;
+            width: 30%;
+        }
+
+        .anglais{
+            text-align: center;
+            width: 30%;
+            
+        }
+
+        .notes{
+            text-align: center;
+            width: 20%;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }  
+        .date{
+            text-align: center;
+            width:20%;
+        }
+        .odd{
+            background-color: #efefef;
+            justify-items: end;
+            margin: 0;
         
+            
+        }
+        .even{
+            background-color:rgb(247, 247, 249);
+            justify-items: end;
+            margin:0;
+        
+        }
     }
-    .even{
-        background-color:rgb(247, 247, 249);
-        justify-items: end;
-       
-    }
-    </style>
+
+            </style>
 
 
 </head>
@@ -141,7 +158,7 @@
     //var_dump($vocabulaire); ?>
         <header>
             <div class="tableau">
-                    <div class="categories francais"> Mots francais </div>
+                    <div class="categories francais"> Mots français </div>
                     <div class="categories anglais"> Mots anglais </div>
                     <div class="categories notes"> Notes </div>
                     <div class="categories date"> Date </div>
