@@ -9,12 +9,12 @@ CREATE TABLE vocabulaire (
     note TEXT,
     modified TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-)
+);
 
-INSERT INTO vocabulaire (id,mot_fr,mot_en,note,CURRENT_TIMESTAMP) VALUES
-("pharisiens", "pharisees"),
-("juifs","Jews"),
-("Flavius Josèphe","Flavius Josephus"),
-("Gethsémané","Gethsemane")
+INSERT INTO vocabulaire (mot_fr,mot_en,note) VALUES
+("pharisiens","pharisees","essai"),
+("juifs","Jews","essai"),
+("Flavius Josèphe","Flavius Josephus","essai"),
+("Gethsémané","Gethsemane","essai");
 
-
+SELECT * FROM vocabulaire;

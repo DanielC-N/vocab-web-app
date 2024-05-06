@@ -1,15 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>essai</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main>
 <?php
-/*$servername ="localhost";
-$database="schema.sql"; 
-$username= "loise";
-$password= "formation";
+    require 'modele.php';
+    $resultats = getBaseDD();
+    //var_dump($resultat); ?>
 
-$connexion = mysqli_connect($servername, $username, $password, $database);
-
-if (!$connexion) {
-    die("connexion failed:" .mysqli_connect_error());
-}
-echo "connexion successfully";
-mysqli_connect($connexion);
-
-?>*/
+    <?php foreach($resultats as $vocabulaire): ?>
+    <article> 
+        <header>
+            <h1> Tableau </h1>  
+            <time><?=$vocabulaire['created']?></time> 
+            <p class=""><?=$vocabulaire['mot_fr']?><p>
+            <p class=""><?=$vocabulaire['mot_en']?></p>
+            <p class=""><?=$vocabulaire['note']?></p>
+        <header>
+    </article>
+    <?php endforeach; ?>
+    </main>
+  
+</body>
+</html>
