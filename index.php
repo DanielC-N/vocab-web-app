@@ -76,7 +76,40 @@
     }
 
     @media (min-width:1025px){  
+       .site-search {
+        
+        display :flex;
+        justify-content: center;
+        align-items:center;
+        height: 10px;
+        margin-top:40px;
+        margin-bottom: 20px;
+       }
 
+       #search{
+        width:300px;
+        padding:10px;
+        border : 1px solid;
+        border-radius : 5px 0 0 5px;
+        margin-bottom: 20px;
+        margin-right: 10px;
+       }
+
+       .bouton{
+        border: none;
+        font-size:20px;
+        padding: 10px;
+        border-radius: 0 5px 5px 0;
+        margin-bottom: 20px;
+       }
+        .row{
+        border: none;
+        font-size:20px;
+        padding: 10px;
+        border-radius: 0 5px 5px 0;
+        margin-bottom: 20px;
+    
+       }
         .tableau{
             display: flex;
             flex-direction:row;
@@ -85,10 +118,19 @@
             font-family:Arial, Helvetica, sans-serif;
             grid-template-columns: auto;
             max-width: 100%;
-
+            border: 1px solid;
+            border-radius : 5px;
 
         }
-        .categories,.francais,.anglais,.notes,.date{
+
+        .button{
+        border: none;
+        font-size:15px;
+        padding: 5px;
+        border-radius: 0 5px 5px 0;
+        margin-bottom: 20px;
+        }
+        .categories,.francais,.anglais,.notes,.date,{
             display: flex;
             flex-grow: 1;
             padding-top: 5px;
@@ -96,6 +138,7 @@
             font-size: 20px;
             align-items: center;
             justify-content: center;
+           
         }
 
         .categories{
@@ -151,6 +194,23 @@
 </head>
 <body>
     <main>
+        <form action="traitement.php" method="post">
+            <div class="site-search">
+                <input type="search" id="search" placeholder="rechercher..."/>
+                <button type="submit" class="bouton"> &#x1F50D; </button>
+            </div>
+        </form>
+        <from action="traitement.php" method="post">
+        <div id="dynamicFields">
+            <div class="row">
+                <input type="text" name="mot_fr[]" placeholder="mot en français">
+                <input type="text" name="mot_en[]" placeholder="mot en anglais">
+                <input type="text" name="note[]" placeholder="note">
+            </div>
+        <div>
+            <button class="button" type="submit" onclick="ajouterLigne()">Envoyez</button>
+            
+        
 <?php
     require 'modele.php';
     $resultats = getBaseDD();
@@ -168,7 +228,7 @@
                     <p class="elements francais <?= $rowType?>"><?=$vocabulaire['mot_fr']?><p>
                     <p class="elements anglais <?= $rowType?>"><?=$vocabulaire['mot_en']?></p>
                     <p class="elements notes <?= $rowType?>"><?=$vocabulaire['note']?></p>
-                    <time class="elements date <?= $rowType?>"><?=$vocabulaire['created']?></time> 
+                    <time class="elements date <?= $rowType?>"><?=$vocabulaire['created']?></time>
                     
                 <?php endforeach; ?>
             </div>

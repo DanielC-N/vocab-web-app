@@ -17,4 +17,3 @@ INSERT INTO vocabulaire (mot_fr,mot_en,note) VALUES
 ("Flavius Josèphe","Flavius Josephus","essai"),
 ("Gethsémané","Gethsemane","essai");
 
-SELECT * FROM vocabulaire;
