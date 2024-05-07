@@ -16,38 +16,40 @@ function filterWord($text){
     return $resultats;
  }
 
-// function deleteWord($text){
+function deleteWord($id){
+
+    $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
+
+    $resultats = $bdd->query('DELETE FROM vocabulaire WHERE id = ' . $id . ' ;');
+
+    return $resultats;
+}
+
+function insertWord($textfr, $texten, $note){
+
+    $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
+
+    $str = 'salut c\'est nico';
+
+    echo `INSERT INTO vocabulaire (mot_fr, mot_en, note) VALUES ('$textfr', '$texten', '$note';`;
+    $resultats = $bdd->query('INSERT INTO vocabulaire (mot_fr, mot_en, note) VALUES (\'' . $textfr . '\', \'' . $texten .'\', \'' . $note . '\');');
+    return $resultats;
+}
+
+//  function updateWord($text){
 
 //     $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
 
-//     $resultats = $bdd->query('DELETE FROM vocabulaire WHERE mot_fr = 3 ;');
+//    $resultats = $bdd->query('UPDATE vocabulaire SET mot_fr ='$text', mot_en='$text', note='$text' WHERE vocabulaire ');
 
-//     return $resultats;
-// }
-
-// function insertword($text){
-
-//     $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
-
-//     $resultats = $bdd->query('INSERT INTO mot_fr VALUES('$text') OR mot_en VALUES('$text') OR notes VALUES('$text');');
-
-//     return $resultats;
-// }
-
-// function updateword($text){
-
-//     $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
-
-//     $resultats = $bdd->query('UPDATE vocabulaire SET mot_fr ='$text', mot_en='$text', note='$text' WHERE vocabulaire_id=:id 
-//     ');
-
+//     $resultats = $bdd->query('INSERT INTO vocabulaire SET mot_fr ='$text', mot_en='$text', note='$text';');
 //     return $resultats;
 // }
 
 
-?>
+// ?>
 
-<!--delete
+<!-- delete
 DELETE FROM vocabulaire WHERE id= nombre;
 
 $connexion = mysql_connect()
@@ -67,5 +69,4 @@ $sqlQuery = 'INSERT INTO recipes(mot_fr,mot_en,note) VALUES (:mot_fr,:mot_en,:no
 
 $insertBaseDD = $resultats-> prepare($sqlQuery);
 
-$insertBaseDD->
--->
+$insertBaseDD-> -->
