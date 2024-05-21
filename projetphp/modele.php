@@ -25,34 +25,40 @@ function deleteWord($id){
     return $resultats;
 }
 
-function insertWord($textfr, $texten, $note){
+function getWord($id){
 
     $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
 
-    $str = 'salut c\'est nico';
+    $resultats = $bdd->query('SELECT * FROM vocabulaire WHERE id = ' . $id . ' ;');
+
+    return $resultats;
+}
+
+
+function insertWord($textfr, $texten, $note){
+
+    $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
 
     echo `INSERT INTO vocabulaire (mot_fr, mot_en, note) VALUES ('$textfr', '$texten', '$note';`;
     $resultats = $bdd->query('INSERT INTO vocabulaire (mot_fr, mot_en, note) VALUES (\'' . $textfr . '\', \'' . $texten .'\', \'' . $note . '\');');
     return $resultats;
 }
 
-//  function updateWord($text){
+ function updateWord($id, $textfr, $texten, $note){
 
-//     $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
+        $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
+        
+        $resultats = $bdd->query( 'UPDATE vocabulaire SET  ' . $textfr . '=mot_fr , mot_en = ' . $texten . ', note = ' . $note . ' WHERE id = ' . $id . ';');
 
-//    $resultats = $bdd->query('UPDATE vocabulaire SET mot_fr ='$text', mot_en='$text', note='$text' WHERE vocabulaire ');
-
-//     $resultats = $bdd->query('INSERT INTO vocabulaire SET mot_fr ='$text', mot_en='$text', note='$text';');
-//     return $resultats;
-// }
-
+        // $resultats ->query(['mot_fr'=>$mot_fr, 'mot_en'=>$mot_en, 'note'=>$note, 'id'=>$id ]); 
+       
+        return $resultats;
+}
 
 // ?>
 
-<!-- delete
-DELETE FROM vocabulaire WHERE id= nombre;
 
-$connexion = mysql_connect()
+<!-- $connexion = mysql_connect()
 */
 //get 
 UPDATE vocabulaire SET mot_fr =:mot_fr, mot_en=:mot_en, note=:note, vocabulaire=:vocabulaire WHERE vocabualaire_id=:id 
@@ -69,4 +75,4 @@ $sqlQuery = 'INSERT INTO recipes(mot_fr,mot_en,note) VALUES (:mot_fr,:mot_en,:no
 
 $insertBaseDD = $resultats-> prepare($sqlQuery);
 
-$insertBaseDD-> -->
+$insertBaseDD-> --> 

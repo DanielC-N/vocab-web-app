@@ -9,6 +9,10 @@
     <style type="text/css">
     @media (min-width:300px){  
 
+        a{
+            text-decoration:none;
+            color:black;
+        }
         .tableau{
             display: flex;
             flex-direction:row;
@@ -158,31 +162,31 @@
         .francais{
 
             text-align: center;
-            width: 20%;
+            width: 25%;
         }
 
         .anglais{
             text-align: center;
-            width: 20%;
+            width: 25%;
             
         }
 
         .notes{
             text-align: center;
-            width: 20%;
+            width: 25%;
             padding-top: 10px;
             padding-bottom: 10px;
         }  
         .date{
             text-align: center;
-            width:15%;
+            width:12%;
         }
         .supp{
             text-align: center;
             width: 5%;
         }
         .modifier{
-            width: 15%;
+            width: 8%;
             text-align: center;
         
         }
@@ -199,8 +203,8 @@
             margin:0;
         
         }
+    
     }
-
             </style>
 
 <script>
@@ -228,18 +232,18 @@
                     <input id="en" type="text" class="text" name="mot_en" placeholder="mot en anglais">
                     <input id="inputnote" type="text" class="text" name="note" placeholder="note">
                     <button id="boutonmodif" class="button" type="submit">Ajouter</button>
+                    
                 </div>
             <div>
         </form>
-            
-            
-        
+             
 <?php
     require 'modele.php';
-    var_dump($_POST);
-    if($_POST['mot_fr'][0]!="" && $_POST['mot_en'][0]!="" && $_POST['note'][0]!=""){
-        insertWord($_POST['mot_fr'][0],$_POST['mot_en'][0],$_POST['note'][0]);
-    }
+    // var_dump($_POST);
+    // if($_POST['mot_fr'][0]!="" && $_POST['mot_en'][0]!="" && $_POST['note'][0]!=""){
+    //     insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
+    // }
+    
     if($_POST['effacer']!="") {
         deleteWord($_POST['effacer']);
     }
@@ -251,7 +255,7 @@
     
     // var_dump($_POST['mot_fr']);
 
-
+   
     $rowType="odd";
     //var_dump($vocabulaire); ?>
         <header>
@@ -271,9 +275,13 @@
                     <p class="elements notes <?= $rowType?>" id="note<?=$vocabulaire['id']?>"><?=$vocabulaire['note']?></p>
                     <time class="elements date <?= $rowType?>"><?=$vocabulaire['created']?></time>
                     <button class="elements supp" value="<?=$vocabulaire['id']?>" name="effacer" type="submit" id="<?=$vocabulaire['id']?>">&#x274C;</button>
-                    <button class="elements modifier" type="button" onclick="modification(<?=$vocabulaire['id']?>)" id="modif<?=$vocabulaire['id']?>">modifier</button>
+                    <form method="post" action="formulaire.php" class="elements modifier" type="button">
+                        <input type="hidden" name="id" value="<?=$vocabulaire['id']?>"></input>
+                        <input type="submit"><a href="formulaire.php"></a></input>
+                    </form>
                     
                 <?php endforeach; ?>
+            </div>
             </div>
         </header>    
     </main>
