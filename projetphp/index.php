@@ -20,10 +20,11 @@
             font-family:Arial, Helvetica, sans-serif;
             grid-template-columns: auto;
             max-width: 100%;
+            justify-content: center;
 
 
         }
-        .categories,.francais,.anglais,.notes,.date{
+        .categories,.francais,.anglais,.notes,.date.supp.modifier{
             display: flex;
             flex-direction:row;
             flex-wrap: wrap;
@@ -157,8 +158,7 @@
             padding-top: 5px;
             padding-bottom: 5px;
             font-size: 20px;
-            align-items: center;
-            justify-content: center;
+            
            
         }
 
@@ -169,6 +169,7 @@
             flex-wrap: wrap;
             background-color: #674df3;      
             align-items: center;
+            justify-content: center;
 
         }
 
@@ -217,6 +218,10 @@
         
         }
     
+        .elements{
+            justify-content:center;
+
+        }
     }
             </style>
 
@@ -235,7 +240,7 @@
         <form method="post">
             <div class="site-search">
                 <input type="search" name="barre" id="search" placeholder="rechercher..."/>
-                <input type="submit" name="mode" value="barre" class="bouton"> &#x1F50D; </input>
+                <input type="submit" name="mode" value="barre" class="bouton"></input>
             </div>
         </form>
         <form method="post">
@@ -259,9 +264,11 @@
     }
     elseif($mode == "effacer"){
         deleteWord($_POST['id']);
+        $resultats=getBaseDD();
     }
     elseif($mode == "ajouter"){
         insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
+        $resultats=getBaseDD();
     }
     elseif($mode == "barre"){
         $resultats=filterWord($_POST['barre']);
@@ -304,9 +311,9 @@
                     <p class="elements notes <?= $rowType?>" id="note<?=$vocabulaire['id']?>"><?=$vocabulaire['note']?></p>
                     <time class="elements date <?= $rowType?>"><?=$vocabulaire['created']?></time>
 
-                    <form action="" method="post">
+                    <form action="" method="post" class="elements modifier">
                         <input type="hidden" name="id" value="<?=$vocabulaire['id']?>"></input>
-                        <input class="elements supp" name="mode" value="effacer" type="submit" id="<?=$vocabulaire['id']?>"></input> 
+                        <input  name="mode" value="effacer" type="submit" id="<?=$vocabulaire['id']?>"></input> 
                     </form>
 
                     <form method="post" action="formulaire.php" class="elements modifier">
