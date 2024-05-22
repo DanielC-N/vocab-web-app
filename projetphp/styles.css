@@ -114,15 +114,3 @@
         justify-content: left;
     }
 }
-/* $resultats = $bdd->prepare(' * FROM vocabulaire WHERE mot_fr = ?');
-$resultats->bind_param('s',$textfr);
-$resultats->execute();
-$result = $resultats->get_result();
-while($row = $result->fetch_assoc()){
-      
-}
-
-// $resultats = $bdd->execute_query('SELECT * FROM vocabulaire WHERE mot_fr = ?',[$textfr]);
-// while($row = $resultats->fetch_assoc()){
-//     return $resultats;
-// } */

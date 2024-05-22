@@ -175,31 +175,31 @@
         .francais{
 
             text-align: center;
-            width: 25%;
+            width: 20%;
         }
 
         .anglais{
             text-align: center;
-            width: 25%;
+            width: 20%;
             
         }
 
         .notes{
             text-align: center;
-            width: 25%;
+            width: 20%;
             padding-top: 10px;
             padding-bottom: 10px;
         }  
         .date{
             text-align: center;
-            width:12%;
+            width:15%;
         }
         .supp{
             text-align: center;
-            width: 5%;
+            width: 15%;
         }
         .modifier{
-            width: 8%;
+            width: 10%;
             text-align: center;
         
         }
@@ -220,7 +220,7 @@
     }
             </style>
 
-<script>
+<!-- <script>
     function modification(id){
         console.log(id);
         document.getElementById('fr').value=document.getElementById('fr'+id).innerText;
@@ -228,14 +228,14 @@
         document.getElementById('boutonmodif').innerText="modifier";
         document.getElementById('inputnote').value=document.getElementById('note'+id).innerText;
     }
-</script>
+</script> -->
 </head>
 <body>
     <main>
         <form method="post">
             <div class="site-search">
                 <input type="search" name="barre" id="search" placeholder="rechercher..."/>
-                <button type="submit" class="bouton"> &#x1F50D; </button>
+                <input type="submit" name="mode" value="barre" class="bouton"> &#x1F50D; </input>
             </div>
         </form>
         <form method="post">
@@ -244,7 +244,7 @@
                     <input id="fr" type="text" class="text" name="mot_fr" placeholder="mot en français">
                     <input id="en" type="text" class="text" name="mot_en" placeholder="mot en anglais">
                     <input id="inputnote" type="text" class="text" name="note" placeholder="note">
-                    <button id="boutonmodif" class="button" type="submit">Ajouter</button>
+                    <input id="boutonmodif" class="button" name="mode" value="ajouter" type="submit"></input>
                     
                 </div>
             <div>
@@ -252,24 +252,41 @@
              
 <?php
     require 'modele.php';
-    if($_POST['mot_fr']&& $_POST['mot_en']){
+    var_dump($_POST);
+    $mode=$_POST['mode'];
+    if(!$mode){
+        $resultats=getBaseDD();
+    }
+    elseif($mode == "effacer"){
+        deleteWord($_POST['id']);
+    }
+    elseif($mode == "ajouter"){
         insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
     }
-    
-    if($_POST['effacer']!="") {
-        deleteWord($_POST['effacer']);
+    elseif($mode == "barre"){
+        $resultats=filterWord($_POST['barre']);
+    } else{
+        $resultats=getBaseDD();
     }
-    if($_POST['barre']!="") {
-        $resultats = filterWord($_POST['barre']);
-    } else {
-        $resultats = getBaseDD();
-    }
+   
+    // if($_POST['mot_fr']&& $_POST['mot_en']){
+    //     insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
+    // }
     
-    // var_dump($_POST['mot_fr']);
+    // if($_POST['effacer']!="") {
+    //     deleteWord($_POST['effacer']);
+    // }
+    // if($_POST['barre']!="") {
+    //     $resultats = filterWord($_POST['barre']);
+    // } else {
+    //     $resultats = getBaseDD();
+    // }
+    
+
 
    
     $rowType="odd";
-    //var_dump($vocabulaire); ?>
+?>
         <header>
             <div class="tableau">
                     <div class="categories francais"> Mots français </div>
@@ -286,8 +303,13 @@
                     <p class="elements anglais <?= $rowType?>" id="en<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_en']?></p>
                     <p class="elements notes <?= $rowType?>" id="note<?=$vocabulaire['id']?>"><?=$vocabulaire['note']?></p>
                     <time class="elements date <?= $rowType?>"><?=$vocabulaire['created']?></time>
-                    <button class="elements supp" value="<?=$vocabulaire['id']?>" name="effacer" type="submit" id="<?=$vocabulaire['id']?>">&#x274C;</button>
-                    <form method="post" action="formulaire.php" class="elements modifier" type="button">
+
+                    <form action="" method="post">
+                        <input type="hidden" name="id" value="<?=$vocabulaire['id']?>"></input>
+                        <input class="elements supp" name="mode" value="effacer" type="submit" id="<?=$vocabulaire['id']?>"></input> 
+                    </form>
+
+                    <form method="post" action="formulaire.php" class="elements modifier">
                         <input type="hidden" name="id" value="<?=$vocabulaire['id']?>"></input>
                         <input type="submit" value="modifier"><a href="formulaire.php"></a></input>
                     </form>

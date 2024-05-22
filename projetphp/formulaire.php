@@ -20,7 +20,7 @@
         exit();
     }
 
-    if($_POST['id']!="") {
+    if(isset($_POST['id'])) {
         $id = $_POST['id'];
         $resultats = getWord($id);
         foreach($resultats as $vocabulaire);
