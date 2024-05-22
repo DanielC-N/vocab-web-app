@@ -1,0 +1,128 @@
+@media (min-width:300px){  
+
+.categories,.francais,.anglais,.notes,.date,.supp,.modifier,.text{
+    display: flex;
+    flex-grow: 1;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 20px;
+    align-items: left;
+    justify-content: left;
+       
+    }
+
+
+#dynamicFields{
+
+    display: flex;
+    flex-direction:column;
+    flex-wrap : nowrap;
+    color: rgb(0, 0, 0);
+    font-family:Arial, Helvetica, sans-serif;
+    grid-template-columns: auto;
+    max-width: 100%;
+}   
+
+#row {
+    flex-direction: column;
+    display: flex;
+    flex-grow: 1;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    font-size: 20px;
+    align-items: center;
+    justify-content: center;
+}
+
+.text{
+    color: black;
+    justify-content: center;
+    flex-wrap: wrap;
+    background-color: #948eb4;      
+    align-items: center;
+
+}
+}
+
+@media (min-width:1025px){
+
+    .categories,.francais,.anglais,.notes,.date,.supp,.modifier,.text{
+        display: flex;
+        flex-grow: 1;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        font-size: 20px;
+        align-items: left;
+        justify-content: left;
+       
+    }
+
+    #dynamicFields{
+        display: flex;
+        flex-direction:column;
+        flex-wrap : nowrap;
+        color: rgb(0, 0, 0);
+        font-family:Arial, Helvetica, sans-serif;
+        grid-template-columns: auto;
+        max-width: 100%;
+    }   
+    
+    #row {
+        flex-direction: column;
+        display: flex;
+        flex-grow: 1;
+        padding-top: 2px;
+        padding-bottom: 2px;
+        font-size: 20px;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .text{
+        color: black;
+        justify-content: center;
+        flex-wrap: wrap;
+        background-color: #948eb4;      
+        align-items: center;
+        justify-content: center;
+        border-radius: 5px 5px 5px 5px;
+    
+    }
+
+
+    .button{
+        margin: 1%;
+        border-radius: 5px 5px 5px 5px;
+        width: 13%;
+        height: 10%;
+    }
+    .texten{
+        color: black;
+        justify-content: center;
+        flex-wrap: wrap;
+        background-color: #948eb4;      
+        align-items: center;
+        justify-content: center;
+        border-radius: 5px 5px 5px 5px;
+        pointer-events: none;
+        display: flex;
+        flex-grow: 1;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        font-size: 20px;
+        align-items: left;
+        justify-content: left;
+    }
+}
+/* $resultats = $bdd->prepare(' * FROM vocabulaire WHERE mot_fr = ?');
+$resultats->bind_param('s',$textfr);
+$resultats->execute();
+$result = $resultats->get_result();
+while($row = $result->fetch_assoc()){
+      
+}
+
+// $resultats = $bdd->execute_query('SELECT * FROM vocabulaire WHERE mot_fr = ?',[$textfr]);
+// while($row = $resultats->fetch_assoc()){
+//     return $resultats;
+// } */

@@ -44,15 +44,13 @@ function insertWord($textfr, $texten, $note){
     return $resultats;
 }
 
- function updateWord($id, $textfr, $texten, $note){
+ function updateWord($id, $textfr, $note){
 
         $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
-        
-        $resultats = $bdd->query( 'UPDATE vocabulaire SET  ' . $textfr . '=mot_fr , mot_en = ' . $texten . ', note = ' . $note . ' WHERE id = ' . $id . ';');
-
-        // $resultats ->query(['mot_fr'=>$mot_fr, 'mot_en'=>$mot_en, 'note'=>$note, 'id'=>$id ]); 
+        $stmt= $bdd->prepare('UPDATE vocabulaire SET mot_fr=:fr, note=:note WHERE id=:id');
        
-        return $resultats;
+        $stmt->execute(['fr'=> $textfr,'note'=>$note, 'id'=>$id]); 
+       
 }
 
 // ?>

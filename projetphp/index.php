@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>essai</title>
-   <!-- <link rel="stylesheet" href="styles.css"> -->
 
     <style type="text/css">
     @media (min-width:300px){  
@@ -26,6 +25,8 @@
         }
         .categories,.francais,.anglais,.notes,.date{
             display: flex;
+            flex-direction:row;
+            flex-wrap: wrap;
             flex-grow: 1;
             padding-top: 2px;
             padding-bottom: 2px;
@@ -46,25 +47,34 @@
 
         .francais{
             text-align: center;
-            width: 30%;
+            width: 25%;
             font-size:15px;
         }
 
         .anglais{
             text-align: center;
-            width: 30%;
+            width: 25%;
             font-size:15px;
         }
 
         .notes{
             text-align: center;
-            width: 20%;
+            width: 25%;
             font-size:15px;
         }  
         .date{
             text-align: center;
-            width:20%;
+            width:12%;
             font-size:15px;
+        }
+        .supp{
+            text-align: center;
+            width: 5%;
+        }
+        .modifier{
+            width: 8%;
+            text-align: center;
+        
         }
         .odd{
             background-color: #efefef;
@@ -83,6 +93,7 @@
 
        .site-search {
             display :flex;
+            display: row;
             justify-content: center;
             align-items:center;
             height: 10px;
@@ -91,6 +102,8 @@
        }
 
        #search{
+            display: flex;
+            display: row;
             width:300px;
             padding:10px;
             border : 1px solid;
@@ -239,10 +252,9 @@
              
 <?php
     require 'modele.php';
-    // var_dump($_POST);
-    // if($_POST['mot_fr'][0]!="" && $_POST['mot_en'][0]!="" && $_POST['note'][0]!=""){
-    //     insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
-    // }
+    if($_POST['mot_fr'][0]!="" && $_POST['mot_en'][0]!=""){
+        insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
+    }
     
     if($_POST['effacer']!="") {
         deleteWord($_POST['effacer']);
@@ -277,7 +289,7 @@
                     <button class="elements supp" value="<?=$vocabulaire['id']?>" name="effacer" type="submit" id="<?=$vocabulaire['id']?>">&#x274C;</button>
                     <form method="post" action="formulaire.php" class="elements modifier" type="button">
                         <input type="hidden" name="id" value="<?=$vocabulaire['id']?>"></input>
-                        <input type="submit"><a href="formulaire.php"></a></input>
+                        <input type="submit" value="modifier"><a href="formulaire.php"></a></input>
                     </form>
                     
                 <?php endforeach; ?>
