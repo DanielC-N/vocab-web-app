@@ -252,7 +252,7 @@
              
 <?php
     require 'modele.php';
-    if($_POST['mot_fr'][0]!="" && $_POST['mot_en'][0]!=""){
+    if($_POST['mot_fr']&& $_POST['mot_en']){
         insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
     }
     

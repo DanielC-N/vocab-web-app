@@ -38,12 +38,15 @@ function getWord($id){
 function insertWord($textfr, $texten, $note){
 
     $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
+    $stmt= $bdd->prepare('INSERT INTO vocabulaire (mot_fr,mot_en,note) VALUES(:fr, :en, :note)');
+    $stmt->execute(['fr'=> $textfr,'en'=>$texten,'note'=>$note]);
+    
+    // $resultats = $bdd->query('INSERT INTO vocabulaire (mot_fr, mot_en, note) VALUES (\'' . $textfr . '\', \'' . $texten .'\', \'' . $note . '\');');
+    // return $resultats;
 
-    echo `INSERT INTO vocabulaire (mot_fr, mot_en, note) VALUES ('$textfr', '$texten', '$note';`;
-    $resultats = $bdd->query('INSERT INTO vocabulaire (mot_fr, mot_en, note) VALUES (\'' . $textfr . '\', \'' . $texten .'\', \'' . $note . '\');');
-    return $resultats;
-}
+    // echo `INSERT INTO vocabulaire (mot_fr, mot_en, note) VALUES ('$textfr', '$texten', '$note';`;
 
+} 
  function updateWord($id, $textfr, $note){
 
         $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
