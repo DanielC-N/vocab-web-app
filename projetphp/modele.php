@@ -22,14 +22,15 @@ function deleteWord($id){
     $resultats = $bdd->query('DELETE FROM vocabulaire WHERE id = ' . $id . ' ;');
 
     return $resultats;
-}
 
+}
+ 
 function getWord($id){
     $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
-
-    $resultats = $bdd->query('SELECT * FROM vocabulaire WHERE id = ' . $id . ' ;');
-
-    return $resultats;
+    $stmt =$bdd ->prepare('SELECT * FROM vocabulaire WHERE id =:id');
+    $stmt->execute(['id'=>$id]);
+    //$resultats = $bdd->query('SELECT * FROM vocabulaire WHERE id = ' . $id . ' ;');
+    // return $resultats;
 }
 
 
@@ -48,6 +49,8 @@ function insertWord($textfr, $texten, $note){
         $stmt->execute(['fr'=> $textfr,'note'=>$note, 'id'=>$id]); 
        
 }
+
+  
 
 ?>
 

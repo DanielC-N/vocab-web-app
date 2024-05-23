@@ -256,23 +256,48 @@
         </form>
              
 <?php
+    function checkParams($fields){
+        foreach($fields as $field){
+            if (!$_POST[$field]){
+                return false;
+            }
+        }
+        return true;
+    }
+
     require 'modele.php';
+    $errormsg ="";
     var_dump($_POST);
     $mode=$_POST['mode'];
-    if(!$mode){
+    if(!isset($mode)){
         $resultats=getBaseDD();
     }
     elseif($mode == "effacer"){
-        deleteWord($_POST['id']);
-        $resultats=getBaseDD();
+        if (!checkParams(['id'])){
+
+            $errormsg=("id not found");}
+        else{
+             deleteWord($_POST['id']);
+        }
+           $resultats=getBaseDD();
     }
+        
     elseif($mode == "ajouter"){
-        insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
-        $resultats=getBaseDD();
+        if (!checkParams(['mot_fr'],['mot-en'],['note'])){
+
+            $errormsg=("word not found");}
+        else{
+              insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
+        }
+           $resultats=getBaseDD();
     }
     elseif($mode == "barre"){
-        $resultats=filterWord($_POST['barre']);
-    } else{
+        if (!checkParams(['barre'])){
+
+            $errormsg=("not found");}
+        else{
+              $resultats=filterWord($_POST['barre']);}
+    }else{
         $resultats=getBaseDD();
     }
    
@@ -294,7 +319,11 @@
    
     $rowType="odd";
 ?>
+<?php if ($errormsg): ?> 
+    <h1>error : <?=$errormsg?></h1>
+    <?php endif; ?>
         <header>
+    
             <div class="tableau">
                     <div class="categories francais"> Mots français </div>
                     <div class="categories anglais"> Mots anglais </div>
