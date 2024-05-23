@@ -267,12 +267,12 @@
 
     require 'modele.php';
     $errormsg ="";
-    var_dump($_POST);
     $mode=$_POST['mode'];
     if(!isset($mode)){
         $resultats=getBaseDD();
     }
     elseif($mode == "effacer"){
+        
         if (!checkParams(['id'])){
 
             $errormsg=("id not found");}
@@ -283,6 +283,7 @@
     }
         
     elseif($mode == "ajouter"){
+
         if (!checkParams(['mot_fr'],['mot-en'],['note'])){
 
             $errormsg=("word not found");}
@@ -292,6 +293,7 @@
            $resultats=getBaseDD();
     }
     elseif($mode == "barre"){
+
         if (!checkParams(['barre'])){
 
             $errormsg=("not found");}

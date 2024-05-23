@@ -35,10 +35,21 @@ function getWord($id){
 }
 
 function insertWord($textfr, $texten, $note){
-
+    echo('insert');
     $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
-    $stmt= $bdd->prepare('INSERT INTO vocabulaire (mot_fr,mot_en,note) VALUES(:fr, :en, :note)');
-    $stmt->execute(['fr'=> $textfr,'en'=>$texten,'note'=>$note]);
+    $stmt= $bdd->prepare('SELECT id FROM vocabulaire WHERE mot_en =:en');
+    $stmt->execute(['en'=>$texten]);
+    $r= $stmt->fetchAll();
+    if(count($r)==0){
+        $stmt= $bdd->prepare('INSERT INTO vocabulaire (mot_fr,mot_en,note) VALUES(:fr, :en, :note)');
+        $stmt->execute(['fr'=> $textfr,'en'=>$texten,'note'=>$note]);
+    } else {
+        $id =$r[0]['id'];
+        $stmt= $bdd->prepare('UPDATE vocabulaire SET mot_fr=:fr, note=:note WHERE id=:id');
+        $stmt->execute(['fr'=> $textfr,'note'=>$note, 'id'=>$id]); 
+    }
+
+   
     
 } 
  function updateWord($id, $textfr, $note){
