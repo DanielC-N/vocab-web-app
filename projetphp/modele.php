@@ -1,27 +1,28 @@
 <?php
 function getBaseDD(){
     $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
-
-    $resultats = $bdd->query('SELECT * FROM vocabulaire ORDER BY created DESC; ');
-
-    return $resultats;
+    $stmt =$bdd->prepare('SELECT * FROM vocabulaire ORDER BY created DESC');
+    $stmt->execute(); 
+    return $stmt->fetchAll();
+    // $resultats = $bdd->query('SELECT * FROM vocabulaire ORDER BY created DESC; ');
+    // return $resultats;
 }
 
 function filterWord($text){
-
     $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
-
-    $resultats = $bdd->query('SELECT * FROM vocabulaire WHERE mot_fr LIKE \'%' . $text . '%\'  OR mot_en LIKE \'%' . $text . '%\'; ');
-
-    return $resultats;
+    $stmt =$bdd ->prepare("SELECT * FROM vocabulaire WHERE mot_fr LIKE :fr");
+    $stmt->execute(['fr'=>'%'.$text.'%']);
+   
+    // $resultats = $bdd->query('SELECT * FROM vocabulaire WHERE mot_fr LIKE \'%' . $text . '%\'  OR mot_en LIKE \'%' . $text . '%\'; ');
+    // return $resultats;
  }
 
 function deleteWord($id){
     $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
-
-    $resultats = $bdd->query('DELETE FROM vocabulaire WHERE id = ' . $id . ' ;');
-
-    return $resultats;
+    $stmt =$bdd ->prepare('DELETE FROM vocabulaire WHERE id =:id');
+    $stmt->execute(['id'=>$id]);
+    // $resultats = $bdd->query('DELETE FROM vocabulaire WHERE id = ' . $id . ' ;');
+    // return $resultats; 
 
 }
  
@@ -32,7 +33,6 @@ function getWord($id){
     //$resultats = $bdd->query('SELECT * FROM vocabulaire WHERE id = ' . $id . ' ;');
     // return $resultats;
 }
-
 
 function insertWord($textfr, $texten, $note){
 
@@ -49,9 +49,7 @@ function insertWord($textfr, $texten, $note){
         $stmt->execute(['fr'=> $textfr,'note'=>$note, 'id'=>$id]); 
        
 }
-
-  
-
+ 
 ?>
 
 

@@ -258,7 +258,7 @@
 <?php
     function checkParams($fields){
         foreach($fields as $field){
-            if (!$_POST[$field]){
+            if (!isset($_POST[$field])){
                 return false;
             }
         }
@@ -297,6 +297,7 @@
             $errormsg=("not found");}
         else{
               $resultats=filterWord($_POST['barre']);}
+              var_dump($resultats);
     }else{
         $resultats=getBaseDD();
     }
