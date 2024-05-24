@@ -239,14 +239,14 @@
         <?php    $errormsg ="";
                 $mode=$_POST['mode'];
         ?>
-        <?php if($mode== "modifier"):?>
+        <?php if($mode== "modification"):?>
 
         <form method="post">
         <div id="dynamicFields">
                 <div class="row">
                     <input id="fr" type="text" class="text" value="<?=($_POST['fr'])?>" name="mot_fr" placeholder="mot en français">
                     <input id="en" type="text" class="text"  value="<?=($_POST['en'])?>" name="mot_en" placeholder="mot en anglais"disabled>
-                    <input id="inputnote" type="text" class="text"  value="<?=($_POST['note'])?>" name="note" placeholder="note">
+                    <input id="inputnote" type="text" class="text"  value="<?=($_POST['inputnote'])?>" name="note" placeholder="note">
                     <input type="hidden" name="id" value="<?=($_POST['id'])?>"> </input>
                     <input id="boutonmodif" class="button" name="mode" value="modifier" type="submit"></input>
                 </div>
@@ -276,7 +276,7 @@
 
     require 'modele.php';
 
-    if(!isset($mode)|| $mode=="modifier"){
+    if(!isset($mode)|| $mode=="modification"){
 
         $resultats=getBaseDD();
     }
@@ -294,7 +294,7 @@
     }
     elseif($mode == "modifier"){
         
-        if(!checkParams(['id']['mot_fr'],['note'])){
+        if(!checkParams(['id']['mot_fr'],['mot_en'],['note'])){
           
             $errormsg=('cannot be modified '); 
         }
@@ -380,7 +380,7 @@
                         <input type="hidden" name="fr" value="<?=$vocabulaire['mot_fr']?>"></input>
                         <input type="hidden" name="en" value="<?=$vocabulaire['mot_en']?>"></input>
                         <input type="hidden" name="inputnote" value="<?=$vocabulaire['note']?>"></input>
-                        <input type="submit" name="mode" value="modifier"></input>
+                        <input type="submit" name="mode" value="modification"></input>
                     </form>
                     
                 <?php endforeach; ?>
