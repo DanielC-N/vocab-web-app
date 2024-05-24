@@ -12,7 +12,7 @@ function filterWord($text){
     $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
     $stmt =$bdd ->prepare("SELECT * FROM vocabulaire WHERE mot_fr LIKE :fr");
     $stmt->execute(['fr'=>'%'.$text.'%']);
-   
+    return $stmt->fetchAll();
     // $resultats = $bdd->query('SELECT * FROM vocabulaire WHERE mot_fr LIKE \'%' . $text . '%\'  OR mot_en LIKE \'%' . $text . '%\'; ');
     // return $resultats;
  }
@@ -30,7 +30,8 @@ function getWord($id){
     $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
     $stmt =$bdd ->prepare('SELECT * FROM vocabulaire WHERE id =:id');
     $stmt->execute(['id'=>$id]);
-    //$resultats = $bdd->query('SELECT * FROM vocabulaire WHERE id = ' . $id . ' ;');
+    return $stmt->fetchAll();
+    // $resultats = $bdd->query('SELECT * FROM vocabulaire WHERE id = ' . $id . ' ;');
     // return $resultats;
 }
 

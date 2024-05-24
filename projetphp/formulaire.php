@@ -24,6 +24,7 @@
         $id = $_POST['id'];
         $resultats = getWord($id);
         foreach($resultats as $vocabulaire);
+
         }
 
       

@@ -225,15 +225,6 @@
     }
             </style>
 
-<!-- <script>
-    function modification(id){
-        console.log(id);
-        document.getElementById('fr').value=document.getElementById('fr'+id).innerText;
-        document.getElementById('en').value=document.getElementById('en'+id).innerText;
-        document.getElementById('boutonmodif').innerText="modifier";
-        document.getElementById('inputnote').value=document.getElementById('note'+id).innerText;
-    }
-</script> -->
 </head>
 <body>
     <main>
@@ -258,7 +249,7 @@
 <?php
     function checkParams($fields){
         foreach($fields as $field){
-            if (!isset($_POST[$field])){
+            if ((!$_POST[$field])){
                 return false;
             }
         }
@@ -298,8 +289,8 @@
 
             $errormsg=("not found");}
         else{
-              $resultats=filterWord($_POST['barre']);}
-              var_dump($resultats);
+            $resultats=filterWord($_POST['barre']);}
+             
     }else{
         $resultats=getBaseDD();
     }
@@ -317,9 +308,6 @@
     //     $resultats = getBaseDD();
     // }
     
-
-
-   
     $rowType="odd";
 ?>
 <?php if ($errormsg): ?> 
