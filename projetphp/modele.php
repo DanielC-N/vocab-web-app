@@ -10,8 +10,8 @@ function getBaseDD(){
 
 function filterWord($text){
     $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
-    $stmt =$bdd ->prepare("SELECT * FROM vocabulaire WHERE mot_en LIKE :en");
-    $stmt->execute(['en'=>'%'.$text.'%']);
+    $stmt =$bdd ->prepare("SELECT * FROM vocabulaire WHERE mot_en LIKE :en OR mot_fr LIKE :fr ");
+    $stmt->execute(['en'=>'%'.$text.'%', 'fr'=>'%'.$text.'%']);
     return $stmt->fetchAll();
     // $resultats = $bdd->query('SELECT * FROM vocabulaire WHERE mot_fr LIKE \'%' . $text . '%\'  OR mot_en LIKE \'%' . $text . '%\'; ');
     // return $resultats;

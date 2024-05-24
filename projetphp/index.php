@@ -227,6 +227,9 @@
 </head>
 <body>
     <main>
+
+        <?php $accueil=$_POST['barre']; ?> 
+        
         <form method="post">
             <div class="site-search">
                 <input type="search" name="barre" id="search" placeholder="rechercher..."/>
@@ -236,7 +239,7 @@
         <?php    $errormsg ="";
                 $mode=$_POST['mode'];
         ?>
-        <?php if($mode== "modform"):?>
+        <?php if($mode== "modifier"):?>
 
         <form method="post">
         <div id="dynamicFields">
@@ -273,9 +276,7 @@
 
     require 'modele.php';
 
-  
-
-    if(!isset($mode)|| $mode=="modform"){
+    if(!isset($mode)|| $mode=="modifier"){
 
         $resultats=getBaseDD();
     }
@@ -320,13 +321,16 @@
 
             $errormsg=("not found");}
         else{
-            $resultats=filterWord($_POST['barre']);}
-          
+            $resultats=filterWord($_POST['barre']);}        
+            
+    } else {
+        $resultats=getBaseDD();
     }
 
+     
+
     
-        // $resultats=getBaseDD();
-    
+        
    
     // if($_POST['mot_fr']&& $_POST['mot_en']){
     //     insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
@@ -343,6 +347,7 @@
 
     $rowType="odd";
 ?>
+
 <?php if ($errormsg): ?> 
     <h1>error : <?=$errormsg?></h1>
     <?php endif; ?>
@@ -375,13 +380,17 @@
                         <input type="hidden" name="fr" value="<?=$vocabulaire['mot_fr']?>"></input>
                         <input type="hidden" name="en" value="<?=$vocabulaire['mot_en']?>"></input>
                         <input type="hidden" name="inputnote" value="<?=$vocabulaire['note']?>"></input>
-                        <input type="submit" name="mode" value="modform"></input>
+                        <input type="submit" name="mode" value="modifier"></input>
                     </form>
                     
                 <?php endforeach; ?>
             </div>
             </div>
-            <button><a href="index.php"> Retour à la page d'accueil </a></button> 
+            <?php if (!$accueil=="barre"):?>
+            
+            <?php else: ?>
+                <button><a href="index.php"> Retour à la page d'accueil </a></button> 
+            <?php endif;?>
         </header>    
     </main>
   
