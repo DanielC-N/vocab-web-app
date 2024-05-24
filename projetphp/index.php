@@ -188,8 +188,6 @@
         .notes{
             text-align: center;
             width: 20%;
-            padding-top: 10px;
-            padding-bottom: 10px;
         }  
         .date{
             text-align: center;
@@ -225,6 +223,7 @@
     }
             </style>
 
+
 </head>
 <body>
     <main>
@@ -234,18 +233,34 @@
                 <input type="submit" name="mode" value="barre" class="bouton"></input>
             </div>
         </form>
+        <?php    $errormsg ="";
+                $mode=$_POST['mode'];
+        ?>
+        <?php if($mode== "modform"):?>
+
+        <form method="post">
+        <div id="dynamicFields">
+                <div class="row">
+                    <input id="fr" type="text" class="text" value="<?=($_POST['fr'])?>" name="mot_fr" placeholder="mot en français">
+                    <input id="en" type="text" class="text"  value="<?=($_POST['en'])?>" name="mot_en" placeholder="mot en anglais"disabled>
+                    <input id="inputnote" type="text" class="text"  value="<?=($_POST['note'])?>" name="note" placeholder="note">
+                    <input type="hidden" name="id" value="<?=($_POST['id'])?>"> </input>
+                    <input id="boutonmodif" class="button" name="mode" value="modifier" type="submit"></input>
+                </div>
+            <div>
+        </form>
+        <?php else: ?>
         <form method="post">
             <div id="dynamicFields">
                 <div class="row">
                     <input id="fr" type="text" class="text" name="mot_fr" placeholder="mot en français">
                     <input id="en" type="text" class="text" name="mot_en" placeholder="mot en anglais">
                     <input id="inputnote" type="text" class="text" name="note" placeholder="note">
-                    <input id="boutonmodif" class="button" name="mode" value="ajouter" type="submit"></input>
-                    
+                    <input id="ajouter" class="button" name="mode" value="ajouter" type="submit"></input>
                 </div>
             <div>
         </form>
-             
+        <?php endif; ?>     
 <?php
     function checkParams($fields){
         foreach($fields as $field){
@@ -257,31 +272,47 @@
     }
 
     require 'modele.php';
-    $errormsg ="";
-    $mode=$_POST['mode'];
-    if(!isset($mode)){
+
+  
+
+    if(!isset($mode)|| $mode=="modform"){
+
         $resultats=getBaseDD();
     }
     elseif($mode == "effacer"){
         
         if (!checkParams(['id'])){
 
-            $errormsg=("id not found");}
+            $errormsg=("id not found");
+        }
         else{
              deleteWord($_POST['id']);
+           
         }
-           $resultats=getBaseDD();
+        $resultats=getBaseDD();
     }
+    elseif($mode == "modifier"){
         
+        if(!checkParams(['id']['mot_fr'],['note'])){
+          
+            $errormsg=('cannot be modified '); 
+        }
+        else{
+            $resultats=updateWord($_POST['id'],$_POST['mot_fr'],$_POST['note']);
+            // var_dump($_POST);
+        }
+    }    
     elseif($mode == "ajouter"){
 
         if (!checkParams(['mot_fr'],['mot-en'],['note'])){
 
-            $errormsg=("word not found");}
+            $errormsg=("word not found");
+        }
         else{
               insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
+            
         }
-           $resultats=getBaseDD();
+        $resultats=getBaseDD();
     }
     elseif($mode == "barre"){
 
@@ -290,10 +321,12 @@
             $errormsg=("not found");}
         else{
             $resultats=filterWord($_POST['barre']);}
-             
-    }else{
-        $resultats=getBaseDD();
+          
     }
+
+    
+        // $resultats=getBaseDD();
+    
    
     // if($_POST['mot_fr']&& $_POST['mot_en']){
     //     insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
@@ -307,7 +340,7 @@
     // } else {
     //     $resultats = getBaseDD();
     // }
-    
+
     $rowType="odd";
 ?>
 <?php if ($errormsg): ?> 
@@ -325,7 +358,8 @@
 
             
                 <?php foreach($resultats as $vocabulaire):
-                    $rowType = $rowType == "odd" ? "even":"odd";?>
+                    $rowType = $rowType == "odd" ? "even":"odd";
+                    ?>
                     <p class="elements francais <?= $rowType?>" id="fr<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_fr']?><p>
                     <p class="elements anglais <?= $rowType?>" id="en<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_en']?></p>
                     <p class="elements notes <?= $rowType?>" id="note<?=$vocabulaire['id']?>"><?=$vocabulaire['note']?></p>
@@ -333,17 +367,21 @@
 
                     <form action="" method="post" class="elements modifier">
                         <input type="hidden" name="id" value="<?=$vocabulaire['id']?>"></input>
-                        <input  name="mode" value="effacer" type="submit" id="<?=$vocabulaire['id']?>"></input> 
+                        <input type="submit" name="mode" value="effacer"  id="<?=$vocabulaire['id']?>"></input> 
                     </form>
 
-                    <form method="post" action="formulaire.php" class="elements modifier">
+                    <form method="post" action="" class="elements modifier">
                         <input type="hidden" name="id" value="<?=$vocabulaire['id']?>"></input>
-                        <input type="submit" value="modifier"><a href="formulaire.php"></a></input>
+                        <input type="hidden" name="fr" value="<?=$vocabulaire['mot_fr']?>"></input>
+                        <input type="hidden" name="en" value="<?=$vocabulaire['mot_en']?>"></input>
+                        <input type="hidden" name="inputnote" value="<?=$vocabulaire['note']?>"></input>
+                        <input type="submit" name="mode" value="modform"></input>
                     </form>
                     
                 <?php endforeach; ?>
             </div>
             </div>
+            <button><a href="index.php"> Retour à la page d'accueil </a></button> 
         </header>    
     </main>
   
