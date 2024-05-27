@@ -8,13 +8,13 @@
 </head>
 <body>
 
-    <?php $accueil=$_POST['barre']; ?> 
+    <?php $accueil=$_POST['rechercher']; ?> 
 
         <nav class="navbar bg-body-tertiary">
             <div class="container-fluide">
                 <form class="d-flex"  method="post">
-                        <input class="form-control me-2" type="search" name="barre" id="search" placeholder="rechercher..."/>
-                        <input class="btn btn-outline-success" type="submit" name="mode" value="barre" ></input>
+                        <input class="form-control  me-2" value="<?= $_POST['rechercher'] ?>" type="search" name="rechercher" id="search" placeholder="rechercher..."/>
+                        <input class="btn btn-outline-success" type="submit" name="mode" value="rechercher" ></input>
                 </form>
             </div>        
         </nav>
@@ -100,13 +100,13 @@
         }
         $resultats=getBaseDD();
     }
-    elseif($mode == "barre"){
+    elseif($mode == "rechercher"){
 
-        if (!checkParams(['barre'])){
-
-            $errormsg=("not found");}
-        else{
-            $resultats=filterWord($_POST['barre']);}        
+        if (!checkParams(['rechercher'])) {
+            $errormsg=("not found");
+        } else{
+            $resultats=filterWord($_POST['rechercher']);
+        }        
             
     } else {
         $resultats=getBaseDD();
@@ -121,7 +121,7 @@
         <header>
     
             <div class="container-fuide border">
-                <div class="row py-2 border-bottom bg-danger bg-opacity-50 ">
+                <div class="row py-2 border-bottom bg-success bg-opacity-50 ">
                     <div class="col-lg-2 col-sm-2 col-md-2 ">  
                         <h6 class="text-center"> Mots français</h6>
                     </div>
@@ -167,13 +167,28 @@
                     </div>
                 <?php endforeach; ?>
             </div>
-            <?php if (!$accueil=="barre"):?>
+            <?php if (!$accueil=="rechercher"):?>
             
             <?php else: ?>
                 <button><a href="index.php"> Retour à la page d'accueil </a></button> 
             <?php endif;?>
         </header>    
     </main>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <nav aria-label="Page navigation example">
+        <div class="container m-2">
+            <form method="post" class="pagination justify-content-end ">
+                <li class="page-item disabled">
+                    <a class="page-link text-success">Précédent</a>
+                </li>
+                <li class="page-item"><a class="page-link text-success" href="#">1</a></li>
+                <li class="page-item"><a class="page-link text-success" href="#">2</a></li>
+                <li class="page-item"><a class="page-link text-success" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link text-success" href="#">Suivant</a>
+                </li>
+            </form>
+        </div>
+      
+    </nav>
 </body>
 </html>
