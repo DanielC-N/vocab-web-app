@@ -18,8 +18,13 @@
                 </form>
             </div>        
         </nav>
-        <?php    $errormsg ="";
-                $mode=$_POST['mode'];
+        <?php
+            if(array_key_exists('nbpage', $_GET) && $_GET['nbpage'] <0){
+                $_GET['nbpage']=0;
+            }
+            $errormsg ="";
+            $mode=$_POST['mode'];
+            $page=$_GET['nbpage'];
                 
         ?>
         <?php if($mode== "modification"):?>
@@ -50,17 +55,45 @@
             </div>
         </nav>
         <?php endif; ?>
+            
+        <!-- <nav aria-label="Page navigation example"class="pagination justify-content-center m-2 ">
+            <form method="get" action="">
+                <input  type="hidden" name="nbpage" value="?=$_GET['nbpage']-1?>"></input>
+                <input  type="submit" class="btn btn-outline-success" value="precedent"></input>
+            </form>
+            ?php
+                // $nbPagesTotales=floor(count(getBaseDD())/20);
+                if(array_key_exists('nbpage', $_GET) && $_GET['nbpage'] >= $nbPagesTotales) {
+                    $_GET['nbpage']= $nbPagesTotales -1;
+                }
+                for($numPage=0; $numPage <= $nbPagesTotales; $numPage++): 
+            ?>
+            <form method="get" action="">
+                <input type="hidden" name="nbpage" value="?=$numPage?>"></input>
+                <input type="submit" class="btn btn-outline-success" value="?=$numPage +1?>"></input>
+            </form>
+        
+            ?php endfor ?>
+            <form method="get" action="">
+                <input type="hidden" name="nbpage" value="?=$_GET['nbpage']+1?>"></input>
+                <input type="submit" class="btn btn-outline-success" value="suivant"></input>
+            </form> 
+        </nav> -->
+
 
         <?php if (!$accueil=="rechercher"):?>
             <?php else: ?>
             <ul class="pagination justify-content-left m-2">
-                <li class="page-item"><a class="page-link text-success" href="index.php"> Retour à la page d'accueil </a></li> 
+                <li><a class="btn btn-outline-success" href="index.php"> Retour à la page d'accueil </a></li> 
             </ul>
             <?php endif;?>
-<?php
+    <?php
+    /**
+    * $fields == array
+    */
     function checkParams($fields){
         foreach($fields as $field){
-            if ((!$_POST[$field])){
+            if ((!array_key_exists($field, $_POST))){
                 return false;
             }
         }
@@ -69,61 +102,50 @@
 
     require 'modele.php';
 
-    if(!isset($mode)|| $mode=="modification" ){
-        var_dump($_POST);
-       $resultats=getWordsByOffset();
+    if(!isset($mode)|| $mode=="modification" ) {
+        $resultats=getWordsByOffset($_GET['nbpage']);
     }
-    elseif($mode == "effacer"){
-        
+    elseif($mode == "effacer") {
         if (!checkParams(['id'])){
-
             $errormsg=("id not found");
-        }else{
-
+        } else {
             deleteWord($_POST['id']);
         }
-        $resultats=getBaseDD();
+        $resultats=getWordsByOffset($_GET['nbpage']);
     }
-    elseif($mode == "modifier"){
-        
-        if(!checkParams(['id']['mot_fr'],['mot_en'],['note'])){
-          
-            $errormsg=('cannot be modified '); 
-        }
-        else{
-            $resultats=updateWord($_POST['id'],$_POST['mot_fr'],$_POST['note']);
-        
+    elseif($mode == "modifier") {
+        if(!checkParams(['id','mot_fr','note'])) {
+            $errormsg=('cannot be modified ');
+        } else {
+            $resultats=updateWord($_POST['id'],$_POST['mot_fr'],$_POST['note'],$_GET['nbpage']);
         }
     }    
-    elseif($mode == "ajouter"){
-
-        if (!checkParams(['mot_fr'],['mot-en'],['note'])){
-
+    elseif($mode == "ajouter") {
+        if (!checkParams(['mot_fr','mot-en','note'])) {
             $errormsg=("word not found");
+        } else {
+            insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);   
         }
-        else{
-              insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
-            
-        }
-        $resultats=getBaseDD();
+        $resultats=getWordsByOffset($_GET['nbpage']);
+    } 
+    elseif($page) {
+        $resultats=getWordsByOffset($_GET['nbpage']);
     }
     elseif($mode == "rechercher"){
-
         if (!checkParams(['rechercher'])) {
             $errormsg=("not found");
-        } else{
+        } else {
             $resultats=filterWord($_POST['rechercher']);
-        }        
-            
+        }              
     } else {
-        $resultats=getBaseDD();
+        $resultats=getWordsByOffset($_GET['nbpage']);
     }
 
-    $rowType="odd";
-?>
+    
+    ?>
 
-<?php if ($errormsg): ?> 
-    <h1>error : <?=$errormsg?></h1>
+    <?php if ($errormsg): ?> 
+        <h1>error : <?=$errormsg?></h1>
     <?php endif; ?>
         <header>
     
@@ -150,23 +172,24 @@
                 </div>
             
                 <?php foreach($resultats as $vocabulaire):
-                    $rowType = $rowType == "odd" ? "even":"odd";
+                  
                     ?>
                     <div class="row py-1 border-bottom ">
-                            <p class="col-sm-12 col-lg-2 col-md-2 text-center <?= $rowType?>" id="fr<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_fr']?></p>
-                            <p class="col-sm-12 col-lg-2 col-md-2 text-center <?= $rowType?>" id="en<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_en']?></p>
-                            <p class="col-sm-12 col-lg-2 col-md-2 text-center <?= $rowType?>" id="note<?=$vocabulaire['id']?>"><?=$vocabulaire['note']?></p>
-                            <time class="col-sm-12 col-lg-2 col-md-2 text-center <?= $rowType?>"><?=$vocabulaire['created']?></time>
+                            <p class="col-sm-12 col-lg-2 col-md-2 text-center" id="fr<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_fr']?></p>
+                            <p class="col-sm-12 col-lg-2 col-md-2 text-center" id="en<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_en']?></p>
+                            <p class="col-sm-12 col-lg-2 col-md-2 text-center" id="note<?=$vocabulaire['id']?>"><?=$vocabulaire['note']?></p>
+                            <time class="col-sm-12 col-lg-2 col-md-2 text-center"><?=$vocabulaire['created']?></time>
 
-                        <form action="" method="post" class="col-lg-2 col-sm-12 col-md-2 text-center <?= $rowType?>">
+                        <form action="" method="post" class="col-lg-2 col-sm-12 col-md-2 text-center">
                             <input type="hidden" name="id" value="<?=$vocabulaire['id']?>"></input>
                             <input class="btn btn-outline-success" type="submit" name="mode" value="effacer"  id="<?=$vocabulaire['id']?>"></input> 
                         </form>
 
-                        <form method="post" action="" class="col-lg-2 col-sm-12 col-md-2 text-center <?= $rowType?>">
+                        <form method="post" action="" class="col-lg-2 col-sm-12 col-md-2 text-center">
                             <input type="hidden" name="id" value="<?=$vocabulaire['id']?>"></input>
                             <input type="hidden" name="fr" value="<?=$vocabulaire['mot_fr']?>"></input>
                             <input type="hidden" name="en" value="<?=$vocabulaire['mot_en']?>"></input>
+
                             <input type="hidden" name="inputnote" value="<?=$vocabulaire['note']?>"></input>
                             <input class="btn btn-outline-success" type="submit" name="mode" value="modification"></input>
                         </form>
@@ -179,24 +202,37 @@
             <?php if (!$accueil=="rechercher"):?>
             <?php else: ?>
             <ul class="pagination justify-content-left m-2">
-                <li class="page-item"><a class="page-link text-success" href="index.php"> Retour à la page d'accueil </a></li> 
+                <li><a class="btn btn-outline-success" href="index.php"> Retour à la page d'accueil </a></li> 
             </ul>
             <?php endif;?>
 
     </main>
 
-    <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-center m-2">
-            <li class="page-item disabled">
-            <a class="page-link text-success " href="#">precedent</a>
-            </li>
-            <li class="page-item"><a class="page-link text-success" href="#">1</a></li>
-            <li class="page-item"><a class="page-link text-success" href="#">2</a></li>
-            <li class="page-item"><a class="page-link text-success" href="#">3</a></li>
-            <li class="page-item">
-                <a class="page-link text-success " href="#">suivant</a>
-            </li>
-        </ul>
-    </nav>
+        <nav aria-label="Page navigation example"class="pagination justify-content-center m-2 ">
+            <form method="get" action="">
+                <input  type="hidden" name="nbpage" value="<?=$_GET['nbpage']-1?>"></input>
+                <input  type="submit" class="btn btn-outline-success" value="precedent"></input>
+            </form>
+
+            <?php
+                $nbPagesTotales=floor(count(getBaseDD())/20);
+
+                if(array_key_exists('nbpage', $_GET) && $_GET['nbpage'] >= $nbPagesTotales){
+                    $_GET['nbpage']= $nbPagesTotales -1;
+                }
+
+                for($numPage=0; $numPage <= $nbPagesTotales; $numPage++): 
+            ?>
+            <form method="get" action="">
+                <input type="hidden" name="nbpage" value="<?=$numPage?>"></input>
+                <input type="submit" class="btn btn-outline-success" value="<?=$numPage +1?>"></input>
+            </form>
+        
+            <?php endfor ?>
+            <form method="get" action="">
+                <input type="hidden" name="nbpage" value="<?=$_GET['nbpage']+1?>"></input>
+                <input type="submit" class="btn btn-outline-success" value="suivant"></input>
+            </form>
+        </nav>
 </body>
 </html>
