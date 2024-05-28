@@ -10,22 +10,23 @@
 
     <?php $accueil=$_POST['rechercher']; ?> 
 
-        <nav class="navbar bg-body-tertiary">
-            <div class="container-fluide">
+        <nav class="navbar bg-body-tertiary ">
+            <div class="container justify-content-center">
                 <form class="d-flex"  method="post">
-                        <input class="form-control  me-2" value="<?= $_POST['rechercher'] ?>" type="search" name="rechercher" id="search" placeholder="rechercher..."/>
+                        <input class="form-control me-2" value="<?= $_POST['rechercher'] ?>" type="search" name="rechercher" id="search" placeholder="rechercher..."/>
                         <input class="btn btn-outline-success" type="submit" name="mode" value="rechercher" ></input>
                 </form>
             </div>        
         </nav>
         <?php    $errormsg ="";
                 $mode=$_POST['mode'];
+                
         ?>
         <?php if($mode== "modification"):?>
 
 
         <nav class="navbar bg-body-tertiary">
-            <div class="container-fluide">
+            <div class="container justify-content-center">
                 <form class="d-flex" method="post">
                     <input class="form-control me-2" id="fr" type="text" class="text" value="<?=($_POST['fr'])?>" name="mot_fr" placeholder="mot en français"/>
                     <input class="form-control me-2" id="en" type="text" class="text"  value="<?=($_POST['en'])?>" name="mot_en" placeholder="mot en anglais"disabled/>
@@ -39,7 +40,7 @@
         <?php else: ?>
        
         <nav class="navbar bg-body-tertiary">
-            <div class="container">
+            <div class="container justify-content-center">
                 <form class="d-flex" method="post">
                     <input class="form-control me-2 " id="fr" type="text" class="text" name="mot_fr" placeholder="mot en français"/>
                     <input class="form-control me-2" id="en" type="text" class="text" name="mot_en" placeholder="mot en anglais"/>
@@ -48,7 +49,14 @@
                 </form>
             </div>
         </nav>
-        <?php endif; ?>  
+        <?php endif; ?>
+
+        <?php if (!$accueil=="rechercher"):?>
+            <?php else: ?>
+            <ul class="pagination justify-content-left m-2">
+                <li class="page-item"><a class="page-link text-success" href="index.php"> Retour à la page d'accueil </a></li> 
+            </ul>
+            <?php endif;?>
 <?php
     function checkParams($fields){
         foreach($fields as $field){
@@ -61,19 +69,18 @@
 
     require 'modele.php';
 
-    if(!isset($mode)|| $mode=="modification"){
-
-        $resultats=getBaseDD();
+    if(!isset($mode)|| $mode=="modification" ){
+        var_dump($_POST);
+       $resultats=getWordsByOffset();
     }
     elseif($mode == "effacer"){
         
         if (!checkParams(['id'])){
 
             $errormsg=("id not found");
-        }
-        else{
-             deleteWord($_POST['id']);
-           
+        }else{
+
+            deleteWord($_POST['id']);
         }
         $resultats=getBaseDD();
     }
@@ -145,12 +152,11 @@
                 <?php foreach($resultats as $vocabulaire):
                     $rowType = $rowType == "odd" ? "even":"odd";
                     ?>
-                    <div class="row py-1 border-bottom">
-
-                        <p class="col-sm-12 col-lg-2 col-md-2 text-center  <?= $rowType?>" id="fr<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_fr']?></p>
-                        <p class="col-sm-12 col-lg-2 col-md-2 text-center <?= $rowType?>" id="en<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_en']?></p>
-                        <p class="col-sm-12 col-lg-2 col-md-2 text-center <?= $rowType?>" id="note<?=$vocabulaire['id']?>"><?=$vocabulaire['note']?></p>
-                        <time class="col-sm-12 col-lg-2 col-md-2 text-center <?= $rowType?>"><?=$vocabulaire['created']?></time>
+                    <div class="row py-1 border-bottom ">
+                            <p class="col-sm-12 col-lg-2 col-md-2 text-center <?= $rowType?>" id="fr<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_fr']?></p>
+                            <p class="col-sm-12 col-lg-2 col-md-2 text-center <?= $rowType?>" id="en<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_en']?></p>
+                            <p class="col-sm-12 col-lg-2 col-md-2 text-center <?= $rowType?>" id="note<?=$vocabulaire['id']?>"><?=$vocabulaire['note']?></p>
+                            <time class="col-sm-12 col-lg-2 col-md-2 text-center <?= $rowType?>"><?=$vocabulaire['created']?></time>
 
                         <form action="" method="post" class="col-lg-2 col-sm-12 col-md-2 text-center <?= $rowType?>">
                             <input type="hidden" name="id" value="<?=$vocabulaire['id']?>"></input>
@@ -167,28 +173,30 @@
                     </div>
                 <?php endforeach; ?>
             </div>
+           
+        </header> 
+
             <?php if (!$accueil=="rechercher"):?>
-            
             <?php else: ?>
-                <button><a href="index.php"> Retour à la page d'accueil </a></button> 
+            <ul class="pagination justify-content-left m-2">
+                <li class="page-item"><a class="page-link text-success" href="index.php"> Retour à la page d'accueil </a></li> 
+            </ul>
             <?php endif;?>
-        </header>    
+
     </main>
+
     <nav aria-label="Page navigation example">
-        <div class="container m-2">
-            <form method="post" class="pagination justify-content-end ">
-                <li class="page-item disabled">
-                    <a class="page-link text-success">Précédent</a>
-                </li>
-                <li class="page-item"><a class="page-link text-success" href="#">1</a></li>
-                <li class="page-item"><a class="page-link text-success" href="#">2</a></li>
-                <li class="page-item"><a class="page-link text-success" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link text-success" href="#">Suivant</a>
-                </li>
-            </form>
-        </div>
-      
+        <ul class="pagination justify-content-center m-2">
+            <li class="page-item disabled">
+            <a class="page-link text-success " href="#">precedent</a>
+            </li>
+            <li class="page-item"><a class="page-link text-success" href="#">1</a></li>
+            <li class="page-item"><a class="page-link text-success" href="#">2</a></li>
+            <li class="page-item"><a class="page-link text-success" href="#">3</a></li>
+            <li class="page-item">
+                <a class="page-link text-success " href="#">suivant</a>
+            </li>
+        </ul>
     </nav>
 </body>
 </html>
