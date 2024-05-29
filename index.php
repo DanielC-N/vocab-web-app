@@ -72,14 +72,13 @@
             $errormsg=("id not found");
         }
         else{
-             deleteWord($_POST['id']);
+            deleteWord($_POST['id']);
            
         }
         $resultats=getBaseDD();
     }
     elseif($mode == "modifier"){
-        
-        if(!checkParams(['id']['mot_fr'],['mot_en'],['note'])){
+        if(!checkParams(['id','mot_fr','mot_en','note'])){
           
             $errormsg=('cannot be modified '); 
         }
@@ -90,7 +89,7 @@
     }    
     elseif($mode == "ajouter"){
 
-        if (!checkParams(['mot_fr'],['mot-en'],['note'])){
+        if (!checkParams([['mot_fr'],['mot-en'],['note']])){
 
             $errormsg=("word not found");
         }
