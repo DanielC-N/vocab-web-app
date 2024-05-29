@@ -3,48 +3,42 @@ function getBaseDD(){
     $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
     $stmt =$bdd->prepare('SELECT * FROM vocabulaire ORDER BY mot_fr ');
     $stmt->execute(); 
-    return $stmt->fetchAll();
-    // $resultats = $bdd->query('SELECT * FROM vocabulaire ORDER BY created DESC; ');
-    // return $resultats;
+    $res = $stmt->fetchAll();
+    $bdd = null;
+    $stmt= null;
+    return $res;
 }
 
-function getWordsByOffset($offset){
+function getWordsByOffset($nbpage){
+    $offset = $nbpage*20;
     $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
-    $stmt =$bdd->prepare('SELECT * FROM vocabulaire ORDER BY mot_fr LIMIT 10 OFFSET 10');
-    $stmt->execute(); 
-    return $stmt->fetchAll();
-   
+    $stmt =$bdd->prepare('SELECT * FROM vocabulaire ORDER BY mot_fr LIMIT 20 OFFSET :offset');
+    $stmt->bindValue('offset', $offset, PDO::PARAM_INT);
+    $stmt->execute();
+    $res = $stmt->fetchAll();
+    $bdd = null;
+    $stmt= null;
+    return $res;
 }
 
 function filterWord($text){
     $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
     $stmt =$bdd ->prepare("SELECT * FROM vocabulaire WHERE mot_en LIKE :en OR mot_fr LIKE :fr ");
     $stmt->execute(['en'=>'%'.$text.'%', 'fr'=>'%'.$text.'%']);
-    return $stmt->fetchAll();
-
-    // $resultats = $bdd->query('SELECT * FROM vocabulaire WHERE mot_fr LIKE \'%' . $text . '%\'  OR mot_en LIKE \'%' . $text . '%\'; ');
-    // return $resultats;
+    $res = $stmt->fetchAll();
+    $bdd = null;
+    $stmt= null;
+    return $res;
  }
 
 function deleteWord($id){
     $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
     $stmt =$bdd ->prepare('DELETE FROM vocabulaire WHERE id =:id');
     $stmt->execute(['id'=>$id]);
-    // $resultats = $bdd->query('DELETE FROM vocabulaire WHERE id = ' . $id . ' ;');
-    // return $resultats; 
-
-}
- 
-function getWord($id){
-    $bdd=new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
-    $stmt=$bdd ->prepare('SELECT * FROM vocabulaire WHERE id =:id');
-    $stmt->execute(['id'=>$id]);
-    //$resultats = $bdd->query('SELECT * FROM vocabulaire WHERE id = ' . $id . ' ;');
-    // return $resultats;
+   
 }
 
 function insertWord($textfr, $texten, $note){
-    echo('insert');
     $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
     $stmt= $bdd->prepare('SELECT id FROM vocabulaire WHERE mot_en =:en');
     $stmt->execute(['en'=>$texten]);
@@ -57,17 +51,15 @@ function insertWord($textfr, $texten, $note){
         $stmt=$bdd->prepare('UPDATE vocabulaire SET mot_fr=:fr, note=:note WHERE id=:id');
         $stmt->execute(['fr'=> $textfr,'note'=>$note, 'id'=>$id]); 
     }
-
-   
-    
+    $bdd = null;
+    $stmt = null;
 } 
- function updateWord($id, $textfr, $note){
+ function updateWord($id, $textfr, $note, $numeroDeLaPage){
 
     $bdd=new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
     $stmt= $bdd->prepare('UPDATE vocabulaire SET mot_fr=:fr, note=:note WHERE id=:id');
     $stmt->execute(['fr'=> $textfr,'note'=>$note, 'id'=>$id]);
-    return getBaseDD();
-       
+    return getWordsByOffset($numeroDeLaPage);
 }
  
 ?>
