@@ -61,7 +61,15 @@ function insertWord($textfr, $texten, $note){
     $stmt->execute(['fr'=> $textfr,'note'=>$note, 'id'=>$id]);
     return getWordsByOffset($numeroDeLaPage);
 }
- 
+
+function checkParams($fields){
+    foreach($fields as $field){
+        if ((!array_key_exists($field, $_POST))){
+            return false;
+        }
+    }
+    return true;
+}
 ?>
 
 
