@@ -18,7 +18,7 @@
         
         $nbPagesTotales=floor(count(getBaseDD())/20);
         if(array_key_exists('nbpage', $_GET) && $_GET['nbpage'] >= $nbPagesTotales) {
-            $_GET['nbpage']= $nbPagesTotales -1;
+            $_GET['nbpage']= $nbPagesTotales;
         }
         $numeroPageCourante=$_GET['nbpage'];
 
