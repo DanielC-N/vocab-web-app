@@ -91,55 +91,55 @@
     /**
     * $fields == array
     */
-    function checkParams($fields){
-        foreach($fields as $field){
-            if ((!array_key_exists($field, $_POST))){
-                return false;
-            }
-        }
-        return true;
-    }
+    // function checkParams($fields){
+    //     foreach($fields as $field){
+    //         if ((!array_key_exists($field, $_POST))){
+    //             return false;
+    //         }
+    //     }
+    //     return true;
+    // }
 
-    require 'modele.php';
+    // require 'modele.php';
 
-    if(!isset($mode)|| $mode=="modification" ) {
-        $resultats=getWordsByOffset($_GET['nbpage']);
-    }
-    elseif($mode == "effacer") {
-        if (!checkParams(['id'])){
-            $errormsg=("id not found");
-        } else {
-            deleteWord($_POST['id']);
-        }
-        $resultats=getWordsByOffset($_GET['nbpage']);
-    }
-    elseif($mode == "modifier") {
-        if(!checkParams(['id','mot_fr','note'])) {
-            $errormsg=('cannot be modified ');
-        } else {
-            $resultats=updateWord($_POST['id'],$_POST['mot_fr'],$_POST['note'],$_GET['nbpage']);
-        }
-    }    
-    elseif($mode == "ajouter") {
-        if (!checkParams(['mot_fr','mot-en','note'])) {
-            $errormsg=("word not found");
-        } else {
-            insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);   
-        }
-        $resultats=getWordsByOffset($_GET['nbpage']);
-    } 
-    elseif($page) {
-        $resultats=getWordsByOffset($_GET['nbpage']);
-    }
-    elseif($mode == "rechercher"){
-        if (!checkParams(['rechercher'])) {
-            $errormsg=("not found");
-        } else {
-            $resultats=filterWord($_POST['rechercher']);
-        }              
-    } else {
-        $resultats=getWordsByOffset($_GET['nbpage']);
-    }
+    // if(!isset($mode)|| $mode=="modification" ) {
+    //     $resultats=getWordsByOffset($_GET['nbpage']);
+    // }
+    // elseif($mode == "effacer") {
+    //     if (!checkParams(['id'])){
+    //         $errormsg=("id not found");
+    //     } else {
+    //         deleteWord($_POST['id']);
+    //     }
+    //     $resultats=getWordsByOffset($_GET['nbpage']);
+    // }
+    // elseif($mode == "modifier") {
+    //     if(!checkParams(['id','mot_fr','note'])) {
+    //         $errormsg=('cannot be modified ');
+    //     } else {
+    //         $resultats=updateWord($_POST['id'],$_POST['mot_fr'],$_POST['note'],$_GET['nbpage']);
+    //     }
+    // }    
+    // elseif($mode == "ajouter") {
+    //     if (!checkParams(['mot_fr','mot-en','note'])) {
+    //         $errormsg=("word not found");
+    //     } else {
+    //         insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);   
+    //     }
+    //     $resultats=getWordsByOffset($_GET['nbpage']);
+    // } 
+    // elseif($page) {
+    //     $resultats=getWordsByOffset($_GET['nbpage']);
+    // }
+    // elseif($mode == "rechercher"){
+    //     if (!checkParams(['rechercher'])) {
+    //         $errormsg=("not found");
+    //     } else {
+    //         $resultats=filterWord($_POST['rechercher']);
+    //     }              
+    // } else {
+    //     $resultats=getWordsByOffset($_GET['nbpage']);
+    // }
 
     
     ?>
@@ -207,32 +207,5 @@
             <?php endif;?>
 
     </main>
-
-        <nav aria-label="Page navigation example"class="pagination justify-content-center m-2 ">
-            <form method="get" action="">
-                <input  type="hidden" name="nbpage" value="<?=$_GET['nbpage']-1?>"></input>
-                <input  type="submit" class="btn btn-outline-success" value="precedent"></input>
-            </form>
-
-            <?php
-                $nbPagesTotales=floor(count(getBaseDD())/20);
-
-                if(array_key_exists('nbpage', $_GET) && $_GET['nbpage'] >= $nbPagesTotales){
-                    $_GET['nbpage']= $nbPagesTotales -1;
-                }
-
-                for($numPage=0; $numPage <= $nbPagesTotales; $numPage++): 
-            ?>
-            <form method="get" action="">
-                <input type="hidden" name="nbpage" value="<?=$numPage?>"></input>
-                <input type="submit" class="btn btn-outline-success" value="<?=$numPage +1?>"></input>
-            </form>
-        
-            <?php endfor ?>
-            <form method="get" action="">
-                <input type="hidden" name="nbpage" value="<?=$_GET['nbpage']+1?>"></input>
-                <input type="submit" class="btn btn-outline-success" value="suivant"></input>
-            </form>
-        </nav>
 </body>
 </html>
