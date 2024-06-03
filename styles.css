@@ -1,116 +1,25 @@
-@media (min-width:300px){  
-
-.categories,.francais,.anglais,.notes,.date,.supp,.modifier,.text{
-    display: flex;
-    flex-grow: 1;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    font-size: 20px;
-    align-items: left;
-    justify-content: left;
-       
-    }
-
-
-#dynamicFields{
-
-    display: flex;
-    flex-direction:column;
-    flex-wrap : nowrap;
-    color: rgb(0, 0, 0);
-    font-family:Arial, Helvetica, sans-serif;
-    grid-template-columns: auto;
-    max-width: 100%;
-}   
-
-#row {
-    flex-direction: column;
-    display: flex;
-    flex-grow: 1;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    font-size: 20px;
-    align-items: center;
-    justify-content: center;
-}
-
-.text{
-    color: black;
-    justify-content: center;
-    flex-wrap: wrap;
-    background-color: #948eb4;      
-    align-items: center;
-
-}
-}
-
-@media (min-width:1025px){
-
-    .categories,.francais,.anglais,.notes,.date,.supp,.modifier,.text{
-        display: flex;
-        flex-grow: 1;
-        padding-top: 5px;
-        padding-bottom: 5px;
-        font-size: 20px;
-        align-items: left;
-        justify-content: left;
-       
-    }
-
-    #dynamicFields{
-        display: flex;
-        flex-direction:column;
-        flex-wrap : nowrap;
-        color: rgb(0, 0, 0);
-        font-family:Arial, Helvetica, sans-serif;
-        grid-template-columns: auto;
-        max-width: 100%;
-    }   
-    
-    #row {
-        flex-direction: column;
-        display: flex;
-        flex-grow: 1;
-        padding-top: 2px;
-        padding-bottom: 2px;
-        font-size: 20px;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .text{
-        color: black;
-        justify-content: center;
-        flex-wrap: wrap;
-        background-color: #948eb4;      
-        align-items: center;
-        justify-content: center;
-        border-radius: 5px 5px 5px 5px;
-    
-    }
-
-
-    .button{
-        margin: 1%;
-        border-radius: 5px 5px 5px 5px;
-        width: 13%;
-        height: 10%;
-    }
-    .texten{
-        color: black;
-        justify-content: center;
-        flex-wrap: wrap;
-        background-color: #948eb4;      
-        align-items: center;
-        justify-content: center;
-        border-radius: 5px 5px 5px 5px;
-        pointer-events: none;
-        display: flex;
-        flex-grow: 1;
-        padding-top: 5px;
-        padding-bottom: 5px;
-        font-size: 20px;
-        align-items: left;
-        justify-content: left;
-    }
-}
+/* <!-- <nav aria-label="Page navigation example"class=" navbar bg-body-tertiary pagination justify-content-center ">
+               <form method="get" action="">
+                    <input  type="hidden" name="nbpage" value="?=$numeroPageCourante -1?>"></input>
+                    <input  type="submit" class="btn btn-outline-success" value="precedent"></input>
+                </form>
+                ?php
+                    for($numPage=0; $numPage <= $nbPagesTotales; $numPage++):
+                ?>
+                    ?php if ($numPage == $numeroPageCourante) : ?>
+                        <form method="get" action="">
+                            <input type="hidden" name="nbpage" value="?=$numPage?>"></input>
+                            <input type="submit" class="btn btn-success" value="?=$numPage +1?>"></input>
+                    </form>
+                    ?php else : ?>
+                        <form method="get" action="">
+                            <input type="hidden" name="nbpage" value="?=$numPage?>"></input>
+                            <input type="submit" class="btn btn-outline-success" value="?=$numPage +1?>"></input>
+                        </form>
+                    ?php endif ?>
+                ?php endfor ?>
+                <form method="get" action="">
+                    <input type="hidden" name="nbpage" value="?=$numeroPageCourante+1?>"></input>
+                    <input type="submit" type="submit" class="btn btn-outline-success" value="suivant"></input>
+                </form>
+        </nav> --> */
