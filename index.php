@@ -43,7 +43,7 @@
         }
         elseif($mode == "ajouter") {
             if (!checkParams(['mot_fr','mot_en','note'])) {
-                var_dump($_POST);
+                
                 $errormsg=("word not found");
             } else {
                 insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
