@@ -39,24 +39,23 @@
             } else {
                 $resultats=updateWord($_POST['id'],$_POST['mot_fr'],$_POST['note'],$nbPagesCourante);
             }
-        }    
+            $resultats=getWordsByOffset($numeroPageCourante);
+        }
         elseif($mode == "ajouter") {
-            if (!checkParams(['mot_fr','mot-en','note'])) {
+            if (!checkParams(['mot_fr','mot_en','note'])) {
+                var_dump($_POST);
                 $errormsg=("word not found");
             } else {
-                insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);   
+                insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
             }
             $resultats=getWordsByOffset($numeroPageCourante);
         } 
-        elseif($numeroPageCourante) {
-            $resultats=getWordsByOffset($_GET['nbpage']);
-        }
         elseif($mode == "rechercher"){
             if (!checkParams(['rechercher'])) {
                 $errormsg=("not found");
             } else {
                 $resultats=filterWord($_POST['rechercher']);
-            }              
+            }
         } else {
             $resultats=getWordsByOffset($nbPagesCourante);
         }
@@ -71,7 +70,7 @@
                         <input class="form-control me-2" value="<?= $_POST['rechercher'] ?>" type="search" name="rechercher" id="search" placeholder="rechercher..."/>
                         <input class="btn btn-outline-success" type="submit" name="mode" value="rechercher" ></input>
                 </form>
-            </div>        
+            </div>
         </nav>
 
         <?php if($mode== "modification"):?>
@@ -109,7 +108,7 @@
                 <input  type="submit" class="btn btn-outline-success" value="precedent"></input>
             </form>
             <?php
-                for($numPage=0; $numPage <= $nbPagesTotales; $numPage++): 
+                for($numPage=0; $numPage <= $nbPagesTotales; $numPage++):
             ?>
                 <?php if ($numPage == $numeroPageCourante) : ?>
                     <form method="get" action="">
@@ -125,7 +124,7 @@
             <?php endfor ?>
             <form method="get" action="">
                 <input type="hidden" name="nbpage" value="<?=$numeroPageCourante+1?>"></input>
-                <input  type="submit" type="submit" class="btn btn-outline-success" value="suivant"></input>
+                <input type="submit" type="submit" class="btn btn-outline-success" value="suivant"></input>
             </form>
         </nav>
 
@@ -143,7 +142,7 @@
         <header>
             <div class="container-fuide border">
                 <div class="row py-2 border-bottom bg-success bg-opacity-50 ">
-                    <div class="col-lg-2 col-sm-2 col-md-2 ">  
+                    <div class="col-lg-2 col-sm-2 col-md-2 ">
                         <h6 class="text-center"> Mots français</h6>
                     </div>
                     <div class="col-lg-2 col-sm-2 col-md-2">  
@@ -189,12 +188,12 @@
                 <?php endforeach; ?>
             </div>
            
-        </header> 
+        </header>
 
             <?php if (!$accueil=="rechercher"):?>
             <?php else: ?>
             <ul class="pagination justify-content-left m-2">
-                <li><a class="btn btn-outline-success" href="index.php"> Retour à la page d'accueil </a></li> 
+                <li><a class="btn btn-outline-success" href="index.php"> Retour à la page d'accueil </a></li>
             </ul>
             <?php endif;?>
 
@@ -206,7 +205,7 @@
                 <input  type="submit" class="btn btn-outline-success" value="precedent"></input>
             </form>
             <?php
-                for($numPage=0; $numPage <= $nbPagesTotales; $numPage++): 
+                for($numPage=0; $numPage <= $nbPagesTotales; $numPage++):
             ?>
                 <?php if ($numPage == $numeroPageCourante) : ?>
                     <form method="get" action="">
@@ -222,10 +221,8 @@
             <?php endfor ?>
             <form method="get" action="">
                 <input type="hidden" name="nbpage" value="<?=$numeroPageCourante+1?>"></input>
-                <input  type="submit" type="submit" class="btn btn-outline-success" value="suivant"></input>
+                <input type="submit" type="submit" class="btn btn-outline-success" value="suivant"></input>
             </form>
         </nav>
 </body>
 </html>
-
-      
