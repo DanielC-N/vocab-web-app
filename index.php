@@ -102,31 +102,82 @@
         </nav>
         <?php endif; ?>
             
-        <nav aria-label="Page navigation example"class=" navbar bg-body-tertiary pagination justify-content-center m-2 ">
+        <!-- <nav aria-label="Page navigation example"class=" navbar bg-body-tertiary pagination justify-content-center m-2 ">
             <form method="get" action="">
-                <input  type="hidden" name="nbpage" value="<?=$numeroPageCourante -1?>"></input>
+                <input  type="hidden" name="nbpage" value="?=$numeroPageCourante -1?>"></input>
                 <input  type="submit" class="btn btn-outline-success" value="precedent"></input>
             </form>
-            <?php
+            ?php
                 for($numPage=0; $numPage <= $nbPagesTotales; $numPage++):
             ?>
-                <?php if ($numPage == $numeroPageCourante) : ?>
+                ?php if ($numPage == $numeroPageCourante) : ?>
                     <form method="get" action="">
-                        <input type="hidden" name="nbpage" value="<?=$numPage?>"></input>
-                        <input type="submit" class="btn btn-success" value="<?=$numPage +1?>"></input>
+                        <input type="hidden" name="nbpage" value="?=$numPage?>"></input>
+                        <input type="submit" class="btn btn-success" value="?=$numPage +1?>"></input>
                     </form>
-                <?php else : ?>
+                ?php else : ?>
                     <form method="get" action="">
-                        <input type="hidden" name="nbpage" value="<?=$numPage?>"></input>
-                        <input type="submit" class="btn btn-outline-success" value="<?=$numPage +1?>"></input>
+                        <input type="hidden" name="nbpage" value="?=$numPage?>"></input>
+                        <input type="submit" class="btn btn-outline-success" value="?=$numPage +1?>"></input>
                     </form>
-                <?php endif ?>
-            <?php endfor ?>
+                <php endif ?>
+            ?php endfor ?>
             <form method="get" action="">
-                <input type="hidden" name="nbpage" value="<?=$numeroPageCourante+1?>"></input>
+                <input type="hidden" name="nbpage" value="?=$numeroPageCourante+1?>"></input>
                 <input type="submit" type="submit" class="btn btn-outline-success" value="suivant"></input>
             </form>
-        </nav>
+        </nav> -->
+
+        <nav aria-label="Page navigation example" class="navbar bg-body-tertiary pagination justify-content-center">
+            <form method="get" action="">
+                <input type="hidden" name="nbpage" value="<?= max($numeroPageCourante - 1, 0) ?>"></input>
+                <input type="submit" class="btn btn-outline-success" value="précédent"></input>
+            </form>
+
+        <?php
+            $startPage = max(0, $numeroPageCourante - 1);
+            $endPage = min($nbPagesTotales, $numeroPageCourante + 1);
+
+            if ($startPage > 0) {
+                echo '<form method="get" action="">
+                        <input type="hidden" name="nbpage" value="0"></input>
+                        <input type="submit" class="btn btn-outline-success" value="1"></input>
+                    </form>';
+                if ($startPage > 1) {
+                    echo '<span>...</span>';
+                }
+            }
+
+            for ($numPage = $startPage; $numPage <= $endPage; $numPage++):
+        ?>
+            <?php if ($numPage == $numeroPageCourante): ?>
+                <form method="get" action="">
+                    <input type="hidden" name="nbpage" value="<?= $numPage ?>"></input>
+                    <input type="submit" class="btn btn-success" value="<?= $numPage + 1 ?>"></input>
+                </form>
+            <?php else: ?>
+                <form method="get" action="">
+                    <input type="hidden" name="nbpage" value="<?= $numPage ?>"></input>
+                    <input type="submit" class="btn btn-outline-success" value="<?= $numPage + 1 ?>"></input>
+                </form>
+            <?php endif; ?>
+        <?php endfor; ?>
+        <?php
+            if ($endPage < $nbPagesTotales) {
+                if ($endPage < $nbPagesTotales - 1) {
+                    echo '<span>...</span>';
+                }
+                echo '<form method="get" action="">
+                        <input type="hidden" name="nbpage" value="' . $nbPagesTotales . '"></input>
+                        <input type="submit" class="btn btn-outline-success" value="' . ($nbPagesTotales + 1) . '"></input>
+                    </form>';
+            }
+        ?>
+        <form method="get" action="">
+            <input type="hidden" name="nbpage" value="<?= min($numeroPageCourante + 1, $nbPagesTotales) ?>"></input>
+            <input type="submit" class="btn btn-outline-success" value="suivant"></input>
+        </form>
+    </nav>
 
 
         <?php if (!$accueil=="rechercher"):?>
@@ -142,25 +193,25 @@
         <header>
             <div class="container-fuide">
                 <div class="row py-2 bg-success bg-opacity-50 ">
-                    <div class="col-2 col-sm-2">
+
+                    <div class="col-2">
                         <h6 class="text-center"> Mots français</h6>
                     </div>
-                    <div class="col-2 col-sm-2">  
+                    <div class="col-2">  
                         <h6 class="text-center"> Mots anglais</h6>
                     </div>
-                    <div class="col-2 col-sm-1"> 
+                    <div class="col-2"> 
                         <h6 class="text-center"> Notes</h6>
                     </div>
-                  
-                    <div class="col-2 col-sm-2"> 
+                    <div class="col-3"> 
                         <h6 class="text-center"> Effacer</h6>
                     </div>
-                    <div class="col-2 col-sm-3"> 
+                    <div class="col-3"> 
                         <h6 class="text-center"> Modification</h6>
                     </div>
-                    <div class="col-2 col-sm-2">  
+                    <!-- <div class="col-2 col-sm-2">  
                         <h6 class="text-center"> Date de création</h6>
-                    </div>
+                    </div> -->
                 </div>
                 
             
@@ -168,24 +219,23 @@
                   
                     ?>
                     <div class="row p-1">
-                            <p class="col-2 col-sm-2 text-center " id="fr<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_fr']?></p>
-                            <p class="col-2 col-sm-2 text-center" id="en<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_en']?></p>
-                            <p class="col-2 col-sm-1 text-center" id="note<?=$vocabulaire['id']?>"><?=$vocabulaire['note']?></p>
+                            <p class="col-2 text-center " id="fr<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_fr']?></p>
+                            <p class="col-2 text-center" id="en<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_en']?></p>
+                            <p class="col-2 text-center" id="note<?=$vocabulaire['id']?>"><?=$vocabulaire['note']?></p>
 
-                        <form action="" method="post" class="col-2 col-sm-2 text-center">
+                        <form action="" method="post" class="col-3 text-center">
                             <input type="hidden" name="id" value="<?=$vocabulaire['id']?>"></input>
                             <input class="btn btn-outline-success" type="submit" name="mode" value="effacer"  id="<?=$vocabulaire['id']?>"></input>
                         </form>
 
-                        <form method="post" action="" class="col-2 col-sm-3 text-center">
+                        <form method="post" action="" class="col-3 text-center">
                             <input type="hidden" name="id" value="<?=$vocabulaire['id']?>"></input>
                             <input type="hidden" name="fr" value="<?=$vocabulaire['mot_fr']?>"></input>
                             <input type="hidden" name="en" value="<?=$vocabulaire['mot_en']?>"></input>
-
                             <input type="hidden" name="inputnote" value="<?=$vocabulaire['note']?>"></input>
                             <input class="btn btn-outline-success" type="submit" name="mode" value="modification"></input>
                         </form>
-                        <time class=" col-2 col-sm-2 text-center"><?=$vocabulaire['created']?></time> 
+                        <!-- <time class=" col-2 text-center">?=$vocabulaire['created']?></time>  -->
                     </div>
                 <?php endforeach; ?>
             </div>
@@ -201,30 +251,83 @@
 
     </main>
 
-        <nav aria-label="Page navigation example"class=" navbar bg-body-tertiary pagination justify-content-center ">
+        <!-- <nav aria-label="Page navigation example"class=" navbar bg-body-tertiary pagination justify-content-center ">
                <form method="get" action="">
-                    <input  type="hidden" name="nbpage" value="<?=$numeroPageCourante -1?>"></input>
+                    <input  type="hidden" name="nbpage" value="?=$numeroPageCourante -1?>"></input>
                     <input  type="submit" class="btn btn-outline-success" value="precedent"></input>
                 </form>
-                <?php
+                ?php
                     for($numPage=0; $numPage <= $nbPagesTotales; $numPage++):
                 ?>
-                    <?php if ($numPage == $numeroPageCourante) : ?>
+                    ?php if ($numPage == $numeroPageCourante) : ?>
                         <form method="get" action="">
-                            <input type="hidden" name="nbpage" value="<?=$numPage?>"></input>
-                            <input type="submit" class="btn btn-success" value="<?=$numPage +1?>"></input>
-                        </form>
-                    <?php else : ?>
+                            <input type="hidden" name="nbpage" value="?=$numPage?>"></input>
+                            <input type="submit" class="btn btn-success" value="?=$numPage +1?>"></input>
+                    </form>
+                    ?php else : ?>
                         <form method="get" action="">
-                            <input type="hidden" name="nbpage" value="<?=$numPage?>"></input>
-                            <input type="submit" class="btn btn-outline-success" value="<?=$numPage +1?>"></input>
+                            <input type="hidden" name="nbpage" value="?=$numPage?>"></input>
+                            <input type="submit" class="btn btn-outline-success" value="?=$numPage +1?>"></input>
                         </form>
-                    <?php endif ?>
-                <?php endfor ?>
+                    ?php endif ?>
+                ?php endfor ?>
                 <form method="get" action="">
-                    <input type="hidden" name="nbpage" value="<?=$numeroPageCourante+1?>"></input>
+                    <input type="hidden" name="nbpage" value="?=$numeroPageCourante+1?>"></input>
                     <input type="submit" type="submit" class="btn btn-outline-success" value="suivant"></input>
                 </form>
-        </nav>
+        </nav> -->
+            <nav aria-label="Page navigation example" class="navbar bg-body-tertiary pagination justify-content-center">
+        <form method="get" action="">
+            <input type="hidden" name="nbpage" value="<?= max($numeroPageCourante - 1, 0) ?>"></input>
+            <input type="submit" class="btn btn-outline-success" value="précédent"></input>
+        </form>
+
+        <?php
+            $startPage = max(0, $numeroPageCourante - 1);
+            $endPage = min($nbPagesTotales, $numeroPageCourante + 1);
+
+            if ($startPage > 0) {
+                echo '<form method="get" action="">
+                        <input type="hidden" name="nbpage" value="0"></input>
+                        <input type="submit" class="btn btn-outline-success" value="1"></input>
+                    </form>';
+                if ($startPage > 1) {
+                    echo '<span>...</span>';
+                }
+            }
+
+            for ($numPage = $startPage; $numPage <= $endPage; $numPage++):
+        ?>
+            <?php if ($numPage == $numeroPageCourante): ?>
+                <form method="get" action="">
+                    <input type="hidden" name="nbpage" value="<?= $numPage ?>"></input>
+                    <input type="submit" class="btn btn-success" value="<?= $numPage + 1 ?>"></input>
+                </form>
+            <?php else: ?>
+                <form method="get" action="">
+                    <input type="hidden" name="nbpage" value="<?= $numPage ?>"></input>
+                    <input type="submit" class="btn btn-outline-success" value="<?= $numPage + 1 ?>"></input>
+                </form>
+            <?php endif; ?>
+        <?php endfor; ?>
+
+        <?php
+            if ($endPage < $nbPagesTotales) {
+                if ($endPage < $nbPagesTotales - 1) {
+                    echo '<span>...</span>';
+                }
+                echo '<form method="get" action="">
+                        <input type="hidden" name="nbpage" value="' . $nbPagesTotales . '"></input>
+                        <input type="submit" class="btn btn-outline-success" value="' . ($nbPagesTotales + 1) . '"></input>
+                    </form>';
+            }
+        ?>
+
+        <form method="get" action="">
+            <input type="hidden" name="nbpage" value="<?= min($numeroPageCourante + 1, $nbPagesTotales) ?>"></input>
+            <input type="submit" class="btn btn-outline-success" value="suivant"></input>
+        </form>
+    </nav>
+
 </body>
 </html>
