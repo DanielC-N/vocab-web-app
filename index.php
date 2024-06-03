@@ -7,7 +7,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <?php
         require 'modele.php';
-
         // declaration 
         $accueil=$_POST['rechercher'];
         if(array_key_exists('nbpage', $_GET) && $_GET['nbpage'] <0){
@@ -17,15 +16,15 @@
         $mode=$_POST['mode'];
         
         $nbPagesTotales=floor(count(getBaseDD())/20);
-        if(array_key_exists('nbpage', $_GET) && $_GET['nbpage'] >= $nbPagesTotales) {
+        if(array_key_exists('nbpage', $_GET) && $_GET['nbpage'] >= $nbPagesTotales){
             $_GET['nbpage']= $nbPagesTotales;
         }
         $numeroPageCourante=$_GET['nbpage'];
 
-        if(!isset($mode)|| $mode=="modification" ) {
+        if(!isset($mode)|| $mode=="modification"){
             $resultats=getWordsByOffset($numeroPageCourante);
         }
-        elseif($mode == "effacer") {
+        elseif($mode == "effacer"){
             if (!checkParams(['id'])){
                 $errormsg=("id not found");
             } else {
@@ -33,15 +32,15 @@
             }
             $resultats=getWordsByOffset($numeroPageCourante);
         }
-        elseif($mode == "modifier") {
-            if(!checkParams(['id','mot_fr','note'])) {
+        elseif($mode == "modifier"){
+            if(!checkParams(['id','mot_fr','note'])){
                 $errormsg=('cannot be modified ');
             } else {
                 $resultats=updateWord($_POST['id'],$_POST['mot_fr'],$_POST['note'],$nbPagesCourante);
             }
             $resultats=getWordsByOffset($numeroPageCourante);
         }
-        elseif($mode == "ajouter") {
+        elseif($mode == "ajouter"){
             if (!checkParams(['mot_fr','mot_en','note'])) {
 
                 $errormsg=("word not found");
@@ -49,9 +48,9 @@
                 insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
             }
             $resultats=getWordsByOffset($numeroPageCourante);
-        } 
+        }
         elseif($mode == "rechercher"){
-            if (!checkParams(['rechercher'])) {
+            if (!checkParams(['rechercher'])){
                 $errormsg=("not found");
             } else {
                 $resultats=filterWord($_POST['rechercher']);
@@ -62,13 +61,15 @@
 
         ?>
 
+
+
 </head>
 <body>
-        <nav class="navbar bg-body-tertiary ">
+        <nav class="navbar bg-body-tertiary">
             <div class="container justify-content-center">
                 <form class="d-flex"  method="post">
                         <input class="form-control me-1" value="<?= $_POST['rechercher'] ?>" type="search" name="rechercher" id="search" placeholder="rechercher..."/>
-                        <input class="btn btn-outline-success" type="submit" name="mode" value="rechercher" ></input>
+                        <input class="btn btn-outline-success" type="submit" name="mode" value="rechercher"></input>
                 </form>
             </div>
         </nav>
@@ -79,9 +80,9 @@
         <nav class="navbar bg-body-tertiary">
             <div class="container justify-content-center">
                 <form class="d-flex" method="post">
-                    <input class="form-control me-1 " id="fr" type="text" class="text" value="<?=($_POST['fr'])?>" name="mot_fr" placeholder="mot en français"/>
-                    <input class="form-control me-1" id="en" type="text" class="text"  value="<?=($_POST['en'])?>" name="mot_en" placeholder="mot en anglais"disabled/>
-                    <input class="form-control me-1" id="inputnote" type="text" class="text"  value="<?=($_POST['inputnote'])?>" name="note" placeholder="note"/>
+                    <input class="form-control me-1" id="fr" type="text" class="text" value="<?=($_POST['fr'])?>" name="mot_fr" placeholder="mot en français"/>
+                    <input class="form-control me-1" id="en" type="text" class="text" value="<?=($_POST['en'])?>" name="mot_en" placeholder="mot en anglais"disabled/>
+                    <input class="form-control me-1" id="inputnote" type="text" class="text" value="<?=($_POST['inputnote'])?>" name="note" placeholder="note"/>
                     <input class="form-control me-1" type="hidden" name="id" value="<?=($_POST['id'])?>"> </input>
                     <input class="btn btn-outline-success" name="mode" value="modifier" type="submit"></input>
                 </form>
@@ -93,8 +94,8 @@
         <nav class="navbar bg-body-tertiary">
             <div class="container justify-content-center">
                 <form class="d-flex" method="post">
-                    <input class="form-control me-1 " id="fr" type="text" class="text" name="mot_fr" placeholder="mot en français"/>
-                    <input class="form-control me-1" id="en" type="text" class="text" name="mot_en" placeholder="mot en anglais"/>
+                    <input class="form-control me-1" id="fr" type="text" class="text" name="mot_fr" placeholder="mot français"/>
+                    <input class="form-control me-1" id="en" type="text" class="text" name="mot_en" placeholder="mot anglais"/>
                     <input class="form-control me-1" id="inputnote" type="text" class="text" name="note" placeholder="note"/>
                     <input class="btn btn-outline-success" id="ajouter" name="mode" value="ajouter" type="submit"></input>
                 </form>
@@ -105,19 +106,19 @@
         <nav aria-label="Page navigation example" class="navbar bg-body-tertiary pagination justify-content-center">
             <form method="get" action="">
                 <input type="hidden" name="nbpage" value="<?= max($numeroPageCourante - 1, 0) ?>"></input>
-                <input type="submit" class="btn btn-outline-success" value="précédent"></input>
+                <input type="submit" class="btn btn-outline-success" value="&laquo;"></input>
             </form>
 
         <?php
             $startPage = max(0, $numeroPageCourante - 1);
             $endPage = min($nbPagesTotales, $numeroPageCourante + 1);
 
-            if ($startPage > 0) {
+            if ($startPage > 0){
                 echo '<form method="get" action="">
                         <input type="hidden" name="nbpage" value="0"></input>
                         <input type="submit" class="btn btn-outline-success" value="1"></input>
                     </form>';
-                if ($startPage > 1) {
+                if ($startPage > 1){
                     echo '<span>...</span>';
                 }
             }
@@ -142,14 +143,14 @@
                     echo '<span>...</span>';
                 }
                 echo '<form method="get" action="">
-                        <input type="hidden" name="nbpage" value="' . $nbPagesTotales . '"></input>
-                        <input type="submit" class="btn btn-outline-success" value="' . ($nbPagesTotales + 1) . '"></input>
+                    <input type="hidden" name="nbpage" value="' . $nbPagesTotales . '"></input>
+                    <input type="submit" class="btn btn-outline-success" value="&rsaquo;"></input>
                     </form>';
             }
         ?>
         <form method="get" action="">
             <input type="hidden" name="nbpage" value="<?= min($numeroPageCourante + 1, $nbPagesTotales) ?>"></input>
-            <input type="submit" class="btn btn-outline-success" value="suivant"></input>
+            <input type="submit" class="btn btn-outline-success" value="&raquo;"></input>
         </form>
     </nav>
 
@@ -165,51 +166,53 @@
         <h1>error : <?=$errormsg?></h1>
     <?php endif; ?>
         <header>
-            <div class="container-fuide">
-                <div class="row py-2 bg-success bg-opacity-50 ">
+            <div class="container-fuide overflow-x-hidden">
+                <div class="row py-2 bg-success bg-opacity-50 text-wrap" style="width: 350px;">
 
-                    <div class="col-2 col-sm-3">
+                    <div class="col-3 col-sm-3">
                         <h6 class="text-center"> Mots français</h6>
                     </div>
-                    <div class="col-2 col-sm-3">  
+                    <div class="col-3 col-sm-3">  
                         <h6 class="text-center"> Mots anglais</h6>
                     </div>
                     <div class="col-2 col-sm-1"> 
                         <h6 class="text-center"> Notes</h6>
                     </div>
-                    <div class="col-3 col-sm-2"> 
-                        <h6 class="text-center"> Effacer</h6>
+                    <div class="col-2"> 
+                        <h6 class="text-center">Effacer</h6>
                     </div>
-                    <div class="col-3 col-sm-3"> 
-                        <h6 class="text-center"> Modification</h6>
+                    <div class="col-2 col-sm-3"> 
+                        <h6 class="text-center"> Modifier</h6>
                     </div>
-                    <!-- <div class="col-2 col-sm-2">  
+                    <!-- <div class="col-2 col-sm-2">
                         <h6 class="text-center"> Date de création</h6>
                     </div> -->
                 </div>
                 
             
                 <?php foreach($resultats as $vocabulaire):
-                  
+                        $rowType = $rowType == "odd" ? "even":"odd";
                     ?>
-                    <div class="row p-1">
-                            <p class="col-2 col-sm-3 text-center " id="fr<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_fr']?></p>
-                            <p class="col-2 col-sm-3 text-center " id="en<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_en']?></p>
-                            <p class="col-2 col-sm-1 text-center" id="note<?=$vocabulaire['id']?>"><?=$vocabulaire['note']?></p>
+                    <div class="row p-1 text-wrap" style="width:350px ;">
+                            <p class="col-3 col-sm-3 text-center text-wrap <?=$rowType?>" id="fr<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_fr']?></p>
+                            <p class="col-3 col-sm-3 text-center <?=$rowType?>" id="en<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_en']?></p>
+                            <p class="col-2 col-sm-1 text-center <?=$rowType?>" id="note<?=$vocabulaire['id']?>"><?=$vocabulaire['note']?></p>
 
-                        <form action="" method="post" class="col-3 col-sm-2 text-center">
+                        <form action="" method="post" class="col-2 col-sm-2 text-center <?=$rowType?>">
                             <input type="hidden" name="id" value="<?=$vocabulaire['id']?>"></input>
-                            <input class="btn btn-outline-success" type="submit" name="mode" value="effacer"  id="<?=$vocabulaire['id']?>"></input>
+                            <input type="hidden" name="mode" value="effacer"></input>
+                            <input class="btn btn-outline-success" type="submit" name="txt" value="&#128465;" id="<?=$vocabulaire['id']?>"></input>
                         </form>
 
-                        <form method="post" action="" class="col-3 col-sm-3 text-center ">
+                        <form method="post" action="" class="col-2 col-sm-3 text-center <?=$rowType?>">
                             <input type="hidden" name="id" value="<?=$vocabulaire['id']?>"></input>
                             <input type="hidden" name="fr" value="<?=$vocabulaire['mot_fr']?>"></input>
                             <input type="hidden" name="en" value="<?=$vocabulaire['mot_en']?>"></input>
                             <input type="hidden" name="inputnote" value="<?=$vocabulaire['note']?>"></input>
-                            <input class="btn btn-outline-success" type="submit" name="mode" value="modification"></input>
+                            <input type="hidden" name="mode" value="modifier"></input>
+                            <input class="btn btn-outline-success" type="submit" name="txt" value="&#128394;"></input>
                         </form>
-                        <!-- <time class=" col-2 text-center">?=$vocabulaire['created']?></time>  -->
+                        <!-- <time class=" col-2 text-center">?=$vocabulaire['created']?></time>-->
                     </div>
                 <?php endforeach; ?>
             </div>
@@ -228,7 +231,7 @@
             <nav aria-label="Page navigation example" class="navbar bg-body-tertiary pagination justify-content-center">
         <form method="get" action="">
             <input type="hidden" name="nbpage" value="<?= max($numeroPageCourante - 1, 0) ?>"></input>
-            <input type="submit" class="btn btn-outline-success" value="précédent"></input>
+            <input type="submit" class="btn btn-outline-success" value="&laquo;"></input>
         </form>
 
         <?php
@@ -267,14 +270,14 @@
                 }
                 echo '<form method="get" action="">
                         <input type="hidden" name="nbpage" value="' . $nbPagesTotales . '"></input>
-                        <input type="submit" class="btn btn-outline-success" value="' . ($nbPagesTotales + 1) . '"></input>
+                        <input type="submit" class="btn btn-outline-success" value="&rsaquo;"></input>
                     </form>';
             }
         ?>
 
         <form method="get" action="">
             <input type="hidden" name="nbpage" value="<?= min($numeroPageCourante + 1, $nbPagesTotales) ?>"></input>
-            <input type="submit" class="btn btn-outline-success" value="suivant"></input>
+            <input type="submit" class="btn btn-outline-success" value="&raquo;"></input>
         </form>
     </nav>
 

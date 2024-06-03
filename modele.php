@@ -52,7 +52,7 @@ function insertWord($textfr, $texten, $note){
     }
     $bdd = null;
     $stmt = null;
-}
+} 
  function updateWord($id, $textfr, $note, $numeroDeLaPage){
 
     $bdd=new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
