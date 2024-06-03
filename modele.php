@@ -35,7 +35,6 @@ function deleteWord($id){
     $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
     $stmt =$bdd ->prepare('DELETE FROM vocabulaire WHERE id =:id');
     $stmt->execute(['id'=>$id]);
-   
 }
 
 function insertWord($textfr, $texten, $note){
@@ -53,7 +52,7 @@ function insertWord($textfr, $texten, $note){
     }
     $bdd = null;
     $stmt = null;
-} 
+}
  function updateWord($id, $textfr, $note, $numeroDeLaPage){
 
     $bdd=new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
