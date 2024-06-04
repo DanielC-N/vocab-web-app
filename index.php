@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Vocabulaire </title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="styles.css" rel="stylesheet">
     <?php
         require 'modele.php';
         // declaration 
@@ -61,15 +62,14 @@
 
         ?>
 
-
-
 </head>
 <body>
         <nav class="navbar bg-body-tertiary">
             <div class="container justify-content-center">
                 <form class="d-flex"  method="post">
                         <input class="form-control me-1" value="<?= $_POST['rechercher'] ?>" type="search" name="rechercher" id="search" placeholder="rechercher..."/>
-                        <input class="btn btn-outline-success" type="submit" name="mode" value="rechercher"></input>
+                        <input class="btn btn-outline-success" type="hidden" name="mode" value="rechercher"></input>
+                        <input class="btn btn-outline-success" type="submit" name="txt" value=" &#128269;"></input>
                 </form>
             </div>
         </nav>
@@ -166,25 +166,25 @@
         <h1>error : <?=$errormsg?></h1>
     <?php endif; ?>
         <header>
-            <div class="container-fuide overflow-x-hidden">
-                <div class="row py-2 bg-success bg-opacity-50 text-wrap" >
+            <div class="container-fuide overflow-x-hidden text-black">
+                <div class="row-gap d-flex align-items-center p-1 bg-success bg-opacity-50 text-wrap" >
 
-                    <div class="col-3 col-sm-3">
+                    <div class="col-3 p-0">
                         <h6 class="text-center"> Mots français</h6>
                     </div>
-                    <div class="col-3 col-sm-3">  
+                    <div class="col-3 p-0">  
                         <h6 class="text-center"> Mots anglais</h6>
                     </div>
-                    <div class="col-1 col-sm-1"> 
+                    <div class="col-2 pe-1"> 
                         <h6 class="text-center"> Notes</h6>
                     </div>
-                    <div class="col-3"> 
+                    <div class="col-2 pe-1"> 
                         <h6 class="text-center">Effacer</h6>
                     </div>
-                    <div class="col-2 col-sm-3"> 
+                    <div class="col-2 p-0"> 
                         <h6 class="text-center"> Modifier</h6>
                     </div>
-                    <!-- <div class="col-2 col-sm-2">
+                    <!-- <div class="col-2 ">
                         <h6 class="text-center"> Date de création</h6>
                     </div> -->
                 </div>
@@ -192,25 +192,27 @@
             
                 <?php foreach($resultats as $vocabulaire):
                         $rowType = $rowType == "odd" ? "even":"odd";
-                    ?>
-                    <div class="row p-1">
-                            <p class="col-3 col-sm-3 text-break text-center <?=$rowType?>" id="fr<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_fr']?></p>
-                            <p class="col-3 col-sm-3 text-center text-break <?=$rowType?>" id="en<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_en']?></p>
-                            <p class="col-2 col-sm-1 text-center <?=$rowType?>" id="note<?=$vocabulaire['id']?>"><?=$vocabulaire['note']?></p>
 
-                        <form action="" method="post" class="col-2 col-sm-2 text-center <?=$rowType?>">
+                    ?>
+                    <div class=" d-flex align-items-center p-1 row m-0 <?=$rowType?>">
+
+                            <p class="col-3 text-center p-0 m-0 text-break " id="fr<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_fr']?></p>
+                            <p class="col-3 text-center p-0 m-0 text-break " id="en<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_en']?></p>
+                            <p class="col-2 text-center p-0 m-0" id="note<?=$vocabulaire['id']?>"><?=$vocabulaire['note']?></p>
+
+                        <form action="" method="post" class="col-2 text-center p-0">
                             <input type="hidden" name="id" value="<?=$vocabulaire['id']?>"></input>
                             <input type="hidden" name="mode" value="effacer"></input>
                             <input class="btn btn-outline-success" type="submit" name="txt" value="&#128465;" id="<?=$vocabulaire['id']?>"></input>
                         </form>
 
-                        <form method="post" action="" class="col-2 col-sm-3 text-center <?=$rowType?>">
+                        <form method="post" action="" class="col-2 text-center p-0">
                             <input type="hidden" name="id" value="<?=$vocabulaire['id']?>"></input>
                             <input type="hidden" name="fr" value="<?=$vocabulaire['mot_fr']?>"></input>
                             <input type="hidden" name="en" value="<?=$vocabulaire['mot_en']?>"></input>
                             <input type="hidden" name="inputnote" value="<?=$vocabulaire['note']?>"></input>
-                            <input type="hidden" name="mode" value="modifier"></input>
-                            <input class="btn btn-outline-success" type="submit" name="txt" value="&#128394;"></input>
+                            <input type="hidden" name="mode" value="modification"></input>
+                            <input class="btn btn-outline-success" type="submit" name="txte" value="&#128394;"></input>
                         </form>
                         <!-- <time class=" col-2 text-center">?=$vocabulaire['created']?></time>-->
                     </div>
