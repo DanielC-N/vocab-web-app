@@ -286,5 +286,16 @@
     </nav>
 
 </body>
+<script>
+    let collectionOfText = document.getElementsByClassName('text-break');
+
+    for (let i = 0; i < collectionOfText.length; i++) {
+        collectionOfText[i].addEventListener('dblclick', (e) => {
+            let textToCopy = e.target.innerText;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                console.log(`Copier dans le presse papier: ${textToCopy}`);
+            });
+        });
+    }
+</script>
 </html>
-&rsaquo;
