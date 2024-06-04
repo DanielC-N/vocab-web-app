@@ -167,7 +167,7 @@
     <?php endif; ?>
         <header>
             <div class="container-fuide overflow-x-hidden">
-                <div class="row py-2 bg-success bg-opacity-50 text-wrap" style="width: 350px;">
+                <div class="row py-2 bg-success bg-opacity-50 text-wrap" >
 
                     <div class="col-3 col-sm-3">
                         <h6 class="text-center"> Mots français</h6>
@@ -175,10 +175,10 @@
                     <div class="col-3 col-sm-3">  
                         <h6 class="text-center"> Mots anglais</h6>
                     </div>
-                    <div class="col-2 col-sm-1"> 
+                    <div class="col-1 col-sm-1"> 
                         <h6 class="text-center"> Notes</h6>
                     </div>
-                    <div class="col-2"> 
+                    <div class="col-3"> 
                         <h6 class="text-center">Effacer</h6>
                     </div>
                     <div class="col-2 col-sm-3"> 
@@ -193,9 +193,9 @@
                 <?php foreach($resultats as $vocabulaire):
                         $rowType = $rowType == "odd" ? "even":"odd";
                     ?>
-                    <div class="row p-1 text-wrap" style="width:350px ;">
-                            <p class="col-3 col-sm-3 text-center text-wrap <?=$rowType?>" id="fr<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_fr']?></p>
-                            <p class="col-3 col-sm-3 text-center <?=$rowType?>" id="en<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_en']?></p>
+                    <div class="row p-1">
+                            <p class="col-3 col-sm-3 text-break text-center <?=$rowType?>" id="fr<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_fr']?></p>
+                            <p class="col-3 col-sm-3 text-center text-break <?=$rowType?>" id="en<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_en']?></p>
                             <p class="col-2 col-sm-1 text-center <?=$rowType?>" id="note<?=$vocabulaire['id']?>"><?=$vocabulaire['note']?></p>
 
                         <form action="" method="post" class="col-2 col-sm-2 text-center <?=$rowType?>">
