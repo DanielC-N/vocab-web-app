@@ -106,7 +106,7 @@
         <nav aria-label="Page navigation example" class="navbar bg-body-tertiary pagination justify-content-center">
             <form method="get" action="">
                 <input type="hidden" name="nbpage" value="<?= max($numeroPageCourante - 1, 0) ?>"></input>
-                <input type="submit" class="btn btn-outline-success" value="&laquo;"></input>
+                <input type="submit" class="btn btn-outline-success" value="&lsaquo;"></input>
             </form>
 
         <?php
@@ -137,6 +137,11 @@
                 </form>
             <?php endif; ?>
         <?php endfor; ?>
+        
+        <form method="get" action="">
+            <input type="hidden" name="nbpage" value="<?= min($numeroPageCourante + 1, $nbPagesTotales) ?>"></input>
+            <input type="submit" class="btn btn-outline-success" value="&rsaquo;"></input>
+        </form>
         <?php
             if ($endPage < $nbPagesTotales) {
                 if ($endPage < $nbPagesTotales - 1) {
@@ -144,14 +149,10 @@
                 }
                 echo '<form method="get" action="">
                     <input type="hidden" name="nbpage" value="' . $nbPagesTotales . '"></input>
-                    <input type="submit" class="btn btn-outline-success" value="&rsaquo;"></input>
+                    <input type="submit" class="btn btn-outline-success" value="&raquo;"></input>
                     </form>';
             }
         ?>
-        <form method="get" action="">
-            <input type="hidden" name="nbpage" value="<?= min($numeroPageCourante + 1, $nbPagesTotales) ?>"></input>
-            <input type="submit" class="btn btn-outline-success" value="&raquo;"></input>
-        </form>
     </nav>
 
 
@@ -196,9 +197,9 @@
                     ?>
                     <div class=" d-flex align-items-center p-1 row m-0 <?=$rowType?>">
 
-                            <p class="col-3 text-center p-0 m-0 text-break " id="fr<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_fr']?></p>
-                            <p class="col-3 text-center p-0 m-0 text-break " id="en<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_en']?></p>
-                            <p class="col-2 text-center p-0 m-0" id="note<?=$vocabulaire['id']?>"><?=$vocabulaire['note']?></p>
+                            <p class="col-3 text-center p-0 m-0 text-break" id="fr<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_fr']?></p>
+                            <p class="col-3 text-center p-0 m-0 text-break" id="en<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_en']?></p>
+                            <p class="col-2 text-center p-0 m-0 text-break" id="note<?=$vocabulaire['id']?>"><?=$vocabulaire['note']?></p>
 
                         <form action="" method="post" class="col-2 text-center p-0">
                             <input type="hidden" name="id" value="<?=$vocabulaire['id']?>"></input>
@@ -233,7 +234,7 @@
             <nav aria-label="Page navigation example" class="navbar bg-body-tertiary pagination justify-content-center">
         <form method="get" action="">
             <input type="hidden" name="nbpage" value="<?= max($numeroPageCourante - 1, 0) ?>"></input>
-            <input type="submit" class="btn btn-outline-success" value="&laquo;"></input>
+            <input type="submit" class="btn btn-outline-success" value="&lsaquo;"></input>
         </form>
 
         <?php
@@ -265,6 +266,12 @@
             <?php endif; ?>
         <?php endfor; ?>
 
+        <form method="get" action="">
+            <input type="hidden" name="nbpage" value="<?= min($numeroPageCourante + 1, $nbPagesTotales) ?>"></input>
+            <input type="submit" class="btn btn-outline-success" value="&rsaquo;"></input>
+        </form>
+
+
         <?php
             if ($endPage < $nbPagesTotales) {
                 if ($endPage < $nbPagesTotales - 1) {
@@ -272,16 +279,12 @@
                 }
                 echo '<form method="get" action="">
                         <input type="hidden" name="nbpage" value="' . $nbPagesTotales . '"></input>
-                        <input type="submit" class="btn btn-outline-success" value="&rsaquo;"></input>
+                        <input type="submit" class="btn btn-outline-success" value="&raquo;"></input>
                     </form>';
             }
         ?>
-
-        <form method="get" action="">
-            <input type="hidden" name="nbpage" value="<?= min($numeroPageCourante + 1, $nbPagesTotales) ?>"></input>
-            <input type="submit" class="btn btn-outline-success" value="&raquo;"></input>
-        </form>
     </nav>
 
 </body>
 </html>
+&rsaquo;
