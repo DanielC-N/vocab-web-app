@@ -56,6 +56,7 @@
             } else {
                 $resultats=filterWord($_POST['rechercher']);
             }
+            $resultats=getWordsByOffset($numeroPageCourante);
         } else {
             $resultats=getWordsByOffset($nbPagesCourante);
         }
