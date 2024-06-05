@@ -25,16 +25,16 @@
         if(!isset($mode)|| $mode=="modification"){
             $resultats=getWordsByOffset($numeroPageCourante);
         }
-        elseif($mode == "ajouter"){
-            var_dump($_POST);
-            if (!checkParams(['mot_fr','mot_en','note'])) {
+        // elseif($mode == "ajouter"){
+        //     var_dump($_POST);
+        //     if (!checkParams(['mot_fr','mot_en','note'])) {
 
-                $errormsg=("word not found");
-            } else {
-                insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
-            }
-            $resultats=getWordsByOffset($numeroPageCourante);
-        }
+        //         $errormsg=("word not found");
+        //     } else {
+        //         insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
+        //     }
+        //     $resultats=getWordsByOffset($numeroPageCourante);
+        //}
         elseif($mode == "rechercher"){
             if (!checkParams(['rechercher'])){
                 $errormsg=("not found");
@@ -101,8 +101,7 @@
                     <input class="form-control me-1" id="en" type="text" class="text" name="mot_en" placeholder="mot anglais"/>
                     <input class="form-control me-1" id="fr" type="text" class="text" name="mot_fr" placeholder="mot français"/>
                     <input class="form-control me-1" id="inputnote" type="text" class="text" name="note" placeholder="note"/>
-                    <input class="btn btn-outline-success" id="ajouter" name="mode" value="ajouter" type="submit"><a href="log.php"></a></input>
-                    
+                    <input class="btn btn-outline-success" id="ajouter" name="mode" value="ajouter" type="submit"></input>
                 </form>
             </div>
         </nav>
@@ -202,9 +201,9 @@
                     ?>
                     <div class=" d-flex align-items-center p-1 row m-0 <?=$rowType?>">
 
-                            <p class="col-3 text-center p-0 m-0 text-break" id="en<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_en']?></p>
-                            <p class="col-3 text-center p-0 m-0 text-break" id="fr<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_fr']?></p>
-                            <p class="col-2 text-center p-0 m-0 text-break" id="note<?=$vocabulaire['id']?>"><?=$vocabulaire['note']?></p>
+                            <p class="col-3 text-center p-0 m-0 text-break" id="en <?=$vocabulaire['id']?>"><?=$vocabulaire['mot_en']?></p>
+                            <p class="col-3 text-center p-0 m-0 text-break" id="fr <?=$vocabulaire['id']?>"><?=$vocabulaire['mot_fr']?></p>
+                            <p class="col-2 text-center p-0 m-0 text-break" id="note <?=$vocabulaire['id']?>"><?=$vocabulaire['note']?></p>
 
                         <form action="" method="post" class="col-2 text-center p-0">
                             <input type="hidden" name="id" value="<?=$vocabulaire['id']?>"></input>
@@ -289,7 +288,37 @@
             }
         ?>
     </nav>
-            <a href="log.php"> bouton</a>
+        <?php if($mode== "ajouter"):{
+            var_dump($_POST);
+            if (!checkParams(['mot_fr','mot_en','note'])) {
+
+                $errormsg=("word not found");
+            } else {
+                insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
+            }
+            $resultats=getWordsByOffset($numeroPageCourante);
+            }
+            ?>
+        <?php else: ?>
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                  <img src="..." class="rounded me-2" alt="...">
+                    <strong class="me-auto">Bootstrap</strong>
+                    <small>11 mins ago</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    Hello, world! This is a toast message.
+                </div>
+            </div>
+        <?php 
+        if(isset($errormsg)){ ?>
+            <div class="alert alert-danger" role="alert">
+                <?= $errormsg;?>
+            </div>
+       <?php } ?>
+        <?php endif; ?>
+            
 </body>
 <script>
     let collectionOfText = document.getElementsByClassName('text-break');

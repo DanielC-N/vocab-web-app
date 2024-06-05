@@ -17,3 +17,13 @@ INSERT INTO vocabulaire (mot_fr,mot_en,note) VALUES
 ("Flavius Josèphe","Flavius Josephus","essai"),
 ("Gethsémané","Gethsemane","essai");
 
+CREATE TABLE log (
+
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    user TEXT NOT NULL,
+    classe TEXT NOT NULL,
+    classe TEXT NOT NULL,
+    mot_fr TEXT NOT NULL,
+    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+);

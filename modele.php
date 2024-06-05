@@ -45,11 +45,12 @@ function insertWord($textfr, $texten, $note){
     if(count($r)==0){
         $stmt= $bdd->prepare('INSERT INTO vocabulaire (mot_fr,mot_en,note) VALUES(:fr, :en, :note)');
         $stmt->execute(['fr'=> $textfr,'en'=>$texten,'note'=>$note]);
+        $stmt2=$bdd->prepare('INSERT INTO log (user, classe, mot_en mot_fr) VALUES(:user,:fr, :en, :note)');
+        $stmt->execute(['fr'=> $textfr,'en'=>$texten,'note'=>$note]);
     } elseif (count($r)!=0) {
-        echo("le mot existe déjà");
-    }else {
-      
-    }
+        echo("Le mot existe déjà");
+    }   
+    
     // } else {
     //     $id=$r[0]['id'];
     //     $stmt=$bdd->prepare('UPDATE vocabulaire SET mot_fr=:fr, note=:note WHERE id=:id');
@@ -58,14 +59,20 @@ function insertWord($textfr, $texten, $note){
     $stmt = null;
     }
    
+    function updateWord($id, $textfr, $note,){
 
- function updateWord($id, $textfr, $note, $numeroDeLaPage){
+        $bdd=new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
+        $stmt= $bdd->prepare('UPDATE vocabulaire SET mot_fr=:fr, note=:note WHERE id=:id');
+        $stmt->execute(['fr'=> $textfr,'note'=>$note, 'id'=>$id]);
+    }
+    
+//  function updateWord($id, $textfr, $note, $numeroDeLaPage){
 
-    $bdd=new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
-    $stmt= $bdd->prepare('UPDATE vocabulaire SET mot_fr=:fr, note=:note WHERE id=:id');
-    $stmt->execute(['fr'=> $textfr,'note'=>$note, 'id'=>$id]);
-    return getWordsByOffset($numeroDeLaPage);
-}
+//     $bdd=new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
+//     $stmt= $bdd->prepare('UPDATE vocabulaire SET mot_fr=:fr, note=:note WHERE id=:id');
+//     $stmt->execute(['fr'=> $textfr,'note'=>$note, 'id'=>$id]);
+//     return getWordsByOffset($numeroDeLaPage);
+// }
 
 function checkParams($fields){
     foreach($fields as $field){
@@ -75,11 +82,19 @@ function checkParams($fields){
     }
     return true;
 }
+
 function getWord($id){
     $bdd=new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
     $stmt =$bdd->prepare('SELECT * FROM vocabulaire WHERE id=:id') ;
     $stmt->execute(['id'=>$id]);
 }
 ?>
+<!-- <script>
+const myModal = document.getElementById('myModal')
+const myInput = document.getElementById('myInput')
 
+myModal.addEventListener('shown.bs.modal', () => {
+  myInput.focus()
+})
+</script> -->
 
