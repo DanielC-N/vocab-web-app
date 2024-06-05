@@ -12,7 +12,7 @@ function getBaseDD(){
 function getWordsByOffset($nbpage){
     $offset = $nbpage*20;
     $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
-    $stmt =$bdd->prepare('SELECT * FROM vocabulaire ORDER BY mot_fr LIMIT 20 OFFSET :offset');
+    $stmt =$bdd->prepare('SELECT * FROM vocabulaire ORDER BY mot_en LIMIT 20 OFFSET :offset');
     $stmt->bindValue('offset', $offset, PDO::PARAM_INT);
     $stmt->execute();
     $res = $stmt->fetchAll();
@@ -45,14 +45,20 @@ function insertWord($textfr, $texten, $note){
     if(count($r)==0){
         $stmt= $bdd->prepare('INSERT INTO vocabulaire (mot_fr,mot_en,note) VALUES(:fr, :en, :note)');
         $stmt->execute(['fr'=> $textfr,'en'=>$texten,'note'=>$note]);
-    } else {
-        $id=$r[0]['id'];
-        $stmt=$bdd->prepare('UPDATE vocabulaire SET mot_fr=:fr, note=:note WHERE id=:id');
-        $stmt->execute(['fr'=> $textfr,'note'=>$note, 'id'=>$id]); 
+    } elseif (count($r)!=0) {
+        echo("le mot existe déjà");
+    }else {
+      
     }
+    // } else {
+    //     $id=$r[0]['id'];
+    //     $stmt=$bdd->prepare('UPDATE vocabulaire SET mot_fr=:fr, note=:note WHERE id=:id');
+    //     $stmt->execute(['fr'=> $textfr,'note'=>$note, 'id'=>$id]); 
     $bdd = null;
     $stmt = null;
-} 
+    }
+   
+
  function updateWord($id, $textfr, $note, $numeroDeLaPage){
 
     $bdd=new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
@@ -68,6 +74,11 @@ function checkParams($fields){
         }
     }
     return true;
+}
+function getWord($id){
+    $bdd=new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
+    $stmt =$bdd->prepare('SELECT * FROM vocabulaire WHERE id=:id') ;
+    $stmt->execute(['id'=>$id]);
 }
 ?>
 

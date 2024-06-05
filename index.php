@@ -25,23 +25,8 @@
         if(!isset($mode)|| $mode=="modification"){
             $resultats=getWordsByOffset($numeroPageCourante);
         }
-        elseif($mode == "effacer"){
-            if (!checkParams(['id'])){
-                $errormsg=("id not found");
-            } else {
-                deleteWord($_POST['id']);
-            }
-            $resultats=getWordsByOffset($numeroPageCourante);
-        }
-        elseif($mode == "modifier"){
-            if(!checkParams(['id','mot_fr','note'])){
-                $errormsg=('cannot be modified ');
-            } else {
-                $resultats=updateWord($_POST['id'],$_POST['mot_fr'],$_POST['note'],$nbPagesCourante);
-            }
-            $resultats=getWordsByOffset($numeroPageCourante);
-        }
         elseif($mode == "ajouter"){
+            var_dump($_POST);
             if (!checkParams(['mot_fr','mot_en','note'])) {
 
                 $errormsg=("word not found");
@@ -57,10 +42,28 @@
                 $resultats=filterWord($_POST['rechercher']);
             }
             $resultats=getWordsByOffset($numeroPageCourante);
-        } else {
-            $resultats=getWordsByOffset($nbPagesCourante);
+        // } else {
+        //     $resultats=getWordsByOffset($numeroPageCourante);
         }
-
+        elseif($mode == "effacer"){
+            if (!checkParams(['id'])){
+                $errormsg=("id not found");
+            } else {
+                deleteWord($_POST['id']);
+            }
+            $resultats=getWordsByOffset($numeroPageCourante);
+        }
+        else {
+            $resultats=getWordsByOffset($numeroPageCourante);
+        }
+        // elseif($mode == "modifier"){
+        //     if(!checkParams(['id','mot_fr','note'])){
+        //         $errormsg=('cannot be modified ');
+        //     } else {
+        //         $resultats=updateWord($_POST['id'],$_POST['mot_fr'],$_POST['note'],$nbPagesCourante);
+        //     }
+        //     $resultats=getWordsByOffset($numeroPageCourante);
+        // }
         ?>
 
 </head>
@@ -75,22 +78,22 @@
             </div>
         </nav>
 
-        <?php if($mode== "modification"):?>
+        <!-- ?php if($mode== "modification"):?>
 
 
         <nav class="navbar bg-body-tertiary">
             <div class="container justify-content-center">
                 <form class="d-flex" method="post">
-                    <input class="form-control me-1" id="en" type="text" class="text" value="<?=($_POST['en'])?>" name="mot_en" placeholder="mot en anglais"disabled/>
-                    <input class="form-control me-1" id="fr" type="text" class="text" value="<?=($_POST['fr'])?>" name="mot_fr" placeholder="mot en français"/>
-                    <input class="form-control me-1" id="inputnote" type="text" class="text" value="<?=($_POST['inputnote'])?>" name="note" placeholder="note"/>
-                    <input class="form-control me-1" type="hidden" name="id" value="<?=($_POST['id'])?>"> </input>
+                    <input class="form-control me-1" id="en" type="text" class="text" value="?=($_POST['en'])?>" name="mot_en" placeholder="mot en anglais"disabled/>
+                    <input class="form-control me-1" id="fr" type="text" class="text" value="?=($_POST['fr'])?>" name="mot_fr" placeholder="mot en français"/>
+                    <input class="form-control me-1" id="inputnote" type="text" class="text" value="?=($_POST['inputnote'])?>" name="note" placeholder="note"/>
+                    <input class="form-control me-1" type="hidden" name="id" value="?=($_POST['id'])?>"> </input>
                     <input class="btn btn-outline-success" name="mode" value="modifier" type="submit"></input>
                 </form>
             </div>
         </nav>
         
-        <?php else: ?>
+        ?php else: ?> -->
        
         <nav class="navbar bg-body-tertiary">
             <div class="container justify-content-center">
@@ -98,11 +101,12 @@
                     <input class="form-control me-1" id="en" type="text" class="text" name="mot_en" placeholder="mot anglais"/>
                     <input class="form-control me-1" id="fr" type="text" class="text" name="mot_fr" placeholder="mot français"/>
                     <input class="form-control me-1" id="inputnote" type="text" class="text" name="note" placeholder="note"/>
-                    <input class="btn btn-outline-success" id="ajouter" name="mode" value="ajouter" type="submit"></input>
+                    <input class="btn btn-outline-success" id="ajouter" name="mode" value="ajouter" type="submit"><a href="log.php"></a></input>
+                    
                 </form>
             </div>
         </nav>
-        <?php endif; ?>
+        <!-- ?php endif; ?> -->
 
         <nav aria-label="Page navigation example" class="navbar bg-body-tertiary pagination justify-content-center">
             <form method="get" action="">
@@ -285,7 +289,7 @@
             }
         ?>
     </nav>
-
+            <a href="log.php"> bouton</a>
 </body>
 <script>
     let collectionOfText = document.getElementsByClassName('text-break');
