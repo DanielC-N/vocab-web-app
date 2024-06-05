@@ -81,8 +81,8 @@
         <nav class="navbar bg-body-tertiary">
             <div class="container justify-content-center">
                 <form class="d-flex" method="post">
-                    <input class="form-control me-1" id="fr" type="text" class="text" value="<?=($_POST['fr'])?>" name="mot_fr" placeholder="mot en français"/>
                     <input class="form-control me-1" id="en" type="text" class="text" value="<?=($_POST['en'])?>" name="mot_en" placeholder="mot en anglais"disabled/>
+                    <input class="form-control me-1" id="fr" type="text" class="text" value="<?=($_POST['fr'])?>" name="mot_fr" placeholder="mot en français"/>
                     <input class="form-control me-1" id="inputnote" type="text" class="text" value="<?=($_POST['inputnote'])?>" name="note" placeholder="note"/>
                     <input class="form-control me-1" type="hidden" name="id" value="<?=($_POST['id'])?>"> </input>
                     <input class="btn btn-outline-success" name="mode" value="modifier" type="submit"></input>
@@ -95,8 +95,8 @@
         <nav class="navbar bg-body-tertiary">
             <div class="container justify-content-center">
                 <form class="d-flex" method="post">
-                    <input class="form-control me-1" id="fr" type="text" class="text" name="mot_fr" placeholder="mot français"/>
                     <input class="form-control me-1" id="en" type="text" class="text" name="mot_en" placeholder="mot anglais"/>
+                    <input class="form-control me-1" id="fr" type="text" class="text" name="mot_fr" placeholder="mot français"/>
                     <input class="form-control me-1" id="inputnote" type="text" class="text" name="note" placeholder="note"/>
                     <input class="btn btn-outline-success" id="ajouter" name="mode" value="ajouter" type="submit"></input>
                 </form>
@@ -170,12 +170,12 @@
         <header>
             <div class="container-fuide overflow-x-hidden text-black">
                 <div class="row-gap d-flex align-items-center p-1 bg-success bg-opacity-50 text-wrap" >
-
-                    <div class="col-3 p-0">
-                        <h6 class="text-center"> Mots français</h6>
-                    </div>
+                    
                     <div class="col-3 p-0">  
                         <h6 class="text-center"> Mots anglais</h6>
+                    </div>
+                    <div class="col-3 p-0">
+                        <h6 class="text-center"> Mots français</h6>
                     </div>
                     <div class="col-2 pe-1"> 
                         <h6 class="text-center"> Notes</h6>
@@ -198,8 +198,8 @@
                     ?>
                     <div class=" d-flex align-items-center p-1 row m-0 <?=$rowType?>">
 
-                            <p class="col-3 text-center p-0 m-0 text-break" id="fr<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_fr']?></p>
                             <p class="col-3 text-center p-0 m-0 text-break" id="en<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_en']?></p>
+                            <p class="col-3 text-center p-0 m-0 text-break" id="fr<?=$vocabulaire['id']?>"><?=$vocabulaire['mot_fr']?></p>
                             <p class="col-2 text-center p-0 m-0 text-break" id="note<?=$vocabulaire['id']?>"><?=$vocabulaire['note']?></p>
 
                         <form action="" method="post" class="col-2 text-center p-0">
@@ -210,8 +210,8 @@
 
                         <form method="post" action="" class="col-2 text-center p-0">
                             <input type="hidden" name="id" value="<?=$vocabulaire['id']?>"></input>
-                            <input type="hidden" name="fr" value="<?=$vocabulaire['mot_fr']?>"></input>
                             <input type="hidden" name="en" value="<?=$vocabulaire['mot_en']?>"></input>
+                            <input type="hidden" name="fr" value="<?=$vocabulaire['mot_fr']?>"></input>
                             <input type="hidden" name="inputnote" value="<?=$vocabulaire['note']?>"></input>
                             <input type="hidden" name="mode" value="modification"></input>
                             <input class="btn btn-outline-success" type="submit" name="txte" value="&#128394;"></input>
