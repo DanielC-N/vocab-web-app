@@ -6,6 +6,7 @@
     <title> Vocabulaire </title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <?php
         require 'modele.php';
         // declaration 
@@ -31,11 +32,10 @@
 
                 $errormsg=("word not found");
             } else {
-                insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
+                $doesExist = insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
             }
             $resultats=getWordsByOffset($numeroPageCourante);
-          
-         } 
+        } 
         elseif($mode == "rechercher"){
             
             if (!checkParams(['rechercher'])){
@@ -43,33 +43,28 @@
             } else {
                 $resultats=filterWord($_POST['rechercher']);
             }
+        } elseif($mode == "effacer"){
+            if (!checkParams(['id'])){
+                $errormsg=("id not found");
+            } else {
+                deleteWord($_POST['id']);
+            }
+            $resultats=getWordsByOffset($numeroPageCourante);
+        } elseif($mode == "modifier"){
+            if(!checkParams(['id','mot_fr','note'])){
+                $errormsg=('cannot be modified ');
+            } else {
+                $resultats=updateWord($_POST['id'],$_POST['mot_fr'],$_POST['note'],$nbPagesCourante);
+            }
+            $resultats=getWordsByOffset($numeroPageCourante);
         } else {
-           $resultats=getWordsByOffset($numeroPageCourante);
+            $resultats=getWordsByOffset($numeroPageCourante);
         }
-
-        // elseif($mode == "effacer"){
-        //     if (!checkParams(['id'])){
-        //         $errormsg=("id not found");
-        //     } else {
-        //         deleteWord($_POST['id']);
-        //     }
-        //     $resultats=getWordsByOffset($numeroPageCourante);
-        //}
-        // else {
-        //     $resultats=getWordsByOffset($numeroPageCourante);
-        // }
-        // elseif($mode == "modifier"){
-        //     if(!checkParams(['id','mot_fr','note'])){
-        //         $errormsg=('cannot be modified ');
-        //     } else {
-        //         $resultats=updateWord($_POST['id'],$_POST['mot_fr'],$_POST['note'],$nbPagesCourante);
-        //     }
-        //     $resultats=getWordsByOffset($numeroPageCourante);
-        // }
+        
     ?>
 
 </head>
-<body>
+<body class="bg-body-tertiary">
         <nav class="navbar bg-body-tertiary">
             <div class="container justify-content-center">
                 <form class="d-flex"  method="post">
@@ -107,6 +102,13 @@
                 </form>
             </div>
         </nav>
+
+        <?php
+            if($doesExist == 'exists'):
+        ?>
+        <div class="text-uppercase fs-2 text-center text-danger fw-semibold"> Ce mot existe déjà !</div>
+        <?php endif ?>
+
         <!-- ?php endif; ?> -->
 
         <nav aria-label="Page navigation example" class="navbar bg-body-tertiary pagination justify-content-center">
@@ -114,7 +116,7 @@
                 <input type="hidden" name="nbpage" value="<?= max($numeroPageCourante - 1, 0) ?>"></input>
                 <input type="submit" class="btn btn-outline-success" value="&lsaquo;"></input>
             </form>
-
+ 
         <?php
             $startPage = max(0, $numeroPageCourante - 1);
             $endPage = min($nbPagesTotales, $numeroPageCourante + 1);
@@ -160,7 +162,7 @@
             }
         ?>
           
-          
+         
     </nav>
 
 
@@ -291,49 +293,27 @@
                     </form>';
             }
         ?>
-    </nav>
-        <!-- ?php if($mode== "ajouter"): ?> 
-            ?php var_dump($_POST);
-            if (!checkParams(['mot_fr','mot_en','note'])) {
+    <!-- </nav>
+             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo"> ajouter </button>
 
-                $errormsg=("word not found");
-            } else {
-                insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
-            }
-            $resultats=getWordsByOffset($numeroPageCourante);
-             ?>
-        ?php else: ?>
-            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-header">
-                  <img src="..." class="rounded me-2" alt="...">
-                    <strong class="me-auto">Bootstrap</strong>
-                    <small>11 mins ago</small>
-                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
-                <div class="toast-body">
-                    Le mot existe déjà ! 
-                </div>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel"> Mot ajouté </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-        ?php if(isset($errormsg)) ?>
-            <div class="alert alert-danger" role="alert">
-                ?= $errormsg;?>
-            </div>
-        ?php endif; ?>
-             -->
+            <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label"> Le mot existe déjà ! </label>
+                         <input type="text" class="form-control" id="recipient-name"> 
 
-
-             <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                <!-- <div class="toast-header">
-                    <strong class="me-auto">Bootstrap</strong>
-                    <small>11 mins ago</small>
-                    <button type="button"  class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div> -->
-                <div class="toast-body">
-                    Le mot existe déjà !
-                </div>
-            </div>
-
+                    </div>
+        </div>
+  </div>
+</div> -->
 </body>
+
 <script>
     let collectionOfText = document.getElementsByClassName('text-break');
 
@@ -345,5 +325,19 @@
             });
         });
     }
+  
+
+//    const exampleModal = document.getElementById('exampleModal')
+// if (exampleModal) {
+//   exampleModal.addEventListener('show.bs.modal', event => {
+//     const button = event.relatedTarget
+//     const recipient = button.getAttribute('data-bs-whatever')
+//     const modalTitle = exampleModal.querySelector('.modal-title')
+//     const modalBodyInput = exampleModal.querySelector('.modal-body input')
+
+//     modalTitle.textContent = `New message to ${recipient}`
+//     modalBodyInput.value = recipient
+//   })
+// }
 </script>
 </html>
