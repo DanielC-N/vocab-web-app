@@ -9,6 +9,17 @@ function getBaseDD(){
     return $res;
 }
 
+function getBaseDD2(){
+    $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
+    $stmt =$bdd->prepare('SELECT * FROM log_words ORDER BY mot_fr ');
+    $stmt->execute(); 
+    $res = $stmt->fetchAll();
+    $bdd = null;
+    $stmt= null;
+    return $res;
+}
+
+
 function getWordsByOffset($nbpage){
     $offset = $nbpage*20;
     $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
@@ -45,6 +56,8 @@ function insertWord($textfr, $texten, $note){
     $r= $stmt->fetchAll();
     if(count($r)==0){
         $stmt= $bdd->prepare('INSERT INTO vocabulaire (mot_fr,mot_en,note) VALUES(:fr, :en, :note)');
+        $stmt->execute(['fr'=> $textfr,'en'=>$texten,'note'=>$note]);
+        $stmt= $bdd->prepare('INSERT INTO `log` (mot_fr,mot_en,note) VALUES(:fr, :en, :note)');
         $stmt->execute(['fr'=> $textfr,'en'=>$texten,'note'=>$note]);
     } else {
         return "exists";

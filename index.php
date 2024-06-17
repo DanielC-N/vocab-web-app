@@ -34,13 +34,14 @@
             } else {
                 $doesExist = insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
             }
-            $resultats=getWordsByOffset($numeroPageCourante);
+            
         } 
         elseif($mode == "rechercher"){
-            
             if (!checkParams(['rechercher'])){
                 $errormsg=("not found");
-            } else {
+            } elseif($_POST['rechercher']== "") {
+               $resultats=getWordsByOffset($numeroPageCourante);
+            }else{
                 $resultats=filterWord($_POST['rechercher']);
             }
         } 
@@ -108,7 +109,7 @@
         <?php
             if($doesExist == 'exists'):
         ?>
-        <div class="text-uppercase fs-2 text-center text-danger fw-semibold"> Ce mot existe déjà !</div>
+        <div class=" fs-2 text-center text-danger-emphasis fw-semibold"> Ce mot existe déjà </div>
         <?php endif ?>
 
         <!-- ?php endif; ?> -->
