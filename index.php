@@ -15,6 +15,7 @@
             $_GET['nbpage']= $nbPagesTotales;
         }
         $numeroPageCourante=$_GET['nbpage'];
+
         $errormsg ="";
         $mode=$_POST['mode'];
 
@@ -26,7 +27,6 @@
         //     $resultats=getWordsByOffset($numeroPageCourante);
         // }
         if($mode == "ajouter"){
-            var_dump($_POST);
             if (!checkParams(['mot_fr','mot_en','note'])) {
 
                 $errormsg=("word not found");
@@ -34,32 +34,19 @@
                 insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
             }
             $resultats=getWordsByOffset($numeroPageCourante);
-        } else { ?>
-            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-header">
-                  <!--<img src="..." class="rounded me-2" alt="..."> -->
-                    <strong class="me-auto">Bootstrap</strong>
-                    <small>11 mins ago</small>
-                    <button type="button"  class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
-                <div class="toast-body">
-                    Le mot existe déjà ! 
-                </div>
-            </div>
-            <?php } ?>
-        <?php     
-        if($mode == "rechercher"){
-            var_dump($_POST['rechercher']);
+          
+         } 
+        elseif($mode == "rechercher"){
+            
             if (!checkParams(['rechercher'])){
                 $errormsg=("not found");
             } else {
                 $resultats=filterWord($_POST['rechercher']);
             }
-                $resultats=getWordsByOffset($numeroPageCourante);
-
         } else {
            $resultats=getWordsByOffset($numeroPageCourante);
         }
+
         // elseif($mode == "effacer"){
         //     if (!checkParams(['id'])){
         //         $errormsg=("id not found");
@@ -79,7 +66,7 @@
         //     }
         //     $resultats=getWordsByOffset($numeroPageCourante);
         // }
-        ?>
+    ?>
 
 </head>
 <body>
@@ -172,6 +159,8 @@
                     </form>';
             }
         ?>
+          
+          
     </nav>
 
 
@@ -331,6 +320,19 @@
             </div>
         ?php endif; ?>
              -->
+
+
+             <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <!-- <div class="toast-header">
+                    <strong class="me-auto">Bootstrap</strong>
+                    <small>11 mins ago</small>
+                    <button type="button"  class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div> -->
+                <div class="toast-body">
+                    Le mot existe déjà !
+                </div>
+            </div>
+
 </body>
 <script>
     let collectionOfText = document.getElementsByClassName('text-break');

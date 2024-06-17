@@ -29,7 +29,8 @@ function filterWord($text){
     $bdd = null;
     $stmt= null;
     return $res;
- }
+    
+}
 
 function deleteWord($id){
     $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
@@ -42,13 +43,12 @@ function insertWord($textfr, $texten, $note){
     $stmt= $bdd->prepare('SELECT id FROM vocabulaire WHERE mot_en =:en');
     $stmt->execute(['en'=>$texten]);
     $r= $stmt->fetchAll();
-    var_dump(count($r)==0);
-        if(count($r)==0){
-            $stmt= $bdd->prepare('INSERT INTO vocabulaire (mot_fr,mot_en,note) VALUES(:fr, :en, :note)');
-            $stmt->execute(['fr'=> $textfr,'en'=>$texten,'note'=>$note]);
-        } else {
-            echo "le mot existe";
-        }
+    if(count($r)==0){
+        $stmt= $bdd->prepare('INSERT INTO vocabulaire (mot_fr,mot_en,note) VALUES(:fr, :en, :note)');
+        $stmt->execute(['fr'=> $textfr,'en'=>$texten,'note'=>$note]);
+    } else {
+        echo "le mot existe déjà ! ";
+    }
     // } else {
     //     $id=$r[0]['id'];
     //     $stmt=$bdd->prepare('INSERT INTO `log` (mot_fr,mot_en,note) VALUES(:fr, :en, :note)');
@@ -89,17 +89,15 @@ function getWord($id){
 }
 
 
-function getBaseDD2(){
-    $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
-    $stmt =$bdd->prepare('SELECT * FROM `log` ORDER BY mot_fr ');
-    $stmt->execute(); 
-    $res = $stmt->fetchAll();
-    $bdd = null;
-    $stmt= null;
-    return $res;
-}
-
-
+// function getBaseDD2(){
+//     $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
+//     $stmt =$bdd->prepare('SELECT * FROM `log` ORDER BY mot_fr ');
+//     $stmt->execute(); 
+//     $res = $stmt->fetchAll();
+//     $bdd = null;
+//     $stmt= null;
+//     return $res;
+// }
 
 ?>
 <!-- <script>
