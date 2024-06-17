@@ -43,21 +43,23 @@
             } else {
                 $resultats=filterWord($_POST['rechercher']);
             }
-        } elseif($mode == "effacer"){
-            if (!checkParams(['id'])){
-                $errormsg=("id not found");
-            } else {
-                deleteWord($_POST['id']);
-            }
-            $resultats=getWordsByOffset($numeroPageCourante);
-        } elseif($mode == "modifier"){
-            if(!checkParams(['id','mot_fr','note'])){
-                $errormsg=('cannot be modified ');
-            } else {
-                $resultats=updateWord($_POST['id'],$_POST['mot_fr'],$_POST['note'],$nbPagesCourante);
-            }
-            $resultats=getWordsByOffset($numeroPageCourante);
-        } else {
+        } 
+        // elseif($mode == "effacer"){
+        //     if (!checkParams(['id'])){
+        //         $errormsg=("id not found");
+        //     } else {
+        //         deleteWord($_POST['id']);
+        //     }
+        //     $resultats=getWordsByOffset($numeroPageCourante);
+        // } elseif($mode == "modifier"){
+        //     if(!checkParams(['id','mot_fr','note'])){
+        //         $errormsg=('cannot be modified ');
+        //     } else {
+        //         $resultats=updateWord($_POST['id'],$_POST['mot_fr'],$_POST['note'],$nbPagesCourante);
+        //     }
+        //     $resultats=getWordsByOffset($numeroPageCourante);
+        // } 
+        else {
             $resultats=getWordsByOffset($numeroPageCourante);
         }
         
