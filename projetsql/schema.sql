@@ -22,6 +22,7 @@ CREATE TABLE log_words (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     user TEXT NOT NULL,
     classe TEXT NOT NULL,
+    mot_en TEXT NOT NULL, 
     mot_fr TEXT NOT NULL,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     is_approved TEXT NULL
