@@ -11,17 +11,25 @@
 <body>
 <?php
     require 'modele.php';
-    
-        if(isset($_POST['mot_en']) && isset($_POST['mot_fr']) && isset($_POST['note'])){
-            var_dump($_POST);
-            updateWord($_POST['id'],$_POST['mot_fr'],$_POST['note']);
+        $errormsg ="";
+        $mode=$_POST['mode'];
+        
+        $nbPagesTotales=floor(count(getBaseDD())/20);
+        if(array_key_exists('nbpage', $_GET) && $_GET['nbpage'] >= $nbPagesTotales){
+            $_GET['nbpage']= $nbPagesTotales;
         }
+        $numeroPageCourante=$_GET['nbpage'];
 
-        if($_POST['id']!=""){
-            $id=$_POST['id'];
-            $resultats = getWord($id);
-            foreach($resultats as $vocabulaire);
-        }
+        // if(isset($_POST['mot_en']) && isset($_POST['mot_fr']) && isset($_POST['note'])){
+        //     var_dump($_POST);
+        //     updateWord($_POST['id'],$_POST['mot_fr'],$_POST['note']);
+        // }
+
+        // if($_POST['id']!=""){
+        //     $id=$_POST['id'];
+        //     $resultats = getWord($id);
+        //     foreach($resultats as $vocabulaire);
+        // }
         ?>
 
     <div class="container-fuide overflow-x-hidden text-black">

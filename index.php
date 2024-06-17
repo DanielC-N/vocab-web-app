@@ -9,53 +9,68 @@
     <?php
         require 'modele.php';
         // declaration 
-        $accueil=$_POST['rechercher'];
-        if(array_key_exists('nbpage', $_GET) && $_GET['nbpage'] <0){
-            $_GET['nbpage']=0;
-        }
-        $errormsg ="";
-        $mode=$_POST['mode'];
-        
+
         $nbPagesTotales=floor(count(getBaseDD())/20);
         if(array_key_exists('nbpage', $_GET) && $_GET['nbpage'] >= $nbPagesTotales){
             $_GET['nbpage']= $nbPagesTotales;
         }
         $numeroPageCourante=$_GET['nbpage'];
+        $errormsg ="";
+        $mode=$_POST['mode'];
 
-        if(!isset($mode)|| $mode=="modification"){
-            $resultats=getWordsByOffset($numeroPageCourante);
+        $accueil=$_POST['rechercher'];
+        if(array_key_exists('nbpage', $_GET) && $_GET['nbpage'] <0){
+            $_GET['nbpage']=0;
         }
-        // elseif($mode == "ajouter"){
-        //     var_dump($_POST);
-        //     if (!checkParams(['mot_fr','mot_en','note'])) {
-
-        //         $errormsg=("word not found");
-        //     } else {
-        //         insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
-        //     }
+        // if(!isset($mode)|| $mode=="modification"){
         //     $resultats=getWordsByOffset($numeroPageCourante);
-        //}
-        elseif($mode == "rechercher"){
+        // }
+        if($mode == "ajouter"){
+            var_dump($_POST);
+            if (!checkParams(['mot_fr','mot_en','note'])) {
+
+                $errormsg=("word not found");
+            } else {
+                insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
+            }
+            $resultats=getWordsByOffset($numeroPageCourante);
+        } else { ?>
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                  <!--<img src="..." class="rounded me-2" alt="..."> -->
+                    <strong class="me-auto">Bootstrap</strong>
+                    <small>11 mins ago</small>
+                    <button type="button"  class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    Le mot existe déjà ! 
+                </div>
+            </div>
+            <?php } ?>
+        <?php     
+        if($mode == "rechercher"){
+            var_dump($_POST['rechercher']);
             if (!checkParams(['rechercher'])){
                 $errormsg=("not found");
             } else {
                 $resultats=filterWord($_POST['rechercher']);
             }
-            $resultats=getWordsByOffset($numeroPageCourante);
-        // } else {
+                $resultats=getWordsByOffset($numeroPageCourante);
+
+        } else {
+           $resultats=getWordsByOffset($numeroPageCourante);
+        }
+        // elseif($mode == "effacer"){
+        //     if (!checkParams(['id'])){
+        //         $errormsg=("id not found");
+        //     } else {
+        //         deleteWord($_POST['id']);
+        //     }
         //     $resultats=getWordsByOffset($numeroPageCourante);
-        }
-        elseif($mode == "effacer"){
-            if (!checkParams(['id'])){
-                $errormsg=("id not found");
-            } else {
-                deleteWord($_POST['id']);
-            }
-            $resultats=getWordsByOffset($numeroPageCourante);
-        }
-        else {
-            $resultats=getWordsByOffset($numeroPageCourante);
-        }
+        //}
+        // else {
+        //     $resultats=getWordsByOffset($numeroPageCourante);
+        // }
         // elseif($mode == "modifier"){
         //     if(!checkParams(['id','mot_fr','note'])){
         //         $errormsg=('cannot be modified ');
@@ -288,8 +303,8 @@
             }
         ?>
     </nav>
-        <?php if($mode== "ajouter"):{
-            var_dump($_POST);
+        <!-- ?php if($mode== "ajouter"): ?> 
+            ?php var_dump($_POST);
             if (!checkParams(['mot_fr','mot_en','note'])) {
 
                 $errormsg=("word not found");
@@ -297,9 +312,8 @@
                 insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
             }
             $resultats=getWordsByOffset($numeroPageCourante);
-            }
-            ?>
-        <?php else: ?>
+             ?>
+        ?php else: ?>
             <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="toast-header">
                   <img src="..." class="rounded me-2" alt="...">
@@ -308,17 +322,15 @@
                     <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
                 <div class="toast-body">
-                    Hello, world! This is a toast message.
+                    Le mot existe déjà ! 
                 </div>
             </div>
-        <?php 
-        if(isset($errormsg)){ ?>
+        ?php if(isset($errormsg)) ?>
             <div class="alert alert-danger" role="alert">
-                <?= $errormsg;?>
+                ?= $errormsg;?>
             </div>
-       <?php } ?>
-        <?php endif; ?>
-            
+        ?php endif; ?>
+             -->
 </body>
 <script>
     let collectionOfText = document.getElementsByClassName('text-break');

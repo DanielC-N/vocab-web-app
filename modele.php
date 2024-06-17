@@ -42,23 +42,22 @@ function insertWord($textfr, $texten, $note){
     $stmt= $bdd->prepare('SELECT id FROM vocabulaire WHERE mot_en =:en');
     $stmt->execute(['en'=>$texten]);
     $r= $stmt->fetchAll();
-    if(count($r)==0){
-        $stmt= $bdd->prepare('INSERT INTO vocabulaire (mot_fr,mot_en,note) VALUES(:fr, :en, :note)');
-        $stmt->execute(['fr'=> $textfr,'en'=>$texten,'note'=>$note]);
-        $stmt2=$bdd->prepare('INSERT INTO log (user, classe, mot_en mot_fr) VALUES(:user,:fr, :en, :note)');
-        $stmt->execute(['fr'=> $textfr,'en'=>$texten,'note'=>$note]);
-    } elseif (count($r)!=0) {
-        echo("Le mot existe déjà");
-    }   
-    
+    var_dump(count($r)==0);
+        if(count($r)==0){
+            $stmt= $bdd->prepare('INSERT INTO vocabulaire (mot_fr,mot_en,note) VALUES(:fr, :en, :note)');
+            $stmt->execute(['fr'=> $textfr,'en'=>$texten,'note'=>$note]);
+        } else {
+            echo "le mot existe";
+        }
     // } else {
     //     $id=$r[0]['id'];
-    //     $stmt=$bdd->prepare('UPDATE vocabulaire SET mot_fr=:fr, note=:note WHERE id=:id');
-    //     $stmt->execute(['fr'=> $textfr,'note'=>$note, 'id'=>$id]); 
+    //     $stmt=$bdd->prepare('INSERT INTO `log` (mot_fr,mot_en,note) VALUES(:fr, :en, :note)');
+    //     $stmt->execute(['fr'=> $textfr,'note'=>$note, 'id'=>$id]);  -->
+    // }
     $bdd = null;
     $stmt = null;
     }
-   
+    
     function updateWord($id, $textfr, $note,){
 
         $bdd=new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
@@ -88,6 +87,20 @@ function getWord($id){
     $stmt =$bdd->prepare('SELECT * FROM vocabulaire WHERE id=:id') ;
     $stmt->execute(['id'=>$id]);
 }
+
+
+function getBaseDD2(){
+    $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
+    $stmt =$bdd->prepare('SELECT * FROM `log` ORDER BY mot_fr ');
+    $stmt->execute(); 
+    $res = $stmt->fetchAll();
+    $bdd = null;
+    $stmt= null;
+    return $res;
+}
+
+
+
 ?>
 <!-- <script>
 const myModal = document.getElementById('myModal')
@@ -97,4 +110,3 @@ myModal.addEventListener('shown.bs.modal', () => {
   myInput.focus()
 })
 </script> -->
-
