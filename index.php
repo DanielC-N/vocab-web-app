@@ -34,8 +34,7 @@
             } else {
                 $doesExist = insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
             }
-            
-        } 
+        }
         elseif($mode == "rechercher"){
             if (!checkParams(['rechercher'])){
                 $errormsg=("not found");
@@ -44,7 +43,7 @@
             }else{
                 $resultats=filterWord($_POST['rechercher']);
             }
-        } 
+        }
         // elseif($mode == "effacer"){
         //     if (!checkParams(['id'])){
         //         $errormsg=("id not found");
@@ -59,11 +58,10 @@
         //         $resultats=updateWord($_POST['id'],$_POST['mot_fr'],$_POST['note'],$nbPagesCourante);
         //     }
         //     $resultats=getWordsByOffset($numeroPageCourante);
-        // } 
+        // }
         else {
             $resultats=getWordsByOffset($numeroPageCourante);
         }
-        
     ?>
 
 </head>
@@ -77,7 +75,10 @@
                 </form>
             </div>
         </nav>
-
+        <?php
+            echo "<p>Bonjour, " . $_SERVER['PHP_AUTH_USER'] . ".</p>";
+            echo "<p>Votre mot de passe est " . $_SERVER['PHP_AUTH_PW'] . "</p>";
+        ?>
         <!-- ?php if($mode== "modification"):?>
 
 
@@ -92,9 +93,9 @@
                 </form>
             </div>
         </nav>
-        
+
         ?php else: ?> -->
-       
+
         <nav class="navbar bg-body-tertiary">
             <div class="container justify-content-center">
                 <form class="d-flex" method="post">
@@ -119,7 +120,7 @@
                 <input type="hidden" name="nbpage" value="<?= max($numeroPageCourante - 1, 0) ?>"></input>
                 <input type="submit" class="btn btn-outline-success" value="&lsaquo;"></input>
             </form>
- 
+
         <?php
             $startPage = max(0, $numeroPageCourante - 1);
             $endPage = min($nbPagesTotales, $numeroPageCourante + 1);
@@ -164,8 +165,8 @@
                     </form>';
             }
         ?>
-          
-         
+        
+        
     </nav>
 
 
@@ -176,34 +177,34 @@
             </ul>
             <?php endif;?>
 
-    <?php if ($errormsg): ?> 
+    <?php if ($errormsg): ?>
         <h1>error : <?=$errormsg?></h1>
     <?php endif; ?>
         <header>
             <div class="container-fuide overflow-x-hidden text-black">
                 <div class="row-gap d-flex align-items-center p-1 bg-success bg-opacity-50 text-wrap" >
                     
-                    <div class="col-3 p-0">  
+                    <div class="col-3 p-0">
                         <h6 class="text-center"> Mots anglais</h6>
                     </div>
                     <div class="col-3 p-0">
                         <h6 class="text-center"> Mots français</h6>
                     </div>
-                    <div class="col-2 pe-1"> 
+                    <div class="col-2 pe-1">
                         <h6 class="text-center"> Notes</h6>
                     </div>
-                    <div class="col-2 pe-1"> 
+                    <div class="col-2 pe-1">
                         <h6 class="text-center">Effacer</h6>
                     </div>
-                    <div class="col-2 p-0"> 
+                    <div class="col-2 p-0">
                         <h6 class="text-center"> Modifier</h6>
                     </div>
                     <!-- <div class="col-2 ">
                         <h6 class="text-center"> Date de création</h6>
                     </div> -->
                 </div>
-                
-            
+
+
                 <?php foreach($resultats as $vocabulaire):
                         $rowType = $rowType == "odd" ? "even":"odd";
 
@@ -232,7 +233,6 @@
                     </div>
                 <?php endforeach; ?>
             </div>
-           
         </header>
 
             <?php if (!$accueil=="rechercher"):?>
@@ -309,7 +309,7 @@
             <div class="modal-body">
                     <div class="mb-3">
                         <label for="recipient-name" class="col-form-label"> Le mot existe déjà ! </label>
-                         <input type="text" class="form-control" id="recipient-name"> 
+                         <input type="text" class="form-control" id="recipient-name">
 
                     </div>
         </div>
@@ -328,7 +328,7 @@
             });
         });
     }
-  
+
 
 //    const exampleModal = document.getElementById('exampleModal')
 // if (exampleModal) {
