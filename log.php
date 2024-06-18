@@ -11,12 +11,15 @@
 <body>
 <?php
     require 'modele.php';
+    
+    $res = getBaseDD2();
 
     if ($_SERVER['PHP_AUTH_USER'] == "xenizo") { ?>
         <form action="log.php">
             <button type="submit"> Log </button>
         </form>
 <?php 
+
         $nbPagesTotales=floor(count(getBaseDD())/20);
         if(array_key_exists('nbpage', $_GET) && $_GET['nbpage'] >= $nbPagesTotales){
             $_GET['nbpage']= $nbPagesTotales;
@@ -80,10 +83,11 @@
             $resultats=getWordsByOffset($numeroPageCourante);
         }
     } else {
-        header("Location : .$index.php");
+        header('Location:index.php');
         exit();
     }
 ?>
+    
 
 <header>
             <div class="container-fuide overflow-x-hidden text-black">
