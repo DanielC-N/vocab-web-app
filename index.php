@@ -33,12 +33,15 @@
         //     $resultats=getWordsByOffset($numeroPageCourante);
         // }
         if($mode == "ajouter"){
+            var_dump($_POST);
             if (!checkParams(['mot_fr','mot_en','note'])) {
 
                 $errormsg=("word not found");
             
             } elseif($_POST['mot_fr']== "" || $_POST['mot_en']=="") {
+                var_dump($_POST);
                 $errormsg=("please don't leave the fields for French and English words empty");
+
                 $resultats=getWordsByOffset($numeroPageCourante);
 
             } else {
@@ -115,8 +118,8 @@
             <div class="container justify-content-center">
                 <form class="d-flex" method="post">
                     <input class="form-control me-1" id="en" type="text" class="text" name="mot_en" maxlength="70" placeholder="mot anglais"/>
-                    <input class="form-control me-1" id="fr" type="text" class="text" name="mot_fr" placeholder="mot français"/>
-                    <input class="form-control me-1" id="inputnote" type="text" class="text" name="note" placeholder="note"/>
+                    <input class="form-control me-1" id="fr" type="text" class="text" name="mot_fr" maxlength="70" placeholder="mot français"/>
+                    <input class="form-control me-1" id="inputnote" type="text" class="text" name="note" maxlength="70" placeholder="note"/>
                     <input class="btn btn-outline-success" id="ajouter" name="mode" value="ajouter" type="submit"></input>
                 </form>
             </div>
@@ -196,10 +199,10 @@
             <div class="container-fuide overflow-x-hidden text-black">
                 <div class="row-gap d-flex align-items-center p-1 bg-success bg-opacity-50 text-wrap" >
                     
-                    <div class="col-3 p-0">  
+                    <div class="col-4 p-0">  
                         <h6 class="text-center"> Mots anglais</h6>
                     </div>
-                    <div class="col-3 p-0">
+                    <div class="col-4 p-0">
                         <h6 class="text-center"> Mots français</h6>
                     </div>
                     <div class="col-2 pe-1"> 
@@ -208,9 +211,9 @@
                     <div class="col-2 pe-1"> 
                         <h6 class="text-center">Effacer</h6>
                     </div>
-                    <div class="col-2 p-0"> 
+                    <!-- <div class="col-2 p-0"> 
                         <h6 class="text-center"> Modifier</h6>
-                    </div> 
+                    </div>  -->
                     <!-- <div class="col-2 ">
                         <h6 class="text-center"> Date de création</h6> -->
                     </div>
@@ -223,8 +226,8 @@
                     ?>
                      <div class=" d-flex align-items-center p-1 row m-0 <?=$rowType?>">
 
-                            <p class="col-3 text-center p-0 m-0 text-break" id="en <?=$vocabulaire['id']?>"><?=$vocabulaire['mot_en']?></p>
-                            <p class="col-3 text-center p-0 m-0 text-break" id="fr <?=$vocabulaire['id']?>"><?=$vocabulaire['mot_fr']?></p>
+                            <p class="col-4 text-center p-0 m-0 text-break" id="en <?=$vocabulaire['id']?>"><?=$vocabulaire['mot_en']?></p>
+                            <p class="col-4 text-center p-0 m-0 text-break" id="fr <?=$vocabulaire['id']?>"><?=$vocabulaire['mot_fr']?></p>
                             <p class="col-2 text-center p-0 m-0 text-break" id="note <?=$vocabulaire['id']?>"><?=$vocabulaire['note']?></p>
 
                         <form action="" method="post" class="col-2 text-center p-0">
@@ -236,14 +239,14 @@
                         </form>
 
 
-                        <form method="post" action="" class="col-2 text-center p-0">
-                            <input type="hidden" name="id" value="<?=$vocabulaire['id']?>"></input>
-                            <input type="hidden" name="en" value="<?=$vocabulaire['mot_en']?>"></input>
-                            <input type="hidden" name="fr" value="<?=$vocabulaire['mot_fr']?>"></input>
-                            <input type="hidden" name="inputnote" value="<?=$vocabulaire['note']?>"></input>
+                        <!-- <form method="post" action="" class="col-2 text-center p-0">
+                            <input type="hidden" name="id" value="<//?=$vocabulaire['id']?>"></input>
+                            <input type="hidden" name="en" value="<//?=$vocabulaire['mot_en']?>"></input>
+                            <input type="hidden" name="fr" value="<//?=$vocabulaire['mot_fr']?>"></input>
+                            <input type="hidden" name="inputnote" value="<//?=$vocabulaire['note']?>"></input>
                             <input type="hidden" name="mode" value="modification"></input>
                             <input class="btn btn-outline-success" type="submit" name="txte" value="&#128394;"></input>
-                        </form>
+                        </form> -->
                         <!-- <time class=" col-2 text-center">?=$vocabulaire['created']?></time>  -->
                     </div>
                 <?php endforeach; ?>
