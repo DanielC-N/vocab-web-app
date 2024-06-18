@@ -10,7 +10,7 @@
     <?php
         require 'modele.php';
         // declaration 
-        if ($_SERVER['PHP_AUTH_USER'] == "qroca") { ?>
+        if ($_SERVER['PHP_AUTH_USER'] == "xenizo") { ?>
             <form action="log.php">
                 <button type="submit"> Log </button>
             </form>
@@ -195,13 +195,13 @@
             <div class="container-fuide overflow-x-hidden text-black">
                 <div class="row-gap d-flex align-items-center p-1 bg-success bg-opacity-50 text-wrap" >
                     
-                    <div class="col-3 p-0">  
+                    <div class="col-4 p-0">  
                         <h6 class="text-center"> Mots anglais</h6>
                     </div>
-                    <div class="col-3 p-0">
+                    <div class="col-4 p-0">
                         <h6 class="text-center"> Mots français</h6>
                     </div>
-                    <div class="col-2 pe-1"> 
+                    <div class="col-4 pe-1"> 
                         <h6 class="text-center"> Notes</h6>
                     </div>
                     <!-- <div class="col-2 pe-1"> 
@@ -222,9 +222,9 @@
                     ?>
                     <div class=" d-flex align-items-center p-1 row m-0 <?=$rowType?>">
 
-                            <p class="col-3 text-center p-0 m-0 text-break" id="en <?=$vocabulaire['id']?>"><?=$vocabulaire['mot_en']?></p>
-                            <p class="col-3 text-center p-0 m-0 text-break" id="fr <?=$vocabulaire['id']?>"><?=$vocabulaire['mot_fr']?></p>
-                            <p class="col-2 text-center p-0 m-0 text-break" id="note <?=$vocabulaire['id']?>"><?=$vocabulaire['note']?></p>
+                            <p class="col-4 text-center p-0 m-0 text-break" id="en <?=$vocabulaire['id']?>"><?=$vocabulaire['mot_en']?></p>
+                            <p class="col-4 text-center p-0 m-0 text-break" id="fr <?=$vocabulaire['id']?>"><?=$vocabulaire['mot_fr']?></p>
+                            <p class="col-4 text-center p-0 m-0 text-break" id="note <?=$vocabulaire['id']?>"><?=$vocabulaire['note']?></p>
 
                         <!-- <form action="" method="post" class="col-2 text-center p-0">
                             <input type="hidden" name="id" value="?=$vocabulaire['id']?>"></input>
