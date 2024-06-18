@@ -94,14 +94,17 @@
                 $errormsg=("word not found");
 
             } else {
-              
                 $doesExist = insertWordLog($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
             
             }
         } else {
             
             echo "non "; }
-    ?>
+
+            if($doesExist == 'exists'):
+                $errormsg= "This word already exists"?>
+        <?php endif; ?>
+    
 <header>
             <div class="container-fuide overflow-x-hidden text-black">
                 <div class="row-gap d-flex align-items-center p-1 bg-success bg-opacity-50 text-wrap" >
