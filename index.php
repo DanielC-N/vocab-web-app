@@ -10,6 +10,13 @@
     <?php
         require 'modele.php';
         // declaration 
+        if ($_SERVER['PHP_AUTH_USER'] == "Q.ROCA") { ?>
+            <form action="log.php">
+                <button type="submit"> Log </button>
+            </form>
+    <?php } else {
+            $resultats=getWordsByOffset($numeroPageCourante);
+    }
 
         $nbPagesTotales=floor(count(getBaseDD())/20);
         if(array_key_exists('nbpage', $_GET) && $_GET['nbpage'] >= $nbPagesTotales){
@@ -31,27 +38,37 @@
             if (!checkParams(['mot_fr','mot_en','note'])) {
 
                 $errormsg=("word not found");
+            
+            } elseif($_POST['mot_fr']== "" || $_POST['mot_en']=="") {
+                $errormsg=("please don't leave the fields for French and English words empty");
+                $resultats=getWordsByOffset($numeroPageCourante);
+
             } else {
                 $doesExist = insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
-            }
             
-        } 
-        elseif($mode == "rechercher"){
+            }
+
+            $resultats=getWordsByOffset($numeroPageCourante);
+            
+        } elseif($mode == "rechercher"){
             if (!checkParams(['rechercher'])){
+
                 $errormsg=("not found");
+
             } elseif($_POST['rechercher']== "") {
+
                $resultats=getWordsByOffset($numeroPageCourante);
             }else{
                 $resultats=filterWord($_POST['rechercher']);
             }
         } 
-        // elseif($mode == "effacer"){
-        //     if (!checkParams(['id'])){
-        //         $errormsg=("id not found");
-        //     } else {
-        //         deleteWord($_POST['id']);
-        //     }
-        //     $resultats=getWordsByOffset($numeroPageCourante);
+        elseif($mode == "effacer"){
+            if (!checkParams(['id'])){
+                $errormsg=("id not found");
+            } else {
+                deleteWord($_POST['id']);
+            }
+            $resultats=getWordsByOffset($numeroPageCourante);}
         // } elseif($mode == "modifier"){
         //     if(!checkParams(['id','mot_fr','note'])){
         //         $errormsg=('cannot be modified ');
@@ -98,7 +115,7 @@
         <nav class="navbar bg-body-tertiary">
             <div class="container justify-content-center">
                 <form class="d-flex" method="post">
-                    <input class="form-control me-1" id="en" type="text" class="text" name="mot_en" placeholder="mot anglais"/>
+                    <input class="form-control me-1" id="en" type="text" class="text" name="mot_en" maxlength="70" placeholder="mot anglais"/>
                     <input class="form-control me-1" id="fr" type="text" class="text" name="mot_fr" placeholder="mot français"/>
                     <input class="form-control me-1" id="inputnote" type="text" class="text" name="note" placeholder="note"/>
                     <input class="btn btn-outline-success" id="ajouter" name="mode" value="ajouter" type="submit"></input>
@@ -108,11 +125,8 @@
 
         <?php
             if($doesExist == 'exists'):
-        ?>
-        <div class=" fs-2 text-center text-danger-emphasis fw-semibold"> Ce mot existe déjà </div>
-        <?php endif ?>
-
-        <!-- ?php endif; ?> -->
+                $errormsg= "This word already exists"?>
+        <?php endif; ?>
 
         <nav aria-label="Page navigation example" class="navbar bg-body-tertiary pagination justify-content-center">
             <form method="get" action="">

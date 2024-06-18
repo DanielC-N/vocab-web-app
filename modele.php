@@ -57,8 +57,6 @@ function insertWord($textfr, $texten, $note){
     if(count($r)==0){
         $stmt= $bdd->prepare('INSERT INTO vocabulaire (mot_fr,mot_en,note) VALUES(:fr, :en, :note)');
         $stmt->execute(['fr'=> $textfr,'en'=>$texten,'note'=>$note]);
-        $stmt= $bdd->prepare('INSERT INTO `log` (mot_fr,mot_en,note) VALUES(:fr, :en, :note)');
-        $stmt->execute(['fr'=> $textfr,'en'=>$texten,'note'=>$note]);
     } else {
         return "exists";
     }
