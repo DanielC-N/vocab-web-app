@@ -10,15 +10,15 @@
 
 <body>
 <?php
+
+    if ($_SERVER['PHP_AUTH_USER'] != "xenizo") { 
+        header('Location:index.php');
+        exit();
+    }
+
     require 'modele.php';
     
     $res = getBaseDD2();
-
-    if ($_SERVER['PHP_AUTH_USER'] == "xenizo") { ?>
-        <form action="log.php">
-            <button type="submit"> Log </button>
-        </form>
-<?php 
 
         $nbPagesTotales=floor(count(getBaseDD())/20);
         if(array_key_exists('nbpage', $_GET) && $_GET['nbpage'] >= $nbPagesTotales){
@@ -82,10 +82,7 @@
         else {
             $resultats=getWordsByOffset($numeroPageCourante);
         }
-    } else {
-        header('Location:index.php');
-        exit();
-    }
+
 ?>
     
 
@@ -127,7 +124,7 @@
                             <p class="col-2 text-center p-0 m-0 text-break" id="mot_fr <?=$log_words['id']?>"><?=$log_words['mot_fr']?></p>
                             <time class=" col-2 text-center"><?=$log_words['created']?></time>
                             <button class="col-2 text-center p-0 m-0 text-break" id="is_approved <?=$log_words['is_approved']?>"> oui </button>
-                            <button class="col-2 text-center p-0 m-0 text-break" id="is_approved <?=$log_words['is_approved']?>"> non</button>
+                            <button class="col-2 text-center p-0 m-0 text-break" id="is_approved <?=$log_words['is_approved']?>"> non </button>
                     </div>
                 <?php endforeach; ?>
             </div>
