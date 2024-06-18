@@ -51,7 +51,7 @@ function deleteWord($id){
 
 function insertWord($textfr, $texten, $note){
     $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
-    $stmt= $bdd->prepare('SELECT id FROM vocabulaire WHERE mot_en =:en');
+    $stmt= $bdd->prepare('SELECT id FROM log_words WHERE mot_en =:en');
     $stmt->execute(['en'=>$texten]);
     $r= $stmt->fetchAll();
     if(count($r)==0){
@@ -68,7 +68,28 @@ function insertWord($textfr, $texten, $note){
     $bdd = null;
     $stmt = null;
 }
-    
+
+
+function insertWordLog($textfr, $texten, $note, $id){
+    $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
+    $stmt= $bdd->prepare('SELECT id FROM log_words WHERE id =:id');
+    $stmt->execute(['id'=>$id]);
+    $r= $stmt->fetchAll();
+    if(count($r)==0){
+        $stmt= $bdd->prepare('INSERT INTO vocabulaire (mot_fr,mot_en,note) VALUES(:fr, :en, :note)');
+        $stmt->execute(['fr'=> $textfr,'en'=>$texten,'note'=>$note]);
+        $bdd = null;
+        return true;
+    } else {
+        $stmt=$bdd->prepare('INSERT INTO log_words (mot_fr,mot_en,note) VALUES(:fr, :en, :note)');
+        $stmt->execute(['fr'=> $textfr,'note'=>$note, 'id'=>$id]);  
+        $stmt = null;
+        return false; 
+    }
+}
+   
+
+
 function updateWord($id, $textfr, $note,){
 
     $bdd=new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
