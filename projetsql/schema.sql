@@ -24,9 +24,10 @@ CREATE TABLE log_words (
     classe TEXT NOT NULL,
     mot_en TEXT NOT NULL, 
     mot_fr TEXT NOT NULL,
+    note TEXT NULL,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     is_approved TEXT NULL
 );
 
-INSERT INTO log_words (user,classe,mot_fr, is_approved) VALUES
-("Emma","ajouter","mais","yes");
+INSERT INTO log_words (user, classe, mot_en, mot_fr, note, is_approved) VALUES
+("Emma", "ajouter", "sun", "soleil", "", "");

@@ -11,10 +11,10 @@
 <body>
 <?php
 
-    if ($_SERVER['PHP_AUTH_USER'] != "xenizo") { 
-        header('Location:index.php');
-        exit();
-    }
+    // if ($_SERVER['PHP_AUTH_USER'] != "xenizo") { 
+    //     header('Location:index.php');
+    //     exit();
+    // }
 
     require 'modele.php';
     
@@ -103,9 +103,12 @@
                         <h6 class="text-center"> Mots français</h6>
                     </div>
                     <div class="col-2 pe-1"> 
+                        <h6 class="text-center">Notes</h6>
+                    </div>
+                    <div class="col-2 pe-1"> 
                         <h6 class="text-center">Created</h6>
                     </div>
-                    <div class="col-4 p-0"> 
+                    <div class="col-2 p-0"> 
                         <h6 class="text-center"> approuved</h6>
                     </div>
                     <!-- <div class="col-2 ">
@@ -122,9 +125,10 @@
                             <p class="col-1 text-center p-0 m-0 text-break" id="classe <?=$log_words['id']?>"><?=$log_words['classe']?></p>
                             <p class="col-2 text-center p-0 m-0 text-break" id="mot_en <?=$log_words['id']?>"><?=$log_words['mot_en']?></p>
                             <p class="col-2 text-center p-0 m-0 text-break" id="mot_fr <?=$log_words['id']?>"><?=$log_words['mot_fr']?></p>
+                            <p class="col-2 text-center p-0 m-0 text-break" id="mot_fr <?=$log_words['id']?>"><?=$log_words['note']?></p>
                             <time class=" col-2 text-center"><?=$log_words['created']?></time>
-                            <button class="col-2 text-center p-0 m-0 text-break" id="is_approved <?=$log_words['is_approved']?>"> oui </button>
-                            <button class="col-2 text-center p-0 m-0 text-break" id="is_approved <?=$log_words['is_approved']?>"> non </button>
+                            <button class="col-1 text-center p-0 m-0 text-break" id="is_approved <?=$log_words['is_approved']?>"> oui </button>
+                            <button class="col-1 text-center p-0 m-0 text-break" id="is_approved <?=$log_words['is_approved']?>"> non </button>
                     </div>
                 <?php endforeach; ?>
             </div>
