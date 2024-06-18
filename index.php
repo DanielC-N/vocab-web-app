@@ -27,16 +27,15 @@
         // if(!isset($mode)|| $mode=="modification"){
         //     $resultats=getWordsByOffset($numeroPageCourante);
         // }
-        if($mode == "ajouter"){
+        if ($mode == "ajouter") {
             if (!checkParams(['mot_fr','mot_en','note'])) {
-
                 $errormsg=("word not found");
             } else {
                 $doesExist = insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
             }
         }
-        elseif($mode == "rechercher"){
-            if (!checkParams(['rechercher'])){
+        elseif ($mode == "rechercher") {
+            if (!checkParams(['rechercher'])) {
                 $errormsg=("not found");
             } elseif($_POST['rechercher']== "") {
                $resultats=getWordsByOffset($numeroPageCourante);
