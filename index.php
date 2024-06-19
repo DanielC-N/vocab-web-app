@@ -44,7 +44,7 @@
                 $resultats=getWordsByOffset($numeroPageCourante);
 
             } else {
-                $doesExist = insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note'],empty($_SERVER['PHP_AUTH_USER']));
+                $doesExist = insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note'],$_SERVER['PHP_AUTH_USER']);
                
             }
             $resultats=getWordsByOffset($numeroPageCourante);

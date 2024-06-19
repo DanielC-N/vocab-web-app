@@ -11,10 +11,10 @@
 <body>
     <?php
 
-    // if ($_SERVER['PHP_AUTH_USER'] != "qroca") {
-    //     header('Location:index.php');
-    //     exit();
-    // }
+    if ($_SERVER['PHP_AUTH_USER'] != "qroca") {
+        header('Location:index.php');
+        exit();
+    }
 
     require 'modele.php';
     
