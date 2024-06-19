@@ -46,7 +46,7 @@
 
             } else {
                 $doesExist = insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
-            
+               
             }
             $resultats=getWordsByOffset($numeroPageCourante);
             
