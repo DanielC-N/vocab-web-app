@@ -11,7 +11,7 @@ function getBaseDD(){
 
 function getBaseDDLogWords(){
     $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
-    $stmt =$bdd->prepare('SELECT * FROM log_words WHERE is_approved="" ORDER BY mot_fr ');
+    $stmt =$bdd->prepare('SELECT * FROM log_words WHERE is_approved IS NULL ORDER BY mot_fr ');
     $stmt->execute(); 
     $res = $stmt->fetchAll();
     $bdd = null;
@@ -49,7 +49,7 @@ function deleteWord($id){
     $stmt->execute(['id'=>$id]);
 }
 
-function insertWord($textfr, $texten, $note){
+function insertWord($textfr, $texten, $note,$user){
     $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
     $stmt= $bdd->prepare('SELECT id FROM vocabulaire WHERE mot_en =:en');
     $stmt->execute(['en'=>$texten]);
@@ -58,9 +58,10 @@ function insertWord($textfr, $texten, $note){
     $stmt= $bdd->prepare('SELECT id FROM log_words WHERE mot_en =:en');
     $stmt->execute(['en'=>$texten]);
     $verif= $stmt->fetchAll();
+
     if(count($r)==0 && count($verif)==0){
-        $stmt= $bdd->prepare('INSERT INTO log_words (mot_en,mot_fr,note) VALUES(:en, :fr, :note)');
-        $stmt->execute(['en'=> $texten,'fr'=>$textfr,'note'=>$note]);
+        $stmt= $bdd->prepare('INSERT INTO log_words (user,mot_en,mot_fr,note,classe) VALUES (:user, :en, :fr, :note, :classe)');
+        $stmt->execute(['user'=>$user,'en'=> $texten,'fr'=>$textfr,'note'=>$note, 'classe'=>'ajouter']);
     } else {
         return "exists";
     }

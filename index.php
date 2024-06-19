@@ -10,12 +10,12 @@
     <?php
         require 'modele.php';
         // declaration 
-        if ($_SERVER['PHP_AUTH_USER'] == "xenizo") { ?>
+        if ($_SERVER['PHP_AUTH_USER'] == "qroca") { ?>
             <form action="log.php">
                 <button type="submit"> Log </button>
             </form>
 <?php }
-
+        var_dump($_SERVER['PHP_AUTH_USER']);
         $nbPagesTotales=floor(count(getBaseDD())/20);
         if(array_key_exists('nbpage', $_GET) && $_GET['nbpage'] >= $nbPagesTotales){
             $_GET['nbpage']= $nbPagesTotales;
@@ -29,9 +29,9 @@
         if(array_key_exists('nbpage', $_GET) && $_GET['nbpage'] <0){
             $_GET['nbpage']=0;
         }
-        // if(!isset($mode)|| $mode=="modification"){
-        //     $resultats=getWordsByOffset($numeroPageCourante);
-        // }
+        if(!isset($mode)|| $mode=="modification"){
+            $resultats=getWordsByOffset($numeroPageCourante);
+        }
         if($mode == "ajouter"){
             var_dump($_POST);
             if (!checkParams(['mot_fr','mot_en','note'])) {
@@ -39,18 +39,18 @@
                 $errormsg=("word not found");
             
             } elseif($_POST['mot_fr']== "" || $_POST['mot_en']=="") {
-                var_dump($_POST);
+    
                 $errormsg=("please don't leave the fields for French and English words empty");
 
                 $resultats=getWordsByOffset($numeroPageCourante);
 
             } else {
-                $doesExist = insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
+                $doesExist = insertWord($_POST['mot_fr'],$_POST['mot_en'],$_POST['note'],empty($_SERVER['PHP_AUTH_USER']));
                
             }
             $resultats=getWordsByOffset($numeroPageCourante);
-            
-        } elseif($mode == "rechercher"){
+
+        }elseif($mode == "rechercher"){
             if (!checkParams(['rechercher'])){
 
                 $errormsg=("not found");
@@ -63,13 +63,14 @@
             }
         } 
         elseif($mode == "effacer"){
-            var_dump($_POST);
+     
             if (!checkParams(['id'])){
                 $errormsg=("id not found");
             } else {
                 deleteWord($_POST['id']);
             }
             $resultats=getWordsByOffset($numeroPageCourante);}
+
         // } elseif($mode == "modifier"){
         //     if(!checkParams(['id','mot_fr','note'])){
         //         $errormsg=('cannot be modified ');
