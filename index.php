@@ -15,7 +15,6 @@
                 <button type="submit"> Log </button>
             </form>
 <?php }
-        var_dump($_SERVER['PHP_AUTH_USER']);
         $nbPagesTotales=floor(count(getBaseDD())/20);
         if(array_key_exists('nbpage', $_GET) && $_GET['nbpage'] >= $nbPagesTotales){
             $_GET['nbpage']= $nbPagesTotales;
@@ -33,7 +32,7 @@
             $resultats=getWordsByOffset($numeroPageCourante);
         }
         if($mode == "ajouter"){
-            var_dump($_POST);
+
             if (!checkParams(['mot_fr','mot_en','note'])) {
 
                 $errormsg=("word not found");
@@ -315,25 +314,6 @@
                     </form>';
             }
         ?>
-    <!-- </nav>
-             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo"> ajouter </button>
-
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel"> Mot ajouté </h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="recipient-name" class="col-form-label"> Le mot existe déjà ! </label>
-                         <input type="text" class="form-control" id="recipient-name"> 
-
-                    </div>
-        </div>
-  </div>
-</div> -->
 </body>
 
 <script>
@@ -347,19 +327,5 @@
             });
         });
     }
-  
-
-//    const exampleModal = document.getElementById('exampleModal')
-// if (exampleModal) {
-//   exampleModal.addEventListener('show.bs.modal', event => {
-//     const button = event.relatedTarget
-//     const recipient = button.getAttribute('data-bs-whatever')
-//     const modalTitle = exampleModal.querySelector('.modal-title')
-//     const modalBodyInput = exampleModal.querySelector('.modal-body input')
-
-//     modalTitle.textContent = `New message to ${recipient}`
-//     modalBodyInput.value = recipient
-//   })
-// }
 </script>
 </html>
