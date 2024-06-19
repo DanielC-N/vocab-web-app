@@ -9,9 +9,9 @@ function getBaseDD(){
     return $res;
 }
 
-function getBaseDD2(){
+function getBaseDDLogWords(){
     $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
-    $stmt =$bdd->prepare('SELECT * FROM log_words ORDER BY mot_fr ');
+    $stmt =$bdd->prepare('SELECT * FROM log_words WHERE is_approved ="" ORDER BY mot_fr ');
     $stmt->execute(); 
     $res = $stmt->fetchAll();
     $bdd = null;
@@ -54,53 +54,48 @@ function insertWord($textfr, $texten, $note){
     $stmt= $bdd->prepare('SELECT id FROM vocabulaire WHERE mot_en =:en');
     $stmt->execute(['en'=>$texten]);
     $r= $stmt->fetchAll();
-    if(count($r)==0){
-        $stmt= $bdd->prepare('INSERT INTO vocabulaire (mot_fr,mot_en,note) VALUES(:fr, :en, :note)');
+
+    $stmt= $bdd->prepare('SELECT id FROM log_words WHERE mot_en =:en');
+    $stmt->execute(['en'=>$texten]);
+    $verif= $stmt->fetchAll();
+    if(count($r)==0 && count($verif)==0){
+        $stmt= $bdd->prepare('INSERT INTO log_words(mot_fr,mot_en,note) VALUES(:fr, :en, :note)');
         $stmt->execute(['fr'=> $textfr,'en'=>$texten,'note'=>$note]);
     } else {
         return "exists";
     }
-    // } else {
-    //     $id=$r[0]['id'];
-    //     $stmt=$bdd->prepare('INSERT INTO `log` (mot_fr,mot_en,note) VALUES(:fr, :en, :note)');
-    //     $stmt->execute(['fr'=> $textfr,'note'=>$note, 'id'=>$id]);  -->
-    // }
     $bdd = null;
     $stmt = null;
 }
 
 
-function insertWordLog($textfr, $texten, $note, $id){
+function insertWordLog($textfr, $texten, $note,$id){
     $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
-    $stmt= $bdd->prepare('SELECT mot_fr, mot_en, note, id FROM log_words WHERE mot_fr =:fr mot_en=:en note=:note id =:id');
-    $stmt->execute(['id'=>$id,'fr'=>$textfr, 'en'=>$id, 'note'=>$note]);
-    $r= $stmt->fetchAll();
-    if(count($r)==0){
         $stmt= $bdd->prepare('INSERT INTO vocabulaire (mot_fr,mot_en,note) VALUES(:fr, :en, :note)');
         $stmt->execute(['fr'=> $textfr,'en'=>$texten,'note'=>$note]);
+        $stmt= $bdd->prepare('UPDATE log_words SET is_approved ="oui" WHERE id=:id');
+        $stmt->execute(['id'=>$id]);
         $bdd = null;
         return true;
-    } else{
-        return "exists";
     }
-}
    
 
 
-function updateWord($id, $textfr, $note,){
-
-    $bdd=new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
-    $stmt= $bdd->prepare('UPDATE vocabulaire SET mot_fr=:fr, note=:note WHERE id=:id');
-    $stmt->execute(['fr'=> $textfr,'note'=>$note, 'id'=>$id]);
-}
-    
-//  function updateWord($id, $textfr, $note, $numeroDeLaPage){
+// function updateWord($id, $textfr, $note,){
 
 //     $bdd=new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
 //     $stmt= $bdd->prepare('UPDATE vocabulaire SET mot_fr=:fr, note=:note WHERE id=:id');
 //     $stmt->execute(['fr'=> $textfr,'note'=>$note, 'id'=>$id]);
-//     return getWordsByOffset($numeroDeLaPage);
 // }
+    
+ function updateWordLog($id){
+
+    $bdd=new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
+    $stmt= $bdd->prepare('UPDATE log_words SET is_approved="non" WHERE id=:id');
+    $stmt->execute(['id'=>$id]);
+    $bdd=null;
+
+}
 
 function checkParams($fields){
     foreach($fields as $field){

@@ -18,7 +18,7 @@
 
     require 'modele.php';
     
-    $res = getBaseDD2();
+    $res = getBaseDDLogWords();
 
         $nbPagesTotales=floor(count(getBaseDD())/20);
         if(array_key_exists('nbpage', $_GET) && $_GET['nbpage'] >= $nbPagesTotales){
@@ -94,16 +94,25 @@
                 $errormsg=("word not found");
 
             } else {
-                $doesExist = insertWordLog($_POST['mot_fr'],$_POST['mot_en'],$_POST['note']);
+                $doesExist = insertWordLog($_POST['mot_fr'],$_POST['mot_en'],$_POST['note'],$_POST['id']);
             
             }
-        } else {
-            
-            echo "non "; }
+        }
 
-            if($doesExist == 'exists'):
-                $errormsg= "This word already exists"?>
-        <?php endif; ?>
+        if($mode == "non")
+        var_dump($_POST);
+        if (!checkParams(['mot_fr','mot_en','note','id'])) {
+
+            $errormsg=("word not found");
+
+        } else {
+            updateWordLog($_POST['id']);
+        
+        }
+
+    if($doesExist == 'exists'):
+        $errormsg= "This word already exists"?>
+    <?php endif; ?>
     
 <header>
             <div class="container-fuide overflow-x-hidden text-black">
@@ -153,7 +162,11 @@
                                 <input type ="hidden" name="note" id="note <?=$log_words['id']?>" value="<?=$log_words['note']?>" ></input>
                                 <input type="hidden" name="id" value="<?=$log_words['id']?>"></input>
                                 <input type="hidden" name="mode" value="oui"></input>
-                                <input type="submit" name="txt" class="col-2 text-center p-0 m-0" value="ok"></input>
+                                <input type="submit" name="txt" class="col-2 text-center p-0 m-0" value="yes"></input>
+
+                                <input type="hidden" name="id" value="<?=$log_words['id']?>"></input>
+                                <input type="hidden" name="mode" value="non"></input>
+                                <input type="submit" name="txt" class="col-2 text-center p-0 m-0" value="no"></input>
                             </form>  
 
                     </div>
