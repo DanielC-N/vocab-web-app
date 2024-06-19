@@ -98,16 +98,16 @@
             
             }
         }
-
-        if($mode == "non")
-        var_dump($_POST);
-        if (!checkParams(['mot_fr','mot_en','note','id'])) {
-
-            $errormsg=("word not found");
-
-        } else {
-            updateWordLog($_POST['id']);
         
+        if($mode =="non"){
+            var_dump($_POST);
+                if (!checkParams(['mot_fr','mot_en','note','id'])) {
+
+                    $errormsg=("word not found");
+            } else {
+                refuseWord($_POST['id']);
+            
+            }
         }
 
     if($doesExist == 'exists'):
@@ -130,13 +130,13 @@
                     <div class="col-2 p-0">
                         <h6 class="text-center"> Mots français</h6>
                     </div>
-                    <div class="col-2 pe-1"> 
+                    <div class="col-1 pe-1"> 
                         <h6 class="text-center">Notes</h6>
                     </div>
-                    <div class="col-2 pe-1"> 
+                    <div class="col-1 pe-1"> 
                         <h6 class="text-center">Created</h6>
                     </div>
-                    <div class="col-2 p-0"> 
+                    <div class="col-4 p-0"> 
                         <h6 class="text-center"> approved</h6>
                     </div>
                 </div>
@@ -150,9 +150,9 @@
                             <p class="col-1 text-center p-0 m-0 text-break" id="classe <?=$log_words['id']?>"><?=$log_words['classe']?></p>
                             <p class="col-2 text-center p-0 m-0 text-break" name="mot_en" id="mot_en <?=$log_words['id']?>"><?=$log_words['mot_en']?></p>
                             <p class="col-2 text-center p-0 m-0 text-break" name="mot_fr" id="mot_fr <?=$log_words['id']?>"><?=$log_words['mot_fr']?></p>
-                            <p class="col-2 text-center p-0 m-0 text-break" name="note" id="note <?=$log_words['id']?>"><?=$log_words['note']?></p>
+                            <p class="col-1 text-center p-0 m-0 text-break" name="note" id="note <?=$log_words['id']?>"><?=$log_words['note']?></p>
 
-                            <time class="col-2 text-center"><?=$log_words['created']?></time>
+                            <time class="col-1 text-center"><?=$log_words['created']?></time>
 
                             <form method="post" class="col-2 text-center p-0 m-0 text-break" >
                                 <input type ="hidden" id="user <//?=$log_words['id']?>" value="<?=$log_words['user']?>" ></input>
@@ -160,14 +160,24 @@
                                 <input type="hidden" name="mot_en" id="mot_en <?=$log_words['id']?>" value="<?=$log_words['mot_en']?>"></input>
                                 <input type ="hidden" name="mot_fr" id="mot_fr <?=$log_words['id']?>" value="<?=$log_words['mot_fr']?>" ></input>
                                 <input type ="hidden" name="note" id="note <?=$log_words['id']?>" value="<?=$log_words['note']?>" ></input>
-                                <input type="hidden" name="id" value="<?=$log_words['id']?>"></input>
-                                <input type="hidden" name="mode" value="oui"></input>
-                                <input type="submit" name="txt" class="col-2 text-center p-0 m-0" value="yes"></input>
-
+                            
                                 <input type="hidden" name="id" value="<?=$log_words['id']?>"></input>
                                 <input type="hidden" name="mode" value="non"></input>
-                                <input type="submit" name="txt" class="col-2 text-center p-0 m-0" value="no"></input>
-                            </form>  
+                                <input type="submit" name="text" class="col-2 text-center p-0 m-0" value="no"></input>
+                            </form>
+                            <form method="post" class="col-2 text-center p-0 m-0 text-break" >
+                                <input type ="hidden" id="user <//?=$log_words['id']?>" value="<?=$log_words['user']?>" ></input>
+                                <input type ="hidden" id="classe <//?=$log_words['id']?>" value="<?=$log_words['classe']?>" ></input> 
+                                <input type="hidden" name="mot_en" id="mot_en <?=$log_words['id']?>" value="<?=$log_words['mot_en']?>"></input>
+                                <input type ="hidden" name="mot_fr" id="mot_fr <?=$log_words['id']?>" value="<?=$log_words['mot_fr']?>" ></input>
+                                <input type ="hidden" name="note" id="note <?=$log_words['id']?>" value="<?=$log_words['note']?>" ></input>
+                            
+                                <input type="hidden" name="id" value="<?=$log_words['id']?>"></input>
+                                <input type="hidden" name="mode" value="oui"></input>
+                                <input type="submit" name="txt" class="col-2 text-center p-0 m-0" value="ok"></input>
+                            </form>
+                               
+                              
 
                     </div>
                     

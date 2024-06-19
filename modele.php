@@ -72,6 +72,7 @@ function insertWord($textfr, $texten, $note,$user){
 
 function insertWordLog($textfr, $texten, $note,$id){
     $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
+    
         $stmt= $bdd->prepare('INSERT INTO vocabulaire (mot_fr,mot_en,note) VALUES(:fr, :en, :note)');
         $stmt->execute(['fr'=> $textfr,'en'=>$texten,'note'=>$note]);
 
@@ -90,7 +91,7 @@ function insertWordLog($textfr, $texten, $note,$id){
 //     $stmt->execute(['fr'=> $textfr,'note'=>$note, 'id'=>$id]);
 // }
     
- function updateWordLog($id){
+ function refuseWord($id){
 
     $bdd=new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
     $stmt= $bdd->prepare('UPDATE log_words SET is_approved="non" WHERE id=:id');
