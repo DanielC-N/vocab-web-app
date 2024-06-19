@@ -61,7 +61,7 @@
                 $resultats=filterWord($_POST['rechercher']);
             }
         } 
-        elseif($mode == "effacer" && $_SERVER['PHP_AUTH_USER'] == "qroca"){
+        elseif($mode == "effacer" && $_SERVER['PHP_AUTH_USER'] == "qroca" ){
      
             if (!checkParams(['id']['user'])){
                 $errormsg=("id not found");
@@ -96,24 +96,23 @@
             </div>
         </nav>
 
-         <!-- ?php if($mode== "modification"):?>
+         <?php if($mode== "modification"):?>
 
 
         <nav class="navbar bg-body-tertiary">
             <div class="container justify-content-center">
                 <form class="d-flex" method="post">
-                    <input class="form-control me-1" id="en" type="text" class="text" value="?=($_POST['en'])?>" name="mot_en" placeholder="mot en anglais"disabled/>
-                    <input class="form-control me-1" id="fr" type="text" class="text" value="?=($_POST['fr'])?>" name="mot_fr" placeholder="mot en français"/>
-                    <input class="form-control me-1" id="inputnote" type="text" class="text" value="?=($_POST['inputnote'])?>" name="note" placeholder="note"/>
-                    <input class="form-control me-1" type="hidden" name="id" value="?=($_POST['id'])?>"> </input>
+                    <input class="form-control me-1" id="en" type="text" class="text" value="<?=($_POST['en'])?>" name="mot_en" placeholder="mot en anglais"disabled/>
+                    <input class="form-control me-1" id="fr" type="text" class="text" value="<?=($_POST['fr'])?>" name="mot_fr" placeholder="mot en français"/>
+                    <input class="form-control me-1" id="inputnote" type="text" class="text" value="<?=($_POST['inputnote'])?>" name="note" placeholder="note"/>
+                    <input class="form-control me-1" type="hidden" name="id" value="<?=($_POST['id'])?>"> </input>
                     <input class="btn btn-outline-success" name="mode" value="modifier" type="submit"></input>
                 </form>
             </div>
         </nav>
         
-        ?php else: ?> 
-       ? -->
-        <nav class="navbar bg-body-tertiary">
+        <?php else: ?>
+            <nav class="navbar bg-body-tertiary">
             <div class="container justify-content-center">
                 <form class="d-flex" method="post">
                     <input class="form-control me-1" id="en" type="text" class="text" name="mot_en" maxlength="70" placeholder="mot anglais"/>
@@ -122,7 +121,8 @@
                     <input class="btn btn-outline-success" id="ajouter" name="mode" value="ajouter" type="submit"></input>
                 </form>
             </div>
-        </nav>
+        </nav>   
+       <?php endif ?>
 
         <?php
             if($doesExist == 'exists'):
@@ -212,13 +212,13 @@
                         <div class="col-2 pe-1"> 
                             <h6 class="text-center">Effacer</h6>
                         </div>
-                   <?php } ?>
-                   <?php if($_SERVER['PHP_AUTH_USER'] == "qroca") { ?>
+                   <?php } ?> 
+                   <?php if($_SERVER['PHP_AUTH_USER'] == "qroca") { ?> 
 
                         <div class="col-2 p-0"> 
                             <h6 class="text-center"> Modifier</h6>
                         </div> 
-                    <?php } ?>
+                    <?php } ?> 
                     <!-- <div class="col-2 ">
                         <h6 class="text-center"> Date de création</h6> -->
                     </div>
@@ -235,17 +235,17 @@
                             <p class="col-3 text-center p-0 m-0 text-break" id="fr <?=$vocabulaire['id']?>"><?=$vocabulaire['mot_fr']?></p>
                             <p class="col-2 text-center p-0 m-0 text-break" id="note <?=$vocabulaire['id']?>"><?=$vocabulaire['note']?></p>
 
-                        <?php if($_SERVER['PHP_AUTH_USER'] == "qroca") { ?>
+                        <?php if($_SERVER['PHP_AUTH_USER'] == "qroca") { ?> 
 
                                 <form action="" method="post" class="col-2 text-center p-0">
                                     <input type="hidden" name="id" value="<?=$vocabulaire['id']?>"></input>
                                     <input type="hidden" name="mode" value="effacer"></input>
                                     <input class="btn btn-outline-success" type="submit" name="txt" value="&#128465;" id="<?=$vocabulaire['id']?>"></input>
                                 </form>   
-                        <?php } ?>
+                        <?php } ?> 
                         
 
-                        <?php if($_SERVER['PHP_AUTH_USER'] == "qroca") { ?>
+                        <?php if($_SERVER['PHP_AUTH_USER'] == "qroca") { ?> 
 
                             <form method="post" action="" class="col-2 text-center p-0">
                                 <input type="hidden" name="id" value="<?=$vocabulaire['id']?>"></input>
@@ -255,7 +255,7 @@
                                 <input type="hidden" name="mode" value="modification"></input>
                                 <input class="btn btn-outline-success" type="submit" name="txte" value="&#128394;"></input>
                             </form>
-                        <?php } ?>
+                        <?php } ?> 
                         <!-- <time class=" col-2 text-center">?=$vocabulaire['created']?></time>  -->
                     </div>
                 <?php endforeach; ?>

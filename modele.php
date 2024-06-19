@@ -97,12 +97,12 @@ function insertWordLog($textfr, $texten, $note,$id){
    
 
 
-// function updateWord($id, $textfr, $note,){
+function updateWord($id, $textfr, $note,){
 
-//     $bdd=new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
-//     $stmt= $bdd->prepare('UPDATE vocabulaire SET mot_fr=:fr, note=:note WHERE id=:id');
-//     $stmt->execute(['fr'=> $textfr,'note'=>$note, 'id'=>$id]);
-// }
+    $bdd=new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
+    $stmt= $bdd->prepare('UPDATE vocabulaire SET mot_fr=:fr, note=:note WHERE id=:id');
+    $stmt->execute(['fr'=> $textfr,'note'=>$note, 'id'=>$id]);
+}
     
  function refuseWord($id){
 

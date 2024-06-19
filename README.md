@@ -51,3 +51,6 @@
     //     var_dump($_POST);
     //         insertWordLog($_POST['id']);
     //    } 
+
+
+    && $_SERVER['PHP_AUTH_USER'] == "qroca"
