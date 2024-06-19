@@ -11,53 +11,55 @@
 <body>
     <?php
 
-    // if ($_SERVER['PHP_AUTH_USER'] != "xenizo") {
+    // if ($_SERVER['PHP_AUTH_USER'] != "qroca") {
     //     header('Location:index.php');
     //     exit();
     // }
 
     require 'modele.php';
     
-    $res = getBaseDDLogWords();
+    // $res = getBaseDDLogWords();
 
-        $nbPagesTotales=floor(count(getBaseDDLogWords())/20);
+        $nbPagesTotales=floor(count(getBaseDDLogWords())/10);
         if(array_key_exists('nbpage', $_GET) && $_GET['nbpage'] >= $nbPagesTotales){
             $_GET['nbpage']= $nbPagesTotales;
-        }
-        $numeroPageCourante=$_GET['nbpage'];
+        }    
+            $numeroPageCourante=$_GET['nbpage'];
 
-        $errormsg ="";
-        $mode=$_POST['mode'];
+            $errormsg ="";
+            $mode=$_POST['mode'];
 
-        if(array_key_exists('nbpage', $_GET) && $_GET['nbpage'] <0){
-            $_GET['nbpage']=0;
-        }
+            if(array_key_exists('nbpage', $_GET) && $_GET['nbpage'] <0){
+                $_GET['nbpage']=0;
+            }
 
-        if($mode == "oui"){
-            if (!checkParams(['mot_fr','mot_en','note','id'])) {
-
-                $errormsg=("word not found");
-
-            } else {
-                insertWordLog($_POST['mot_fr'],$_POST['mot_en'],$_POST['note'],$_POST['id']);
-            
-            } 
-            
-        } 
-        $res = getBaseDDLogWords();
-       
-        if($mode =="non"){
-
-                if (!checkParams(['mot_fr','mot_en','note','id'])){
+            if($mode == "oui"){
+                if (!checkParams(['mot_fr','mot_en','note','id'])) {
 
                     $errormsg=("word not found");
+
+                } else {
+                    insertWordLog($_POST['mot_fr'],$_POST['mot_en'],$_POST['note'],$_POST['id']);
+                
+                }
+                // $res = getBaseDDLogWords();
+                $res=getWordsByOffsetLogWords($numeroPageCourante);
+                
+            } elseif($mode =="non"){
+
+                if (!checkParams(['mot_fr','mot_en','note','id'])){
+                    $errormsg=("word not found");
+
+                } else {
+                    refuseWord($_POST['id']);
+                }
+                $res=getWordsByOffsetLogWords($numeroPageCourante);
+                // $res = getBaseDDLogWords();
+
             } else {
-                refuseWord($_POST['id']);
-            
+                // $res = getBaseDDLogWords();
+                 $res=getWordsByOffsetLogWords($numeroPageCourante);
             }
-        }
-        $res = getBaseDDLogWords();
-    
     ?>
     
     <header>
@@ -127,6 +129,59 @@
 
                 <?php endforeach; ?>
             </div>
+
+            <nav aria-label="Page navigation example" class="navbar bg-body-tertiary pagination justify-content-center">
+            <form method="get" action="">
+                <input type="hidden" name="nbpage" value="<?= max($numeroPageCourante - 1, 0) ?>"></input>
+                <input type="submit" class="btn btn-outline-success" value="&lsaquo;"></input>
+            </form>
+ 
+        <?php
+            $startPage = max(0, $numeroPageCourante - 1);
+            $endPage = min($nbPagesTotales, $numeroPageCourante + 1);
+
+            if ($startPage > 0){
+                echo '<form method="get" action="">
+                        <input type="hidden" name="nbpage" value="0"></input>
+                        <input type="submit" class="btn btn-outline-success" value="1"></input>
+                    </form>';
+                if ($startPage > 1){
+                    echo '<span>...</span>';
+                }
+            }
+
+            for ($numPage = $startPage; $numPage <= $endPage; $numPage++):
+        ?>
+            <?php if ($numPage == $numeroPageCourante): ?>
+                <form method="get" action="">
+                    <input type="hidden" name="nbpage" value="<?= $numPage ?>"></input>
+                    <input type="submit" class="btn btn-success" value="<?= $numPage + 1 ?>"></input>
+                </form>
+            <?php else: ?>
+                <form method="get" action="">
+                    <input type="hidden" name="nbpage" value="<?= $numPage ?>"></input>
+                    <input type="submit" class="btn btn-outline-success" value="<?= $numPage + 1 ?>"></input>
+                </form>
+            <?php endif; ?>
+        <?php endfor; ?>
+        
+        <form method="get" action="">
+            <input type="hidden" name="nbpage" value="<?= min($numeroPageCourante + 1, $nbPagesTotales) ?>"></input>
+            <input type="submit" class="btn btn-outline-success" value="&rsaquo;"></input>
+        </form>
+        <?php
+            if ($endPage < $nbPagesTotales) {
+                if ($endPage < $nbPagesTotales - 1) {
+                    echo '<span>...</span>';
+                }
+                echo '<form method="get" action="">
+                    <input type="hidden" name="nbpage" value="' . $nbPagesTotales . '"></input>
+                    <input type="submit" class="btn btn-outline-success" value="&raquo;"></input>
+                    </form>';
+            }
+        ?>   
+    </nav>
+
     </header>
 </body>
 </html>

@@ -23,7 +23,7 @@ function getBaseDDLogWords(){
 function getWordsByOffset($nbpage){
     $offset = $nbpage*20;
     $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
-    $stmt =$bdd->prepare('SELECT * FROM vocabulaire ORDER BY mot_en LIMIT 20 OFFSET :offset');
+    $stmt =$bdd->prepare('SELECT * FROM vocabulaire  ORDER BY mot_en LIMIT 20 OFFSET :offset');
     $stmt->bindValue('offset', $offset, PDO::PARAM_INT);
     $stmt->execute();
     $res = $stmt->fetchAll();
@@ -33,9 +33,9 @@ function getWordsByOffset($nbpage){
 }
 
 function getWordsByOffsetLogWords($nbpage){
-    $offset = $nbpage*20;
+    $offset = $nbpage*10;
     $bdd = new PDO('mysql:host=localhost;dbname=traduction;','loise','formation');
-    $stmt =$bdd->prepare('SELECT * FROM log_words ORDER BY mot_en LIMIT 20 OFFSET :offset');
+    $stmt =$bdd->prepare('SELECT * FROM log_words  WHERE is_approved IS NULL ORDER BY mot_en LIMIT 10 OFFSET :offset');
     $stmt->bindValue('offset', $offset, PDO::PARAM_INT);
     $stmt->execute();
     $res = $stmt->fetchAll();
