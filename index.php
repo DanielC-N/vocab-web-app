@@ -61,23 +61,23 @@
                 $resultats=filterWord($_POST['rechercher']);
             }
         } 
-        elseif($mode == "effacer"){
+        elseif($mode == "effacer" && $_SERVER['PHP_AUTH_USER'] == "qroca"){
      
-            if (!checkParams(['id'])){
+            if (!checkParams(['id']['user'])){
                 $errormsg=("id not found");
             } else {
                 deleteWord($_POST['id']);
             }
-            $resultats=getWordsByOffset($numeroPageCourante);}
+            $resultats=getWordsByOffset($numeroPageCourante);
 
-        // } elseif($mode == "modifier"){
-        //     if(!checkParams(['id','mot_fr','note'])){
-        //         $errormsg=('cannot be modified ');
-        //     } else {
-        //         $resultats=updateWord($_POST['id'],$_POST['mot_fr'],$_POST['note'],$nbPagesCourante);
-        //     }
-        //     $resultats=getWordsByOffset($numeroPageCourante);
-        // } 
+        } elseif($mode == "modifier" && $_SERVER['PHP_AUTH_USER'] == "qroca"){
+            if(!checkParams(['id','mot_fr','note'])){
+                $errormsg=('cannot be modified ');
+            } else {
+                $resultats=updateWord($_POST['id'],$_POST['mot_fr'],$_POST['note'],$nbPagesCourante);
+            }
+            $resultats=getWordsByOffset($numeroPageCourante);
+        } 
         else {
             $resultats=getWordsByOffset($numeroPageCourante);
         }
@@ -96,7 +96,7 @@
             </div>
         </nav>
 
-        <!-- ?php if($mode== "modification"):?>
+         <!-- ?php if($mode== "modification"):?>
 
 
         <nav class="navbar bg-body-tertiary">
@@ -111,8 +111,8 @@
             </div>
         </nav>
         
-        ?php else: ?> -->
-       
+        ?php else: ?> 
+       ? -->
         <nav class="navbar bg-body-tertiary">
             <div class="container justify-content-center">
                 <form class="d-flex" method="post">
@@ -198,21 +198,27 @@
             <div class="container-fuide overflow-x-hidden text-black">
                 <div class="row-gap d-flex align-items-center p-1 bg-success bg-opacity-50 text-wrap" >
                     
-                    <div class="col-4 p-0">  
+                    <div class="col-3 p-0">  
                         <h6 class="text-center"> Mots anglais</h6>
                     </div>
-                    <div class="col-4 p-0">
+                    <div class="col-3 p-0">
                         <h6 class="text-center"> Mots français</h6>
                     </div>
                     <div class="col-2 pe-1"> 
                         <h6 class="text-center"> Notes</h6>
                     </div>
-                    <div class="col-2 pe-1"> 
-                        <h6 class="text-center">Effacer</h6>
-                    </div>
-                    <!-- <div class="col-2 p-0"> 
-                        <h6 class="text-center"> Modifier</h6>
-                    </div>  -->
+                    <?php if($_SERVER['PHP_AUTH_USER'] == "qroca") { ?>
+
+                        <div class="col-2 pe-1"> 
+                            <h6 class="text-center">Effacer</h6>
+                        </div>
+                   <?php } ?>
+                   <?php if($_SERVER['PHP_AUTH_USER'] == "qroca") { ?>
+
+                        <div class="col-2 p-0"> 
+                            <h6 class="text-center"> Modifier</h6>
+                        </div> 
+                    <?php } ?>
                     <!-- <div class="col-2 ">
                         <h6 class="text-center"> Date de création</h6> -->
                     </div>
@@ -225,27 +231,31 @@
                     ?>
                      <div class=" d-flex align-items-center p-1 row m-0 <?=$rowType?>">
 
-                            <p class="col-4 text-center p-0 m-0 text-break" id="en <?=$vocabulaire['id']?>"><?=$vocabulaire['mot_en']?></p>
-                            <p class="col-4 text-center p-0 m-0 text-break" id="fr <?=$vocabulaire['id']?>"><?=$vocabulaire['mot_fr']?></p>
+                            <p class="col-3 text-center p-0 m-0 text-break" id="en <?=$vocabulaire['id']?>"><?=$vocabulaire['mot_en']?></p>
+                            <p class="col-3 text-center p-0 m-0 text-break" id="fr <?=$vocabulaire['id']?>"><?=$vocabulaire['mot_fr']?></p>
                             <p class="col-2 text-center p-0 m-0 text-break" id="note <?=$vocabulaire['id']?>"><?=$vocabulaire['note']?></p>
 
-                        <form action="" method="post" class="col-2 text-center p-0">
+                        <?php if($_SERVER['PHP_AUTH_USER'] == "qroca") { ?>
 
-                            <input type="hidden" name="id" value="<?=$vocabulaire['id']?>"></input>
-                            <input type="hidden" name="mode" value="effacer"></input>
-                            <input class="btn btn-outline-success" type="submit" name="txt" value="&#128465;" id="<?=$vocabulaire['id']?>"></input>
+                                <form action="" method="post" class="col-2 text-center p-0">
+                                    <input type="hidden" name="id" value="<?=$vocabulaire['id']?>"></input>
+                                    <input type="hidden" name="mode" value="effacer"></input>
+                                    <input class="btn btn-outline-success" type="submit" name="txt" value="&#128465;" id="<?=$vocabulaire['id']?>"></input>
+                                </form>   
+                        <?php } ?>
+                        
 
-                        </form>
+                        <?php if($_SERVER['PHP_AUTH_USER'] == "qroca") { ?>
 
-
-                        <!-- <form method="post" action="" class="col-2 text-center p-0">
-                            <input type="hidden" name="id" value="<//?=$vocabulaire['id']?>"></input>
-                            <input type="hidden" name="en" value="<//?=$vocabulaire['mot_en']?>"></input>
-                            <input type="hidden" name="fr" value="<//?=$vocabulaire['mot_fr']?>"></input>
-                            <input type="hidden" name="inputnote" value="<//?=$vocabulaire['note']?>"></input>
-                            <input type="hidden" name="mode" value="modification"></input>
-                            <input class="btn btn-outline-success" type="submit" name="txte" value="&#128394;"></input>
-                        </form> -->
+                            <form method="post" action="" class="col-2 text-center p-0">
+                                <input type="hidden" name="id" value="<?=$vocabulaire['id']?>"></input>
+                                <input type="hidden" name="en" value="<?=$vocabulaire['mot_en']?>"></input>
+                                <input type="hidden" name="fr" value="<?=$vocabulaire['mot_fr']?>"></input>
+                                <input type="hidden" name="inputnote" value="<?=$vocabulaire['note']?>"></input>
+                                <input type="hidden" name="mode" value="modification"></input>
+                                <input class="btn btn-outline-success" type="submit" name="txte" value="&#128394;"></input>
+                            </form>
+                        <?php } ?>
                         <!-- <time class=" col-2 text-center">?=$vocabulaire['created']?></time>  -->
                     </div>
                 <?php endforeach; ?>
