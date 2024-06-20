@@ -13,11 +13,11 @@
         crossorigin="anonymous"></script>
     <?php
     require 'modele.php';
-    // if ($_SERVER['PHP_AUTH_USER'] == "qroca") { ?>
+    if ($_SERVER['PHP_AUTH_USER'] == "qroca") { ?>
         <form action="log.php">
             <button type="submit" class="btn btn-outline-success"> Log </button>
         </form>
-    <?php 
+    <?php }
     $nbPagesTotales = floor(count(getBaseDD()) / 20);
     if (array_key_exists('nbpage', $_GET) && $_GET['nbpage'] >= $nbPagesTotales) {
         $_GET['nbpage'] = $nbPagesTotales;
