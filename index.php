@@ -35,7 +35,7 @@
         $resultats = getWordsByOffset($numeroPageCourante);
     }
     if ($mode == "ajouter") {
-        if (checkParams(['mot_fr', 'mot_en', 'note']) || $_POST['mot_fr'] == "" || $_POST['mot_en'] == "") {
+        if (!checkParams(['mot_fr', 'mot_en', 'note']) || $_POST['mot_fr'] == "" || $_POST['mot_en'] == "") {
             $errormsg = "Veuillez renseigner les champs 'mot anglais' et 'mot fran&ccedil;ais'";
             $resultats = getWordsByOffset($numeroPageCourante);
         } else {
