@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,11 +13,11 @@
         crossorigin="anonymous"></script>
     <?php
     require 'modele.php';
-    if ($_SERVER['PHP_AUTH_USER'] == "qroca") { ?>
+    // if ($_SERVER['PHP_AUTH_USER'] == "qroca") { ?>
         <form action="log.php">
-            <button type="submit"> Log </button>
+            <button type="submit" class="btn btn-outline-success"> Log </button>
         </form>
-    <?php }
+    <?php 
     $nbPagesTotales = floor(count(getBaseDD()) / 20);
     if (array_key_exists('nbpage', $_GET) && $_GET['nbpage'] >= $nbPagesTotales) {
         $_GET['nbpage'] = $nbPagesTotales;
@@ -34,10 +35,8 @@
         $resultats = getWordsByOffset($numeroPageCourante);
     }
     if ($mode == "ajouter") {
-        if (!checkParams(['mot_fr', 'mot_en', 'note'])) {
-            $errormsg = ("word not found");
-        } elseif ($_POST['mot_fr'] == "" || $_POST['mot_en'] == "") {
-            $errormsg = ("please don't leave the fields for French and English words empty");
+        if (checkParams(['mot_fr', 'mot_en', 'note']) || $_POST['mot_fr'] == "" || $_POST['mot_en'] == "") {
+            $errormsg = "Veuillez renseigner les champs 'mot anglais' et 'mot fran&ccedil;ais'";
             $resultats = getWordsByOffset($numeroPageCourante);
         } else {
             $doesExist = insertWord($_POST['mot_fr'], $_POST['mot_en'], $_POST['note'], $_SERVER['PHP_AUTH_USER']);
@@ -45,7 +44,7 @@
         $resultats = getWordsByOffset($numeroPageCourante);
     } elseif ($mode == "rechercher") {
         if (!checkParams(['rechercher'])) {
-            $errormsg = ("not found");
+            $errormsg = "Non trouv&eacute;";
         } elseif ($_POST['rechercher'] == "") {
             $resultats = getWordsByOffset($numeroPageCourante);
         } else {
@@ -53,16 +52,16 @@
         }
     } elseif ($mode == "effacer" && $_SERVER['PHP_AUTH_USER'] == "qroca") {
         if (!checkParams(['id']['user'])) {
-            $errormsg = ("id not found");
+            $errormsg = "id non trouv&eacute;";
         } else {
             deleteWord($_POST['id']);
         }
         $resultats = getWordsByOffset($numeroPageCourante);
     } elseif ($mode == "modifier" && $_SERVER['PHP_AUTH_USER'] == "qroca") {
         if (!checkParams(['id', 'mot_fr', 'note'])) {
-            $errormsg = ('cannot be modified ');
+            $errormsg = 'Impossible de modifier';
         } else {
-            $resultats = updateWord($_POST['id'], $_POST['mot_fr'], $_POST['note'], $nbPagesCourante);
+            updateWord($_POST['id'], $_POST['mot_fr'], $_POST['note']);
         }
         $resultats = getWordsByOffset($numeroPageCourante);
     } else {
@@ -86,8 +85,6 @@
     </nav>
 
     <?php if ($mode == "modification"): ?>
-
-
         <nav class="navbar bg-body-tertiary">
             <div class="container justify-content-center">
                 <form class="d-flex" method="post">
@@ -121,63 +118,63 @@
 
     <?php
     if ($doesExist == 'exists'):
-        $errormsg = "This word already exists" ?>
+        $errormsg = "Ce mot existe d&eacute;j&agrave; ou a d&eacute;j&agrave; &eacute;t&eacute; sugg&eacute;r&eacute;" ?>
     <?php endif; ?>
 
-    <?php if(!checkParams(['rechercher'])): ?>
-    <nav aria-label="Page navigation example" class="navbar bg-body-tertiary pagination justify-content-center">
-        <form method="get" action="">
-            <input type="hidden" name="nbpage" value="<?= max($numeroPageCourante - 1, 0) ?>"></input>
-            <input type="submit" class="btn btn-outline-success" value="&lsaquo;"></input>
-        </form>
+    <?php if (!checkParams(['rechercher'])): ?>
+        <nav aria-label="Page navigation example" class="navbar bg-body-tertiary pagination justify-content-center">
+            <form method="get" action="">
+                <input type="hidden" name="nbpage" value="<?= max($numeroPageCourante - 1, 0) ?>"></input>
+                <input type="submit" class="btn btn-outline-success" value="&lsaquo;"></input>
+            </form>
 
-        <?php
-        $startPage = max(0, $numeroPageCourante - 1);
-        $endPage = min($nbPagesTotales, $numeroPageCourante + 1);
+            <?php
+            $startPage = max(0, $numeroPageCourante - 1);
+            $endPage = min($nbPagesTotales, $numeroPageCourante + 1);
 
-        if ($startPage > 0) {
-            echo '<form method="get" action="">
+            if ($startPage > 0) {
+                echo '<form method="get" action="">
                         <input type="hidden" name="nbpage" value="0"></input>
                         <input type="submit" class="btn btn-outline-success" value="1"></input>
                     </form>';
-            if ($startPage > 1) {
-                echo '<span>...</span>';
+                if ($startPage > 1) {
+                    echo '<span>...</span>';
+                }
             }
-        }
 
-        for ($numPage = $startPage; $numPage <= $endPage; $numPage++):
-            ?>
-            <?php if ($numPage == $numeroPageCourante): ?>
-                <form method="get" action="">
-                    <input type="hidden" name="nbpage" value="<?= $numPage ?>"></input>
-                    <input type="submit" class="btn btn-success" value="<?= $numPage + 1 ?>"></input>
-                </form>
-            <?php else: ?>
-                <form method="get" action="">
-                    <input type="hidden" name="nbpage" value="<?= $numPage ?>"></input>
-                    <input type="submit" class="btn btn-outline-success" value="<?= $numPage + 1 ?>"></input>
-                </form>
-            <?php endif; ?>
-        <?php endfor; ?>
+            for ($numPage = $startPage; $numPage <= $endPage; $numPage++):
+                ?>
+                <?php if ($numPage == $numeroPageCourante): ?>
+                    <form method="get" action="">
+                        <input type="hidden" name="nbpage" value="<?= $numPage ?>"></input>
+                        <input type="submit" class="btn btn-success" value="<?= $numPage + 1 ?>"></input>
+                    </form>
+                <?php else: ?>
+                    <form method="get" action="">
+                        <input type="hidden" name="nbpage" value="<?= $numPage ?>"></input>
+                        <input type="submit" class="btn btn-outline-success" value="<?= $numPage + 1 ?>"></input>
+                    </form>
+                <?php endif; ?>
+            <?php endfor; ?>
 
-        <form method="get" action="">
-            <input type="hidden" name="nbpage" value="<?= min($numeroPageCourante + 1, $nbPagesTotales) ?>"></input>
-            <input type="submit" class="btn btn-outline-success" value="&rsaquo;"></input>
-        </form>
-        <?php
-        if ($endPage < $nbPagesTotales) {
-            if ($endPage < $nbPagesTotales - 1) {
-                echo '<span>...</span>';
-            }
-            echo '<form method="get" action="">
+            <form method="get" action="">
+                <input type="hidden" name="nbpage" value="<?= min($numeroPageCourante + 1, $nbPagesTotales) ?>"></input>
+                <input type="submit" class="btn btn-outline-success" value="&rsaquo;"></input>
+            </form>
+            <?php
+            if ($endPage < $nbPagesTotales) {
+                if ($endPage < $nbPagesTotales - 1) {
+                    echo '<span>...</span>';
+                }
+                echo '<form method="get" action="">
                     <input type="hidden" name="nbpage" value="' . $nbPagesTotales . '"></input>
                     <input type="submit" class="btn btn-outline-success" value="&raquo;"></input>
                     </form>';
-        }
-        ?>
+            }
+            ?>
 
 
-    </nav>
+        </nav>
     <?php endif; ?>
 
 
@@ -189,7 +186,7 @@
     <?php endif; ?>
 
     <?php if ($errormsg): ?>
-        <h1>error : <?= $errormsg ?></h1>
+        <h1 class="error-message">Erreur : <?= $errormsg ?></h1>
     <?php endif; ?>
     <header>
         <div class="container-fuide overflow-x-hidden text-black">
@@ -228,11 +225,14 @@
             ?>
             <div class=" d-flex align-items-center p-1 row m-0 <?= $rowType ?>">
 
-                <p class="col-3 text-center p-0 m-0 text-break" id="en <?= $vocabulaire['id'] ?>"><?= $vocabulaire['mot_en'] ?>
+                <p class="col-3 text-center p-0 m-0 text-break" id="en <?= $vocabulaire['id'] ?>">
+                    <?= $vocabulaire['mot_en'] ?>
                 </p>
-                <p class="col-3 text-center p-0 m-0 text-break" id="fr <?= $vocabulaire['id'] ?>"><?= $vocabulaire['mot_fr'] ?>
+                <p class="col-3 text-center p-0 m-0 text-break" id="fr <?= $vocabulaire['id'] ?>">
+                    <?= $vocabulaire['mot_fr'] ?>
                 </p>
-                <p class="col-2 text-center p-0 m-0 text-break" id="note <?= $vocabulaire['id'] ?>"><?= $vocabulaire['note'] ?>
+                <p class="col-2 text-center p-0 m-0 text-break" id="note <?= $vocabulaire['id'] ?>">
+                    <?= $vocabulaire['note'] ?>
                 </p>
 
                 <?php if ($_SERVER['PHP_AUTH_USER'] == "qroca") { ?>
@@ -269,59 +269,59 @@
             <li><a class="btn btn-outline-success" href="index.php"> Retour à la page d'accueil </a></li>
         </ul>
 
-    <nav aria-label="Page navigation example" class="navbar bg-body-tertiary pagination justify-content-center">
-        <form method="get" action="">
-            <input type="hidden" name="nbpage" value="<?= max($numeroPageCourante - 1, 0) ?>"></input>
-            <input type="submit" class="btn btn-outline-success" value="&lsaquo;"></input>
-        </form>
+        <nav aria-label="Page navigation example" class="navbar bg-body-tertiary pagination justify-content-center">
+            <form method="get" action="">
+                <input type="hidden" name="nbpage" value="<?= max($numeroPageCourante - 1, 0) ?>"></input>
+                <input type="submit" class="btn btn-outline-success" value="&lsaquo;"></input>
+            </form>
 
-        <?php
-        $startPage = max(0, $numeroPageCourante - 1);
-        $endPage = min($nbPagesTotales, $numeroPageCourante + 1);
+            <?php
+            $startPage = max(0, $numeroPageCourante - 1);
+            $endPage = min($nbPagesTotales, $numeroPageCourante + 1);
 
-        if ($startPage > 0) {
-            echo '<form method="get" action="">
+            if ($startPage > 0) {
+                echo '<form method="get" action="">
                         <input type="hidden" name="nbpage" value="0"></input>
                         <input type="submit" class="btn btn-outline-success" value="1"></input>
                     </form>';
-            if ($startPage > 1) {
-                echo '<span>...</span>';
+                if ($startPage > 1) {
+                    echo '<span>...</span>';
+                }
             }
-        }
 
-        for ($numPage = $startPage; $numPage <= $endPage; $numPage++):
-            ?>
-            <?php if ($numPage == $numeroPageCourante): ?>
-                <form method="get" action="">
-                    <input type="hidden" name="nbpage" value="<?= $numPage ?>"></input>
-                    <input type="submit" class="btn btn-success" value="<?= $numPage + 1 ?>"></input>
-                </form>
-            <?php else: ?>
-                <form method="get" action="">
-                    <input type="hidden" name="nbpage" value="<?= $numPage ?>"></input>
-                    <input type="submit" class="btn btn-outline-success" value="<?= $numPage + 1 ?>"></input>
-                </form>
-            <?php endif; ?>
-        <?php endfor; ?>
+            for ($numPage = $startPage; $numPage <= $endPage; $numPage++):
+                ?>
+                <?php if ($numPage == $numeroPageCourante): ?>
+                    <form method="get" action="">
+                        <input type="hidden" name="nbpage" value="<?= $numPage ?>"></input>
+                        <input type="submit" class="btn btn-success" value="<?= $numPage + 1 ?>"></input>
+                    </form>
+                <?php else: ?>
+                    <form method="get" action="">
+                        <input type="hidden" name="nbpage" value="<?= $numPage ?>"></input>
+                        <input type="submit" class="btn btn-outline-success" value="<?= $numPage + 1 ?>"></input>
+                    </form>
+                <?php endif; ?>
+            <?php endfor; ?>
 
-        <form method="get" action="">
-            <input type="hidden" name="nbpage" value="<?= min($numeroPageCourante + 1, $nbPagesTotales) ?>"></input>
-            <input type="submit" class="btn btn-outline-success" value="&rsaquo;"></input>
-        </form>
+            <form method="get" action="">
+                <input type="hidden" name="nbpage" value="<?= min($numeroPageCourante + 1, $nbPagesTotales) ?>"></input>
+                <input type="submit" class="btn btn-outline-success" value="&rsaquo;"></input>
+            </form>
 
 
-        <?php
-        if ($endPage < $nbPagesTotales) {
-            if ($endPage < $nbPagesTotales - 1) {
-                echo '<span>...</span>';
-            }
-            echo '<form method="get" action="">
+            <?php
+            if ($endPage < $nbPagesTotales) {
+                if ($endPage < $nbPagesTotales - 1) {
+                    echo '<span>...</span>';
+                }
+                echo '<form method="get" action="">
                         <input type="hidden" name="nbpage" value="' . $nbPagesTotales . '"></input>
                         <input type="submit" class="btn btn-outline-success" value="&raquo;"></input>
                     </form>';
-        }
-        ?>
-    </nav>
+            }
+            ?>
+        </nav>
     <?php endif; ?>
 </body>
 
@@ -332,9 +332,26 @@
         collectionOfText[i].addEventListener('dblclick', (e) => {
             let textToCopy = e.target.innerText;
             navigator.clipboard.writeText(textToCopy).then(() => {
-                console.log(`Copier dans le presse papier: ${textToCopy}`);
+                showTooltip(e.target, "Copié !");
             });
         });
     }
+
+    function showTooltip(element, message) {
+        let tooltip = document.createElement('div');
+        tooltip.className = 'tooltip';
+        tooltip.innerText = message;
+        document.body.appendChild(tooltip);
+
+        let rect = element.getBoundingClientRect();
+        tooltip.style.left = rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2) + 'px';
+        tooltip.style.top = rect.top - tooltip.offsetHeight - 10 + 'px';
+
+        setTimeout(() => {
+            tooltip.classList.add('fade-out');
+            setTimeout(() => tooltip.remove(), 500);
+        }, 2000);
+    }
 </script>
+
 </html>

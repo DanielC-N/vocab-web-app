@@ -18,6 +18,12 @@
 
     require 'modele.php';
 
+    if ($_SERVER['PHP_AUTH_USER'] == "qroca") { ?>
+        <form action="index.php">
+            <button type="submit" class="btn btn-outline-success"> Index </button>
+        </form>
+    <?php }
+
     // $res = getBaseDDLogWords();
     
     $nbPagesTotales = floor(count(getBaseDDLogWords()) / 10);
@@ -76,7 +82,7 @@
                     <h6 class="text-center">Created</h6>
                 </div>
                 <div class="col-4 p-0">
-                    <h6 class="text-center"> approved</h6>
+                    <h6 class="text-center">Approved</h6>
                 </div>
             </div>
 
