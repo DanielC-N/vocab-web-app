@@ -82,7 +82,7 @@
                     <h6 class="text-center">Created</h6>
                 </div>
                 <div class="col-4 p-0">
-                    <h6 class="text-center">Approved</h6>
+                    <h6 class="text-center">&Agrave; approuver</h6>
                 </div>
             </div>
 

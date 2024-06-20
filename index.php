@@ -188,6 +188,9 @@
     <?php if ($errormsg): ?>
         <h1 class="error-message">Erreur : <?= $errormsg ?></h1>
     <?php endif; ?>
+    <?php if ($mode == "ajouter" && !$errormsg): ?>
+        <h1 class="success-message">Le mot a correctement été soumis</h1>
+    <?php endif; ?>
     <header>
         <div class="container-fuide overflow-x-hidden text-black">
             <div class="row-gap d-flex align-items-center p-1 bg-success bg-opacity-50 text-wrap">
