@@ -12,7 +12,6 @@
         crossorigin="anonymous"></script>
     <?php
     require 'modele.php';
-    // declaration 
     if ($_SERVER['PHP_AUTH_USER'] == "qroca") { ?>
         <form action="log.php">
             <button type="submit"> Log </button>
@@ -125,6 +124,7 @@
         $errormsg = "This word already exists" ?>
     <?php endif; ?>
 
+    <?php if(!checkParams(['rechercher'])): ?>
     <nav aria-label="Page navigation example" class="navbar bg-body-tertiary pagination justify-content-center">
         <form method="get" action="">
             <input type="hidden" name="nbpage" value="<?= max($numeroPageCourante - 1, 0) ?>"></input>
@@ -178,6 +178,7 @@
 
 
     </nav>
+    <?php endif; ?>
 
 
     <?php if (!$accueil == "rechercher"): ?>
@@ -263,14 +264,10 @@
 
     </header>
 
-    <?php if (!$accueil == "rechercher"): ?>
-    <?php else: ?>
+    <?php if ($accueil == "rechercher"): ?>
         <ul class="pagination justify-content-left m-2">
             <li><a class="btn btn-outline-success" href="index.php"> Retour à la page d'accueil </a></li>
         </ul>
-    <?php endif; ?>
-
-    </main>
 
     <nav aria-label="Page navigation example" class="navbar bg-body-tertiary pagination justify-content-center">
         <form method="get" action="">
@@ -324,6 +321,8 @@
                     </form>';
         }
         ?>
+    </nav>
+    <?php endif; ?>
 </body>
 
 <script>
