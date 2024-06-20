@@ -1,29 +1,3 @@
-/* <!-- <nav aria-label="Page navigation example"class=" navbar bg-body-tertiary pagination justify-content-center ">
-               <form method="get" action="">
-                    <input  type="hidden" name="nbpage" value="?=$numeroPageCourante -1?>"></input>
-                    <input  type="submit" class="btn btn-outline-success" value="precedent"></input>
-                </form>
-                ?php
-                    for($numPage=0; $numPage <= $nbPagesTotales; $numPage++):
-                ?>
-                    ?php if ($numPage == $numeroPageCourante) : ?>
-                        <form method="get" action="">
-                            <input type="hidden" name="nbpage" value="?=$numPage?>"></input>
-                            <input type="submit" class="btn btn-success" value="?=$numPage +1?>"></input>
-                    </form>
-                    ?php else : ?>
-                        <form method="get" action="">
-                            <input type="hidden" name="nbpage" value="?=$numPage?>"></input>
-                            <input type="submit" class="btn btn-outline-success" value="?=$numPage +1?>"></input>
-                        </form>
-                    ?php endif ?>
-                ?php endfor ?>
-                <form method="get" action="">
-                    <input type="hidden" name="nbpage" value="?=$numeroPageCourante+1?>"></input>
-                    <input type="submit" type="submit" class="btn btn-outline-success" value="suivant"></input>
-                </form>
-        </nav> --> */
-
-.even{
+.even {
     background-color: rgb(219, 236, 219);
 }
