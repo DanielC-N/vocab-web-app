@@ -1,3 +1,7 @@
+<?php
+// seuls les admins ont accès à cette page
+include 'admin_check.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,28 +13,30 @@
 </head>
 
 <body>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <form action="index.php">
+                    <button type="submit" class="btn btn-outline-success">Index</button>
+                </form>
+            </div>
+            <div class="col-auto ml-auto">
+                <form action="logout.php">
+                    <button type="submit" class="btn btn-outline-success">D&eacute;connexion</button>
+                </form>
+            </div>
+        </div>
+    </div>
     <?php
-
-    if ($_SERVER['PHP_AUTH_USER'] != "qroca") {
-        header('Location:index.php');
-        exit();
-    }
-
-    require 'modele.php';
-
-    if ($_SERVER['PHP_AUTH_USER'] == "qroca") { ?>
-        <form action="index.php">
-            <button type="submit" class="btn btn-outline-success"> Index </button>
-        </form>
-    <?php }
 
     // $res = getBaseDDLogWords();
     
     $nbPagesTotales = floor(count(getBaseDDLogWords()) / 10);
+    $numeroPageCourante = 0;
     if (array_key_exists('nbpage', $_GET) && $_GET['nbpage'] >= $nbPagesTotales) {
         $_GET['nbpage'] = $nbPagesTotales;
+        $numeroPageCourante = $_GET['nbpage'];
     }
-    $numeroPageCourante = $_GET['nbpage'];
 
     $errormsg = "";
     $mode = $_POST['mode'];
