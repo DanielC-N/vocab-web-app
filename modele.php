@@ -75,19 +75,21 @@ function deleteWord($id) {
     $stmt->execute(['id' => $id]);
 }
 
-function suggestWord($textfr, $texten, $note, $user, $gloss) {
+function suggestWord($textfr, $texten, $note, $user_id, $gloss) {
     $bdd = getDBConnection();
-    $stmt = $bdd->prepare('SELECT id FROM vocabulaire WHERE mot_en =:en');
-    $stmt->execute(['en' => $texten]);
+    $stmt = $bdd->prepare('SELECT id FROM vocabulaire WHERE mot_en =:en AND glossary=:gloss');
+    $stmt->execute(['en' => $texten, 'gloss' => $gloss]);
     $r = $stmt->fetchAll();
 
-    $stmt = $bdd->prepare('SELECT id FROM log_words WHERE mot_en =:en');
-    $stmt->execute(['en' => $texten]);
+    $stmt = $bdd->prepare('SELECT id FROM log_words WHERE mot_en =:en AND glossary=:gloss');
+    $stmt->execute(['en' => $texten, 'gloss' => $gloss]);
     $verif = $stmt->fetchAll();
 
     if (count($r) == 0 && count($verif) == 0) {
-        $stmt = $bdd->prepare('INSERT INTO log_words (user,mot_en,mot_fr,note,classe) VALUES (:user, :en, :fr, :note, :classe)');
-        $stmt->execute(['user' => $user, 'en' => $texten, 'fr' => $textfr, 'note' => $note, 'classe' => 'ajouter']);
+        $stmt = $bdd->prepare('SELECT id FROM vocabulaire WHERE mot_en =:en AND glossary=:gloss');
+        $stmt->execute(['en' => $texten, 'gloss' => $gloss]);
+        $stmt = $bdd->prepare('INSERT INTO log_words (user,mot_en,mot_fr,note,classe,glossary) VALUES (:user, :en, :fr, :note, :classe, :gloss)');
+        $stmt->execute(['user' => getUsername($user_id), 'en' => $texten, 'fr' => $textfr, 'note' => $note, 'classe' => 'ajouter', 'gloss' => $gloss]);
         $bdd = null;
         $stmt = null;
         return false;
@@ -119,14 +121,17 @@ function insertWordAdmin($textfr, $texten, $note, $gloss) {
 
 function insertWordLog($textfr, $texten, $note, $id, $gloss) {
     $bdd = getDBConnection();
+    $stmt = $bdd->prepare('SELECT id FROM vocabulaire WHERE mot_en =:en AND glossary=:gloss');
+    $stmt->execute(['en' => $texten, 'gloss' => $gloss]);
+    $verif = $stmt->fetchAll();
 
-    $stmt = $bdd->prepare('INSERT INTO vocabulaire (mot_fr,mot_en,note, glossary) VALUES(:fr, :en, :note, :gloss)');
-    $stmt->execute(['fr' => $textfr, 'en' => $texten, 'note' => $note, 'gloss' => $gloss]);
-
+    if(count($verif) === 0) {
+        $stmt = $bdd->prepare('INSERT INTO vocabulaire (mot_fr,mot_en,note, glossary) VALUES(:fr, :en, :note, :gloss)');
+        $stmt->execute(['fr' => $textfr, 'en' => $texten, 'note' => $note, 'gloss' => $gloss]);
+    }
     $stmt = $bdd->prepare('UPDATE log_words SET is_approved ="oui" WHERE id=:id');
     $stmt->execute(['id' => $id]);
     $bdd = null;
-    return true;
 }
 
 function updateWord($id, $textfr, $note, ) {
@@ -151,10 +156,18 @@ function checkParams($fields) {
     return true;
 }
 
-function getWord($id) {
+function getGlossaryNames() {
     $bdd = getDBConnection();
-    $stmt = $bdd->prepare('SELECT * FROM vocabulaire WHERE id=:id');
-    $stmt->execute(['id' => $id]);
+    $stmt = $bdd->prepare('SELECT * FROM glossNames');
+    $stmt->execute();
+    return $stmt->fetchAll();
+}
+
+function getRealGlossaryName($nameId) {
+    $bdd = getDBConnection();
+    $stmt = $bdd->prepare('SELECT real_name FROM glossNames where name_id LIKE :nameId');
+    $stmt->execute(['nameId' => $nameId]);
+    return $stmt->fetch()['real_name'];
 }
 
 function getUserRights($user_id) {
@@ -164,6 +177,15 @@ function getUserRights($user_id) {
     $user = $stmt->fetch();
     $bdd = null;
     return $user ? $user['rights'] : null;
+}
+
+function getUsername($user_id) {
+    $bdd = getDBConnection();
+    $stmt = $bdd->prepare('SELECT username FROM users WHERE id = :user_id');
+    $stmt->execute(['user_id' => $user_id]);
+    $user = $stmt->fetch();
+    $bdd = null;
+    return $user ? $user['username'] : null;
 }
 
 function getLoggedInUserId() {

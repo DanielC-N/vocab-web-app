@@ -15,6 +15,11 @@ require 'modele.php';
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
     <?php
+    if (isset($_GET['gloss'])) {
+        $_SESSION['gloss'] = $_GET['gloss'];
+    } else {
+        $_SESSION['gloss'] = 'biblica key terms';
+    }
     $nbPagesTotales = floor(count(getBaseDD()) / 20);
     if (isset($_GET['nbpage']) && $_GET['nbpage'] >= $nbPagesTotales) {
         $_GET['nbpage'] = $nbPagesTotales;
@@ -25,11 +30,6 @@ require 'modele.php';
         $numeroPageCourante = 0;
     }
 
-    if (isset($_GET['gloss'])) {
-        $_SESSION['gloss'] = $_GET['gloss'];
-    } else {
-        $_SESSION['gloss'] = 'biblica key terms';
-    }
 
     $errormsg = "";
     $mode = $_POST['mode'] ?? null;
@@ -147,16 +147,34 @@ require 'modele.php';
             </div>
         </nav>
     <?php endif ?>
+    <!-- <div class="fancy-selector btn-group btn-group-toggle">
+        <div class="option" onclick="updateGloss('biblica key terms')">Biblica Key Terms</div>
+        <div class="option" onclick="updateGloss('$glo["glossary"]')">Glossaire unfoldingWord</div>
+    </div> -->
     <div class="container">
-        <div class="fancy-selector">
-            <div class="option" onclick="updateGloss('biblica key terms')">Biblica Key Terms</div>
-            <div class="option" onclick="updateGloss('glossaire unfoldingword')">Glossaire unfoldingWord</div>
+        <div class="fancy-selector btn-group btn-group-toggle" data-toggle="buttons">
+            <?php
+                $uniqGloss = getGlossaryNames();
+                foreach($uniqGloss as $glo) {
+            ?>
+            <label class="option btn <?= $_SESSION['gloss']==$glo['name_id'] ? 'active' : '' ?>">
+                <input
+                    onclick="updateGloss('<?= $glo['name_id'] ?>')"
+                    type="radio"
+                    name="options"
+                    id="option1"
+                    autocomplete="off"
+                    <?= $_SESSION['gloss']==$glo['name_id'] ? 'checked' : '' ?>
+                >
+                <?= $glo['real_name'] ?>
+            </label>
+            <?php } ?>
         </div>
     </div>
 
     <?php
     if ($doesExist):
-        $errormsg = "Ce mot existe d&eacute;j&agrave; ou a d&eacute;j&agrave; &eacute;t&eacute; sugg&eacute;r&eacute;" ?>
+        $errormsg = "Ce mot existe d&eacute;j&agrave; ou a d&eacute;j&agrave; &eacute;t&eacute; sugg&eacute;r&eacute; pour le glossaire suivant : \"" . $_SESSION['gloss'] . "\"" ?>
     <?php endif; ?>
 
     <?php if (!checkParams(['rechercher'])): ?>
@@ -232,9 +250,9 @@ require 'modele.php';
     <header>
         <div class="container-fuide overflow-x-hidden text-black">
             <div class="row-gap d-flex align-items-center p-1 bg-success bg-opacity-50 text-wrap">
-                <div class="col-1 p-0">
+                <!-- <div class="col-1 p-0">
                     <h6 class="text-center">Catégorie</h6>
-                </div>
+                </div> -->
                 <div class="col-3 p-0">
                     <h6 class="text-center">Mots anglais</h6>
                 </div>
@@ -268,9 +286,9 @@ require 'modele.php';
         ?>
             <div class=" d-flex align-items-center p-1 row m-0 <?= $rowType ?>">
 
-                <p class="col-1 text-center p-0 m-0 text-break" id="en <?= $vocabulaire['id'] ?>">
+                <!-- <p class="col-1 text-center p-0 m-0 text-break" id="en <?= $vocabulaire['id'] ?>">
                     <?= $vocabulaire['glossary'] ?>
-                </p>
+                </p> -->
                 <p class="col-3 text-center p-0 m-0 text-break" id="en <?= $vocabulaire['id'] ?>">
                     <?= $vocabulaire['mot_en'] ?>
                 </p>
@@ -305,8 +323,16 @@ require 'modele.php';
                         <input type="hidden" name="mode" value="modification"></input>
                         <input class="btn btn-outline-success" type="submit" name="txte" value="&#128394;"></input>
                     </form>
+                <?php } else if ($vocabulaire['mot_fr'] == '') { ?>
+                    <form method="post" action="" class="col-1 text-center p-0">
+                        <input type="hidden" name="id" value="<?= $vocabulaire['id'] ?>"></input>
+                        <input type="hidden" name="en" value="<?= $vocabulaire['mot_en'] ?>"></input>
+                        <input type="hidden" name="fr" value="<?= $vocabulaire['mot_fr'] ?>"></input>
+                        <input type="hidden" name="inputnote" value="<?= $vocabulaire['note'] ?>"></input>
+                        <input type="hidden" name="mode" value="suggestionfr"></input>
+                        <input class="btn btn-outline-success" type="submit" name="txte" value="&#128394;"></input>
+                    </form>
                 <?php } ?>
-                <!-- <time class=" col-2 text-center">?=$vocabulaire['created']?></time>  -->
             </div>
         <?php endforeach; ?>
         </div>
@@ -396,16 +422,17 @@ require 'modele.php';
 
     function updateGloss(value) {
         // Clear active class from all options
-        document.querySelectorAll('.fancy-selector .option').forEach(option => {
-            option.classList.remove('active');
-        });
+        // document.querySelectorAll('.fancy-selector .option').forEach(option => {
+        //     option.classList.remove('active');
+        // });
 
         // Add active class to the clicked option
-        event.target.classList.add('active');
+        // event.target.classList.add('active');
 
         // Update the URL with the selected value
         const urlParams = new URLSearchParams(window.location.search);
         urlParams.set('gloss', value);
+        urlParams.set('nbpage', 0);
         window.location.search = urlParams.toString();
     }
 </script>
