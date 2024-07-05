@@ -149,8 +149,8 @@ require 'modele.php';
     <?php endif ?>
     <div class="container">
         <div class="fancy-selector">
-            <div class="option" onclick="updateGloss('biblical_key_terms')">Biblical Key Terms</div>
-            <div class="option" onclick="updateGloss('glossaire_unfoldingword')">Glossaire unfoldingWord</div>
+            <div class="option" onclick="updateGloss('biblica key terms')">Biblica Key Terms</div>
+            <div class="option" onclick="updateGloss('glossaire unfoldingword')">Glossaire unfoldingWord</div>
         </div>
     </div>
 
@@ -269,7 +269,7 @@ require 'modele.php';
             <div class=" d-flex align-items-center p-1 row m-0 <?= $rowType ?>">
 
                 <p class="col-1 text-center p-0 m-0 text-break" id="en <?= $vocabulaire['id'] ?>">
-                    <?= $vocabulaire['category'] ?>
+                    <?= $vocabulaire['glossary'] ?>
                 </p>
                 <p class="col-3 text-center p-0 m-0 text-break" id="en <?= $vocabulaire['id'] ?>">
                     <?= $vocabulaire['mot_en'] ?>

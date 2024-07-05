@@ -49,7 +49,7 @@ include 'admin_check.php';
         if (!checkParams(['mot_fr', 'mot_en', 'note', 'id'])) {
             $errormsg = ("word not found");
         } else {
-            insertWordLog($_POST['mot_fr'], $_POST['mot_en'], $_POST['note'], $_POST['id']);
+            insertWordLog($_POST['mot_fr'], $_POST['mot_en'], $_POST['note'], $_POST['id'], $_POST['glossary']);
         }
         // $res = getBaseDDLogWords();
         $res = getWordsByOffsetLogWords($numeroPageCourante);
@@ -70,16 +70,16 @@ include 'admin_check.php';
             <div class="row-gap d-flex align-items-center p-1 bg-success bg-opacity-50 text-wrap">
 
                 <div class="col-1 p-0">
-                    <h6 class="text-center"> User</h6>
+                    <h6 class="text-center">User</h6>
                 </div>
                 <div class="col-1 pe-1">
-                    <h6 class="text-center"> Classe</h6>
+                    <h6 class="text-center">Glossaire</h6>
                 </div>
                 <div class="col-2 p-0">
-                    <h6 class="text-center"> Mots anglais</h6>
+                    <h6 class="text-center">Mots anglais</h6>
                 </div>
                 <div class="col-2 p-0">
-                    <h6 class="text-center"> Mots français</h6>
+                    <h6 class="text-center">Mots français</h6>
                 </div>
                 <div class="col-1 pe-1">
                     <h6 class="text-center">Notes</h6>
@@ -88,7 +88,7 @@ include 'admin_check.php';
                     <h6 class="text-center">Created</h6>
                 </div>
                 <div class="col-4 p-0">
-                    <h6 class="text-center">&Agrave; approuver</h6>
+                    <h6 class="text-center">Approbation</h6>
                 </div>
             </div>
 
@@ -98,8 +98,8 @@ include 'admin_check.php';
                     <p class="col-1 text-center p-0 m-0 text-break" id="user <?= $log_words['id'] ?>">
                         <?= $log_words['user'] ?>
                     </p>
-                    <p class="col-1 text-center p-0 m-0 text-break" id="classe <?= $log_words['id'] ?>">
-                        <?= $log_words['classe'] ?>
+                    <p class="col-1 text-center p-0 m-0 text-break" name="glossary" id="glossary <?= $log_words['id'] ?>">
+                        <?= $log_words['glossary'] ?>
                     </p>
                     <p class="col-2 text-center p-0 m-0 text-break" name="mot_en" id="mot_en <?= $log_words['id'] ?>">
                         <?= $log_words['mot_en'] ?>
@@ -115,8 +115,8 @@ include 'admin_check.php';
 
                     <form method="post" class="col-2 text-center p-0 m-0 text-break">
                         <input type="hidden" id="user <?= $log_words['id'] ?>" value="<?= $log_words['user'] ?>"></input>
-                        <input type="hidden" id="classe <?= $log_words['id'] ?>"
-                            value="<?= $log_words['classe'] ?>"></input>
+                        <input type="hidden" name="glossary" id="glossary <?= $log_words['id'] ?>"
+                            value="<?= $log_words['glossary'] ?>"></input>
                         <input type="hidden" name="mot_en" id="mot_en <?= $log_words['id'] ?>"
                             value="<?= $log_words['mot_en'] ?>"></input>
                         <input type="hidden" name="mot_fr" id="mot_fr <?= $log_words['id'] ?>"
@@ -131,8 +131,8 @@ include 'admin_check.php';
 
                     <form method="post" class="col-2 text-center p-0 m-0 text-break">
                         <input type="hidden" id="user <?= $log_words['id'] ?>" value="<?= $log_words['user'] ?>"></input>
-                        <input type="hidden" id="classe <?= $log_words['id'] ?>"
-                            value="<?= $log_words['classe'] ?>"></input>
+                        <input type="hidden" id="glossary <?= $log_words['id'] ?>"
+                            value="<?= $log_words['glossary'] ?>"></input>
                         <input type="hidden" name="mot_en" id="mot_en <?= $log_words['id'] ?>"
                             value="<?= $log_words['mot_en'] ?>"></input>
                         <input type="hidden" name="mot_fr" id="mot_fr <?= $log_words['id'] ?>"

@@ -7,8 +7,12 @@ function getDBConnection() {
 
 function getBaseDD() {
     $bdd = getDBConnection();
-    $stmt = $bdd->prepare('SELECT * FROM vocabulaire ORDER BY mot_fr ');
-    $stmt->execute();
+    $gloss = 'biblica key terms';
+    if(isset($_SESSION['gloss'])) {
+        $gloss = $_SESSION['gloss'];
+    }
+    $stmt = $bdd->prepare('SELECT * FROM vocabulaire WHERE glossary = :gloss ORDER BY mot_fr ');
+    $stmt->execute(['gloss' => $gloss]);
     $res = $stmt->fetchAll();
     $bdd = null;
     $stmt = null;
@@ -28,9 +32,14 @@ function getBaseDDLogWords() {
 
 function getWordsByOffset($nbpage) {
     $offset = $nbpage * 20;
+    $gloss = 'biblica key terms';
+    if(isset($_SESSION['gloss'])) {
+        $gloss = $_SESSION['gloss'];
+    }
     $bdd = getDBConnection();
-    $stmt = $bdd->prepare('SELECT * FROM vocabulaire  ORDER BY mot_en LIMIT 20 OFFSET :offset');
+    $stmt = $bdd->prepare('SELECT * FROM vocabulaire WHERE glossary = :gloss ORDER BY mot_en LIMIT 20 OFFSET :offset');
     $stmt->bindValue('offset', $offset, PDO::PARAM_INT);
+    $stmt->bindValue('gloss', $gloss, PDO::PARAM_STR);
     $stmt->execute();
     $res = $stmt->fetchAll();
     $bdd = null;
@@ -41,7 +50,7 @@ function getWordsByOffset($nbpage) {
 function getWordsByOffsetLogWords($nbpage) {
     $offset = $nbpage * 10;
     $bdd = getDBConnection();
-    $stmt = $bdd->prepare('SELECT * FROM log_words  WHERE is_approved IS NULL ORDER BY mot_en LIMIT 10 OFFSET :offset');
+    $stmt = $bdd->prepare('SELECT * FROM log_words WHERE is_approved IS NULL OR is_approved = \'\' ORDER BY mot_en LIMIT 10 OFFSET :offset');
     $stmt->bindValue('offset', $offset, PDO::PARAM_INT);
     $stmt->execute();
     $res = $stmt->fetchAll();
@@ -52,7 +61,7 @@ function getWordsByOffsetLogWords($nbpage) {
 
 function filterWord($text, $gloss = '') {
     $bdd = getDBConnection();
-    $stmt = $bdd->prepare("SELECT * FROM vocabulaire WHERE mot_en LIKE (:en OR mot_fr LIKE :fr) AND 'category' LIKE :gloss");
+    $stmt = $bdd->prepare("SELECT * FROM vocabulaire WHERE (mot_en LIKE :en OR mot_fr LIKE :fr) AND glossary LIKE :gloss");
     $stmt->execute(['en' => '%' . $text . '%', 'fr' => '%' . $text . '%', 'gloss' => '%' . $gloss . '%']);
     $res = $stmt->fetchAll();
     $bdd = null;
@@ -91,12 +100,12 @@ function suggestWord($textfr, $texten, $note, $user, $gloss) {
 
 function insertWordAdmin($textfr, $texten, $note, $gloss) {
     $bdd = getDBConnection();
-    $stmt = $bdd->prepare('SELECT id FROM vocabulaire WHERE mot_en =:en and category = :gloss');
+    $stmt = $bdd->prepare('SELECT id FROM vocabulaire WHERE mot_en =:en and glossary = :gloss');
     $stmt->execute(['en' => $texten, 'gloss' => $gloss]);
     $r = $stmt->fetchAll();
 
     if (count($r) == 0) {
-        $stmt = $bdd->prepare('INSERT INTO vocabulaire (mot_fr,mot_en,note,category) VALUES(:fr, :en, :note, :gloss)');
+        $stmt = $bdd->prepare('INSERT INTO vocabulaire (mot_fr,mot_en,note,glossary) VALUES(:fr, :en, :note, :gloss)');
         $stmt->execute(['fr' => $textfr, 'en' => $texten, 'note' => $note, 'gloss' => $gloss]);
         $bdd = null;
         $stmt = null;
@@ -108,11 +117,11 @@ function insertWordAdmin($textfr, $texten, $note, $gloss) {
     }
 }
 
-function insertWordLog($textfr, $texten, $note, $id) {
+function insertWordLog($textfr, $texten, $note, $id, $gloss) {
     $bdd = getDBConnection();
 
-    $stmt = $bdd->prepare('INSERT INTO vocabulaire (mot_fr,mot_en,note) VALUES(:fr, :en, :note)');
-    $stmt->execute(['fr' => $textfr, 'en' => $texten, 'note' => $note]);
+    $stmt = $bdd->prepare('INSERT INTO vocabulaire (mot_fr,mot_en,note, glossary) VALUES(:fr, :en, :note, :gloss)');
+    $stmt->execute(['fr' => $textfr, 'en' => $texten, 'note' => $note, 'gloss' => $gloss]);
 
     $stmt = $bdd->prepare('UPDATE log_words SET is_approved ="oui" WHERE id=:id');
     $stmt->execute(['id' => $id]);
