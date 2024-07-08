@@ -18,11 +18,17 @@ require 'modele.php';
     if (isset($_GET['gloss'])) {
         $_SESSION['gloss'] = $_GET['gloss'];
     } else {
-        $_SESSION['gloss'] = 'biblica key terms';
+        if(!isset($_SESSION['gloss'])) {
+            $_SESSION['gloss'] = 'biblica key terms';
+        }
     }
+    $_SESSION['username'] = getUsername($_SESSION['user_id']);
     $nbPagesTotales = floor(count(getBaseDD()) / 20);
     if (isset($_GET['nbpage']) && $_GET['nbpage'] >= $nbPagesTotales) {
         $_GET['nbpage'] = $nbPagesTotales;
+    }
+    if (array_key_exists('nbpage', $_GET) && $_GET['nbpage'] < 0) {
+        $_GET['nbpage'] = 0;
     }
     if (isset($_GET['nbpage'])) {
         $numeroPageCourante = $_GET['nbpage'];
@@ -30,15 +36,11 @@ require 'modele.php';
         $numeroPageCourante = 0;
     }
 
-
     $errormsg = "";
     $mode = $_POST['mode'] ?? null;
     $rowType = 'odd';
     $doesExist = false;
 
-    if (array_key_exists('nbpage', $_GET) && $_GET['nbpage'] < 0) {
-        $_GET['nbpage'] = 0;
-    }
     if (!isset($mode) || $mode == "modification") {
         $resultats = getWordsByOffset($numeroPageCourante);
     }
@@ -69,13 +71,20 @@ require 'modele.php';
             deleteWord($_POST['id']);
         }
         $resultats = getWordsByOffset($numeroPageCourante);
-    } elseif ($mode == "modifier" && isAdmin()) {
+    } elseif ($mode == "modifier") {
         if (!checkParams(['id', 'mot_fr', 'note'])) {
             $errormsg = 'Impossible de modifier';
         } else {
-            updateWord($_POST['id'], $_POST['mot_fr'], $_POST['note']);
+            if(isAdmin()) {
+                updateWord($_POST['id'], $_POST['mot_fr'], $_POST['note']);
+            } else {
+                $suggestNotOk = suggestTranslation($_POST['mot_fr'], $_POST['mot_en'], $_POST['note'], $_SESSION['user_id'], $_SESSION['gloss']);
+                if($suggestNotOk) {
+                    $errormsg = "Cette traduction a d&eacute;j&agrave; &eacute;t&eacute; propos&eacute;e";
+                }
+            }
+            $resultats = getWordsByOffset($numeroPageCourante);
         }
-        $resultats = getWordsByOffset($numeroPageCourante);
     } else {
         $resultats = getWordsByOffset($numeroPageCourante);
     }
@@ -90,7 +99,7 @@ require 'modele.php';
             <div class="row">
                 <div class="col">
                     <form action="log.php">
-                        <button type="submit" class="btn btn-outline-success"> Log </button>
+                        <button type="submit" class="btn btn-outline-success">Suggestions</button>
                     </form>
                 </div>
                 <div class="col-auto ml-auto">
@@ -105,6 +114,30 @@ require 'modele.php';
             <button type="submit" class="btn btn-outline-success"> D&eacute;connexion </button>
         </form>
     <?php } ?>
+        <!-- <div class="fancy-selector btn-group btn-group-toggle">
+        <div class="option" onclick="updateGloss('biblica key terms')">Biblica Key Terms</div>
+        <div class="option" onclick="updateGloss('$glo["glossary"]')">Glossaire unfoldingWord</div>
+    </div> -->
+    <div class="container">
+        <div class="fancy-selector btn-group btn-group-toggle" data-toggle="buttons">
+            <?php
+                $uniqGloss = getGlossaryNames();
+                foreach($uniqGloss as $glo) {
+            ?>
+            <label class="option btn <?= $_SESSION['gloss']==$glo['name_id'] ? 'active' : '' ?>">
+                <input
+                    onclick="updateGloss('<?= $glo['name_id'] ?>')"
+                    type="radio"
+                    name="options"
+                    id="option<?= $glo['name_id'] ?>"
+                    autocomplete="off"
+                    <?= $_SESSION['gloss']==$glo['name_id'] ? 'checked' : '' ?>
+                >
+                <?= $glo['real_name'] ?>
+            </label>
+            <?php } ?>
+        </div>
+    </div>
     <nav class="navbar bg-body-tertiary">
         <div class="container justify-content-center">
             <form class="d-flex" method="post">
@@ -121,7 +154,7 @@ require 'modele.php';
             <div class="container justify-content-center">
                 <form class="d-flex" method="post">
                     <input class="form-control me-1" id="en" type="text" class="text" value="<?= ($_POST['en']) ?>"
-                        name="mot_en" placeholder="mot en anglais" disabled />
+                        name="mot_en" placeholder="mot en anglais" readonly />
                     <input class="form-control me-1" id="fr" type="text" class="text" value="<?= ($_POST['fr']) ?>"
                         name="mot_fr" placeholder="mot en français" />
                     <input class="form-control me-1" id="inputnote" type="text" class="text"
@@ -147,30 +180,6 @@ require 'modele.php';
             </div>
         </nav>
     <?php endif ?>
-    <!-- <div class="fancy-selector btn-group btn-group-toggle">
-        <div class="option" onclick="updateGloss('biblica key terms')">Biblica Key Terms</div>
-        <div class="option" onclick="updateGloss('$glo["glossary"]')">Glossaire unfoldingWord</div>
-    </div> -->
-    <div class="container">
-        <div class="fancy-selector btn-group btn-group-toggle" data-toggle="buttons">
-            <?php
-                $uniqGloss = getGlossaryNames();
-                foreach($uniqGloss as $glo) {
-            ?>
-            <label class="option btn <?= $_SESSION['gloss']==$glo['name_id'] ? 'active' : '' ?>">
-                <input
-                    onclick="updateGloss('<?= $glo['name_id'] ?>')"
-                    type="radio"
-                    name="options"
-                    id="option1"
-                    autocomplete="off"
-                    <?= $_SESSION['gloss']==$glo['name_id'] ? 'checked' : '' ?>
-                >
-                <?= $glo['real_name'] ?>
-            </label>
-            <?php } ?>
-        </div>
-    </div>
 
     <?php
     if ($doesExist):
@@ -178,7 +187,7 @@ require 'modele.php';
     <?php endif; ?>
 
     <?php if (!checkParams(['rechercher'])): ?>
-        <nav aria-label="Page navigation example" class="navbar bg-body-tertiary pagination justify-content-center">
+        <nav aria-label="navigation" class="navbar bg-body-tertiary pagination justify-content-center">
             <form method="get" action="">
                 <input type="hidden" name="nbpage" value="<?= max($numeroPageCourante - 1, 0) ?>"></input>
                 <input type="submit" class="btn btn-outline-success" value="&lsaquo;"></input>
@@ -236,7 +245,7 @@ require 'modele.php';
 
     <?php if (isset($_POST['rechercher'])) { ?>
         <ul class="pagination justify-content-left m-2">
-            <li><a class="btn btn-outline-success" href="index.php"> Retour à la page d'accueil </a></li>
+            <li><a class="btn btn-outline-success" href="index.php"> Retour &agrave; la page d'accueil </a></li>
         </ul>
     <?php } ?>
 
@@ -245,6 +254,11 @@ require 'modele.php';
     <?php endif; ?>
     <?php if ($mode == "ajouter" && !$errormsg): ?>
         <h1 class="success-message">Le mot a correctement été soumis</h1>
+    <?php endif; ?>
+    <?php if ($mode == "modifier" && !$errormsg && isAdmin()): ?>
+        <h1 class="success-message">Le mot a correctement été modifié</h1>
+    <?php elseif ($mode == "modifier" && !$errormsg && !isAdmin()): ?>
+        <h1 class="success-message">La traduction a correctement été ajoutée &agrave; la liste des suggestions.</h1>
     <?php endif; ?>
     
     <header>
@@ -309,7 +323,7 @@ require 'modele.php';
                 <?php }
                 if (isAdmin()) { ?>
 
-                    <form action="" method="post" class="col-1 pe-1 p-0 text-center">
+                    <form action="" method="post" class="col-1 pe-1 p-0 text-center deleteform">
                         <input type="hidden" name="id" value="<?= $vocabulaire['id'] ?>"></input>
                         <input type="hidden" name="mode" value="effacer"></input>
                         <input class="btn btn-outline-success" type="submit" name="txt" value="&#128465;"
@@ -324,13 +338,13 @@ require 'modele.php';
                         <input class="btn btn-outline-success" type="submit" name="txte" value="&#128394;"></input>
                     </form>
                 <?php } else if ($vocabulaire['mot_fr'] == '') { ?>
-                    <form method="post" action="" class="col-1 text-center p-0">
+                    <form method="post" action="" class="col-2 text-center p-0">
                         <input type="hidden" name="id" value="<?= $vocabulaire['id'] ?>"></input>
                         <input type="hidden" name="en" value="<?= $vocabulaire['mot_en'] ?>"></input>
                         <input type="hidden" name="fr" value="<?= $vocabulaire['mot_fr'] ?>"></input>
                         <input type="hidden" name="inputnote" value="<?= $vocabulaire['note'] ?>"></input>
-                        <input type="hidden" name="mode" value="suggestionfr"></input>
-                        <input class="btn btn-outline-success" type="submit" name="txte" value="&#128394;"></input>
+                        <input type="hidden" name="mode" value="modification"></input>
+                        <input class="btn btn-outline-success" type="submit" name="txte" value="&#128394;">&nbsp;&nbsp;&nbsp;Suggestion</input>
                     </form>
                 <?php } ?>
             </div>
@@ -340,7 +354,7 @@ require 'modele.php';
     </header>
 
     <?php if (!checkParams(['rechercher'])): ?>
-        <nav aria-label="Page navigation example" class="navbar bg-body-tertiary pagination justify-content-center">
+        <nav aria-label="navigation" class="navbar bg-body-tertiary pagination justify-content-center">
             <form method="get" action="">
                 <input type="hidden" name="nbpage" value="<?= max($numeroPageCourante - 1, 0) ?>"></input>
                 <input type="submit" class="btn btn-outline-success" value="&lsaquo;"></input>
@@ -390,29 +404,86 @@ require 'modele.php';
             ?>
         </nav>
     <?php endif; ?>
+    <div id="customModal" class="modal">
+        <div class="modal-content">
+            <p>Voulez-vous vraiment supprimer ce mot ?</p>
+            <button id="confirmBtn" class="btn btn-outline-success">Oui</button>
+            <button id="cancelBtn" class="btn btn-outline-danger">Non</button>
+        </div>
+    </div>
 </body>
 
 <script>
-    let collectionOfText = document.getElementsByClassName('text-break');
+    document.addEventListener('DOMContentLoaded', (event) => {
+        let collectionOfText = document.getElementsByClassName('text-break');
 
-    for (let i = 0; i < collectionOfText.length; i++) {
-        collectionOfText[i].addEventListener('dblclick', (e) => {
-            let textToCopy = e.target.innerText;
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                showTooltip(e.target, "Copié !");
+        for (let i = 0; i < collectionOfText.length; i++) {
+            collectionOfText[i].addEventListener('dblclick', (e) => {
+                let textToCopy = e.target.innerText;
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    showTooltip(e, "Copié !");
+                });
             });
+        }
+
+        let deleteForms = document.getElementsByClassName("deleteform");
+
+        for (let df of deleteForms) {
+            df.onsubmit = async function(event) {
+                event.preventDefault();
+                const form = event.target;
+                if (await validateDeletion(form)) {
+                    form.submit();
+                }
+            };
+        }
+    });
+
+    function validateDeletion(form) {
+        const modal = document.getElementById('customModal');
+        const confirmBtn = document.getElementById('confirmBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+
+        modal.style.display = 'block';
+
+        // Close the modal when the close button or cancel button is clicked
+        cancelBtn.onclick = function() {
+            modal.style.display = 'none';
+            return false;
+        };
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+                return false;
+            }
+        };
+
+        return new Promise((resolve) => {
+            confirmBtn.onclick = function() {
+                modal.style.display = 'none';
+                resolve(true);
+            };
+            cancelBtn.onclick = function() {
+                modal.style.display = 'none';
+                resolve(false);
+            };
         });
     }
 
-    function showTooltip(element, message) {
+    function showTooltip(event, message) {
         let tooltip = document.createElement('div');
-        tooltip.className = 'tooltip';
+        // username == irandrianjanaka
+        tooltip.className = '<?= $_SESSION['username'] == 'qroca' ? 'tooltip-glow' : 'tooltip' ?>';
         tooltip.innerText = message;
         document.body.appendChild(tooltip);
 
-        let rect = element.getBoundingClientRect();
-        tooltip.style.left = rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2) + 'px';
-        tooltip.style.top = rect.top - tooltip.offsetHeight - 10 + 'px';
+        let x = event.clientX + window.scrollX;
+        let y = event.clientY + window.scrollY;
+
+        tooltip.style.left = x - (tooltip.offsetWidth/2) + 'px';
+        tooltip.style.top = y - tooltip.offsetHeight - 10 + 'px';
 
         setTimeout(() => {
             tooltip.classList.add('fade-out');

@@ -47,7 +47,7 @@ include 'admin_check.php';
         if (!checkParams(['mot_fr', 'mot_en', 'note', 'id'])) {
             $errormsg = ("word not found");
         } else {
-            insertWordLog($_POST['mot_fr'], $_POST['mot_en'], $_POST['note'], $_POST['id'], $_POST['glossary']);
+            insertWordLog($_POST['mot_fr'], $_POST['mot_en'], $_POST['note'], $_POST['id'], $_POST['glossary'],$_POST['classe']);
         }
         $res = getWordsByOffsetLogWords($numeroPageCourante);
     } elseif ($mode == "non") {
@@ -122,6 +122,7 @@ include 'admin_check.php';
                             value="<?= $log_words['note'] ?>"></input>
 
                         <input type="hidden" name="id" value="<?= $log_words['id'] ?>"></input>
+                        <input type="hidden" name="classe" value="<?= $log_words['classe'] ?>"></input>
                         <input type="hidden" name="mode" value="oui"></input>
                         <input type="submit" name="txt" class="btn btn-outline-success" value="Approuver"></input>
                     </form>
