@@ -56,7 +56,7 @@ require 'modele.php';
             }
         }
         $resultats = getWordsByOffset($numeroPageCourante);
-    } elseif ($mode == "rechercher") {
+    } elseif ($mode == "rechercher" || ($mode == 'modification' && isset($_POST['rechercher']))) {
         if (!checkParams(['rechercher'])) {
             $errormsg = "Non trouv&eacute;";
         } elseif ($_POST['rechercher'] == "") {
@@ -65,7 +65,7 @@ require 'modele.php';
             $resultats = filterWord($_POST['rechercher'], $_SESSION['gloss']);
         }
     } elseif ($mode == "effacer" && isAdmin()) {
-        if (!checkParams(['id']['user'])) {
+        if (!checkParams(['id'])) {
             $errormsg = "id non trouv&eacute;";
         } else {
             deleteWord($_POST['id']);
@@ -83,7 +83,11 @@ require 'modele.php';
                     $errormsg = "Cette traduction a d&eacute;j&agrave; &eacute;t&eacute; propos&eacute;e";
                 }
             }
-            $resultats = getWordsByOffset($numeroPageCourante);
+            if(!checkParams(['rechercher'])) {
+                $resultats = getWordsByOffset($numeroPageCourante);
+            } else {
+                $resultats = filterWord($_POST['rechercher'], $_SESSION['gloss']);
+            }
         }
     } else {
         $resultats = getWordsByOffset($numeroPageCourante);
@@ -160,6 +164,7 @@ require 'modele.php';
                     <input class="form-control me-1" id="inputnote" type="text" class="text"
                         value="<?= ($_POST['inputnote']) ?>" name="note" placeholder="note" />
                     <input class="form-control me-1" type="hidden" name="id" value="<?= ($_POST['id']) ?>"> </input>
+                    <input type="hidden" name="rechercher" value="<?= $_POST['rechercher'] ?>"></input>
                     <input class="btn btn-outline-success" name="mode" value="modifier" type="submit"></input>
                 </form>
             </div>
@@ -335,6 +340,7 @@ require 'modele.php';
                         <input type="hidden" name="fr" value="<?= $vocabulaire['mot_fr'] ?>"></input>
                         <input type="hidden" name="inputnote" value="<?= $vocabulaire['note'] ?>"></input>
                         <input type="hidden" name="mode" value="modification"></input>
+                        <input type="hidden" name="rechercher" value="<?= isset($_POST['mode']) && $_POST['mode'] == 'rechercher' ? $_POST['rechercher'] : '' ?>"></input>
                         <input class="btn btn-outline-success" type="submit" name="txte" value="&#128394;"></input>
                     </form>
                 <?php } else if ($vocabulaire['mot_fr'] == '') { ?>

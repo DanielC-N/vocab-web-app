@@ -22,6 +22,8 @@ LOAD DATA INFILE 'biblica_key_terms.csv' INTO TABLE vocabulaire FIELDS TERMINATE
 
 LOAD DATA INFILE 'uw.csv' INTO TABLE vocabulaire FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\n' (mot_en, mot_fr, glossary);
 
+LOAD DATA INFILE 'nom_propres.csv' INTO TABLE vocabulaire FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\n' (mot_en, mot_fr, note,glossary);
+
 CREATE TABLE log_words (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     user TEXT NOT NULL,
