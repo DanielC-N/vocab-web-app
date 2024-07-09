@@ -18,12 +18,6 @@ CREATE TABLE vocabulaire (
 -- ("Flavius Josèphe","Flavius Josephus","essai", "biblica key terms"),
 -- ("Gethsémané","Gethsemane","essai", "biblica key terms");
 
-LOAD DATA INFILE 'biblica_key_terms.csv' INTO TABLE vocabulaire FIELDS TERMINATED BY '\t' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\n' (mot_en, mot_fr, glossary);
-
-LOAD DATA INFILE 'uw.csv' INTO TABLE vocabulaire FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\n' (mot_en, mot_fr, glossary);
-
-LOAD DATA INFILE 'nom_propres.csv' INTO TABLE vocabulaire FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\n' (mot_en, mot_fr, note,glossary);
-
 CREATE TABLE log_words (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     user TEXT NOT NULL,
@@ -57,3 +51,9 @@ INSERT INTO glossNames (name_id, real_name) VALUES
 ("biblica key terms", "Biblica Key Terms"),
 ("glossaire unfoldingword", "Glossaire unfoldingWord"),
 ("nom propres", "Noms propres traduction ressources");
+
+LOAD DATA INFILE 'biblica_key_terms.csv' INTO TABLE vocabulaire FIELDS TERMINATED BY '\t' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\n' (mot_en, mot_fr, glossary);
+
+LOAD DATA INFILE 'uw.csv' INTO TABLE vocabulaire FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\n' (mot_en, mot_fr, glossary);
+
+LOAD DATA INFILE 'nom_propres.csv' INTO TABLE vocabulaire FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\n' (mot_en, mot_fr, note,glossary);
