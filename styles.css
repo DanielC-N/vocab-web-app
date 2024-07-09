@@ -80,7 +80,7 @@
     transform: translateY(0px);
 }
 
-/* .tooltip-glow {
+.tooltip-glow {
     position: absolute;
     background: linear-gradient(135deg, #6e8efb, #a777e3);
     color: #fff;
@@ -109,7 +109,7 @@
 
 .tooltip-glow {
     animation: glow 2s infinite;
-} */
+}
 
 @keyframes fadeInOut {
     0% {

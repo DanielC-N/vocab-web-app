@@ -40,6 +40,7 @@ require 'modele.php';
     $mode = $_POST['mode'] ?? null;
     $rowType = 'odd';
     $doesExist = false;
+    $showPagination = !isset($_POST['rechercher']) || $_POST['rechercher'] === '';
 
     if (!isset($mode) || $mode == "modification") {
         $resultats = getWordsByOffset($numeroPageCourante);
@@ -83,7 +84,7 @@ require 'modele.php';
                     $errormsg = "Cette traduction a d&eacute;j&agrave; &eacute;t&eacute; propos&eacute;e";
                 }
             }
-            if(!checkParams(['rechercher'])) {
+            if($showPagination) {
                 $resultats = getWordsByOffset($numeroPageCourante);
             } else {
                 $resultats = filterWord($_POST['rechercher'], $_SESSION['gloss']);
@@ -191,7 +192,7 @@ require 'modele.php';
         $errormsg = "Ce mot existe d&eacute;j&agrave; ou a d&eacute;j&agrave; &eacute;t&eacute; sugg&eacute;r&eacute; pour le glossaire suivant : \"" . $_SESSION['gloss'] . "\"" ?>
     <?php endif; ?>
 
-    <?php if (!checkParams(['rechercher'])): ?>
+    <?php if ($showPagination): ?>
         <nav aria-label="navigation" class="navbar bg-body-tertiary pagination justify-content-center">
             <form method="get" action="">
                 <input type="hidden" name="nbpage" value="<?= max($numeroPageCourante - 1, 0) ?>"></input>
@@ -350,6 +351,7 @@ require 'modele.php';
                         <input type="hidden" name="fr" value="<?= $vocabulaire['mot_fr'] ?>"></input>
                         <input type="hidden" name="inputnote" value="<?= $vocabulaire['note'] ?>"></input>
                         <input type="hidden" name="mode" value="modification"></input>
+                        <input type="hidden" name="rechercher" value="<?= isset($_POST['mode']) && $_POST['mode'] == 'rechercher' ? $_POST['rechercher'] : '' ?>"></input>
                         <input class="btn btn-outline-success" type="submit" name="txte" value="&#128394;">&nbsp;&nbsp;&nbsp;Suggestion</input>
                     </form>
                 <?php } ?>
@@ -359,7 +361,7 @@ require 'modele.php';
 
     </header>
 
-    <?php if (!checkParams(['rechercher'])): ?>
+    <?php if ($showPagination): ?>
         <nav aria-label="navigation" class="navbar bg-body-tertiary pagination justify-content-center">
             <form method="get" action="">
                 <input type="hidden" name="nbpage" value="<?= max($numeroPageCourante - 1, 0) ?>"></input>

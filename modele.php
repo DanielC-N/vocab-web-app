@@ -164,6 +164,7 @@ function updateWord($id, $textfr, $note, ) {
     $bdd = getDBConnection();
     $stmt = $bdd->prepare('UPDATE vocabulaire SET mot_fr=:fr, note=:note WHERE id=:id');
     $stmt->execute(['fr' => $textfr, 'note' => $note, 'id' => $id]);
+    $bdd = null;
 }
 
 function refuseWord($id) {
@@ -175,7 +176,7 @@ function refuseWord($id) {
 
 function checkParams($fields) {
     foreach ($fields as $field) {
-        if ((!array_key_exists($field, $_POST))) {
+        if (!array_key_exists($field, $_POST)) {
             return false;
         }
     }
