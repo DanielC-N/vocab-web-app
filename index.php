@@ -8,6 +8,7 @@ require 'modele.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Vocabulaire </title>
+    <link href="https://fonts.googleapis.com/css2?family=OpenDyslexic&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="styles.css" rel="stylesheet">
@@ -306,18 +307,16 @@ require 'modele.php';
         ?>
             <div class=" d-flex align-items-center p-1 row m-0 <?= $rowType ?>">
 
-                <!-- <p class="col-1 text-center p-0 m-0 text-break" id="en <?= $vocabulaire['id'] ?>">
-                    <?= $vocabulaire['glossary'] ?>
-                </p> -->
-                <p class="col-3 text-center p-0 m-0 text-break" id="en <?= $vocabulaire['id'] ?>">
+                <p class="col-3 text-center p-0 m-0 text-break" id="en <?= $vocabulaire['id'] ?>"
+                    data-def="<?= "VOICI UNE DEF" ?>">
                     <?= $vocabulaire['mot_en'] ?>
                 </p>
-                <p class="col-3 text-center p-0 m-0 text-break" id="fr <?= $vocabulaire['id'] ?>">
+                <p class="col-3 text-center p-0 m-0 text-break" id="fr <?= $vocabulaire['id'] ?>"
+                    data-def="<?= "Voici une def française super longue : Good property testing tools will not only come up with a failing test case but also shrink the input to something minimal that still exhibits the failure — a very helpful trait if you don’t want to look through 50,000 integers to find the three-integer sequence that triggered a bug.
+
+There are two crates to help with property testing. One is Andrew Gallant’s QuickCheck. You can call it from a unit test, and it will quickly generate 100 inputs to test with. For example, my [bytecount](https://docs.rs/bytecount) crate has both a simple and a fast count function and tests them against each other:"?>">
                     <?= $vocabulaire['mot_fr'] ?>
                 </p>
-                <!-- <p class="col-1 text-center p-0 m-0 text-break" id="note <?= $vocabulaire['id'] ?>">
-                    <?= $vocabulaire['note'] ?>
-                </p> -->
                 <?php if (!isAdmin()) { ?>
                     <p class="col-2 text-center pe-1 m-0 text-break" id="note <?= $vocabulaire['id'] ?>">
                         <?= $vocabulaire['note'] ?>
@@ -445,6 +444,31 @@ require 'modele.php';
                 }
             };
         }
+
+        const tooltipDiv = document.createElement('div');
+        tooltipDiv.className = 'def';
+        document.body.appendChild(tooltipDiv);
+
+        document.querySelectorAll('.text-break').forEach(item => {
+            item.addEventListener('mouseover', event => {
+                const message = event.target.getAttribute('data-def');
+                if (message) {
+                    tooltipDiv.innerHTML = message;
+                    tooltipDiv.style.display = 'block';
+                    tooltipDiv.style.left = `${event.pageX + 20}px`;
+                    tooltipDiv.style.top = `${event.pageY - (tooltipDiv.offsetHeight/2)}px`;
+                }
+            });
+
+            item.addEventListener('mousemove', event => {
+                tooltipDiv.style.left = `${event.pageX + 20}px`;
+                tooltipDiv.style.top = `${event.pageY - (tooltipDiv.offsetHeight/2)}px`;
+            });
+
+            item.addEventListener('mouseout', () => {
+                tooltipDiv.style.display = 'none';
+            });
+        });
     });
 
     function validateDeletion(form) {

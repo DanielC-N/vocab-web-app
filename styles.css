@@ -272,3 +272,39 @@ input[type="radio"] {
 #cancelBtn:hover {
     background-color: #da190b;
 }
+
+
+.def {
+    position: absolute;
+    background-color: #f0f8ff;
+    color: #000;
+    padding: 15px 20px;
+    border-radius: 20px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    font-size: 1.2em;
+    font-family: 'OpenDyslexic', Arial, sans-serif; /* Use a dyslexic-friendly font */
+    z-index: 1000;
+    display: none;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    max-width: 600px; /* Limit the tooltip width for better readability */
+    line-height: 1.5;
+    text-align: center;
+}
+
+/* Add custom styles for better readability */
+.def p {
+    margin: 0;
+    padding: 0;
+}
+
+/* Optional: Style links in tooltips */
+.def a {
+    color: #000;
+    text-decoration: underline;
+}
+
+/* Optional: Style links on hover */
+.def a:hover {
+    color: #007bff;
+}
