@@ -64,20 +64,31 @@
     font-family: 'Arial', sans-serif;
 }
 
-.tooltip::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-width: 10px;
-    border-style: solid;
-    border-color: rgba(0, 0, 0, 0.75) transparent transparent transparent;
-}
-
 .fade-out {
     opacity: 0;
     transform: translateY(0px);
+}
+
+.highlight {
+    background-color: rgba(114, 251, 114, 0.3); /* Light green highlight */
+    box-shadow: 0 0 10px rgba(62, 246, 62, 0.7); /* Green glow */
+    transition: background-color 0.5s ease, box-shadow 0.5s ease;
+}
+
+@keyframes greenGlow {
+    0% {
+        box-shadow: 0 0 10px rgba(62, 246, 62, 0.7);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(62, 246, 62, 1);
+    }
+    100% {
+        box-shadow: 0 0 10px rgba(62, 246, 62, 0.7);
+    }
+}
+
+.highlight {
+    animation: greenGlow 1s ease;
 }
 
 .tooltip-glow {
@@ -94,17 +105,6 @@
     font-size: 1.2em;
     font-family: 'Arial', sans-serif;
     text-align: center;
-}
-
-.tooltip-glow::after {
-    content: '';
-    position: absolute;
-    bottom: -15px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-width: 15px;
-    border-style: solid;
-    border-color: #6e8efb transparent transparent transparent;
 }
 
 .tooltip-glow {
@@ -271,4 +271,15 @@ input[type="radio"] {
 
 #cancelBtn:hover {
     background-color: #da190b;
+}
+
+.pagination form {
+    display: inline-block;
+}
+
+.pagination input[type="submit"], .pagination span {
+    width: 40px; /* Set a fixed width for the pagination buttons and ellipsis */
+    text-align: center;
+    padding: 5px 0; /* Adjust padding as needed */
+    display: inline-block;
 }

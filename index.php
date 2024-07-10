@@ -4,6 +4,7 @@ require 'modele.php';
 ?>
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,7 +19,7 @@ require 'modele.php';
     if (isset($_GET['gloss'])) {
         $_SESSION['gloss'] = $_GET['gloss'];
     } else {
-        if(!isset($_SESSION['gloss'])) {
+        if (!isset($_SESSION['gloss'])) {
             $_SESSION['gloss'] = 'biblica key terms';
         }
     }
@@ -50,7 +51,7 @@ require 'modele.php';
             $errormsg = "Veuillez renseigner les champs 'mot anglais' et 'mot fran&ccedil;ais'";
             $resultats = getWordsByOffset($numeroPageCourante);
         } else {
-            if(isAdmin()) {
+            if (isAdmin()) {
                 $doesExist = insertWordAdmin($_POST['mot_fr'], $_POST['mot_en'], $_POST['note'], $_SESSION['gloss']);
             } else {
                 $doesExist = suggestWord($_POST['mot_fr'], $_POST['mot_en'], $_POST['note'], $_SESSION['user_id'], $_SESSION['gloss']);
@@ -76,15 +77,15 @@ require 'modele.php';
         if (!checkParams(['id', 'mot_fr', 'note'])) {
             $errormsg = 'Impossible de modifier';
         } else {
-            if(isAdmin()) {
+            if (isAdmin()) {
                 updateWord($_POST['id'], $_POST['mot_fr'], $_POST['note']);
             } else {
                 $suggestNotOk = suggestTranslation($_POST['mot_fr'], $_POST['mot_en'], $_POST['note'], $_SESSION['user_id'], $_SESSION['gloss']);
-                if($suggestNotOk) {
+                if ($suggestNotOk) {
                     $errormsg = "Cette traduction a d&eacute;j&agrave; &eacute;t&eacute; propos&eacute;e";
                 }
             }
-            if($showPagination) {
+            if ($showPagination) {
                 $resultats = getWordsByOffset($numeroPageCourante);
             } else {
                 $resultats = filterWord($_POST['rechercher'], $_SESSION['gloss']);
@@ -119,35 +120,29 @@ require 'modele.php';
             <button type="submit" class="btn btn-outline-success"> D&eacute;connexion </button>
         </form>
     <?php } ?>
-        <!-- <div class="fancy-selector btn-group btn-group-toggle">
+    <!-- <div class="fancy-selector btn-group btn-group-toggle">
         <div class="option" onclick="updateGloss('biblica key terms')">Biblica Key Terms</div>
         <div class="option" onclick="updateGloss('$glo["glossary"]')">Glossaire unfoldingWord</div>
     </div> -->
     <div class="container">
         <div class="fancy-selector btn-group btn-group-toggle" data-toggle="buttons">
             <?php
-                $uniqGloss = getGlossaryNames();
-                foreach($uniqGloss as $glo) {
-            ?>
-            <label class="option btn <?= $_SESSION['gloss']==$glo['name_id'] ? 'active' : '' ?>">
-                <input
-                    onclick="updateGloss('<?= $glo['name_id'] ?>')"
-                    type="radio"
-                    name="options"
-                    id="option<?= $glo['name_id'] ?>"
-                    autocomplete="off"
-                    <?= $_SESSION['gloss']==$glo['name_id'] ? 'checked' : '' ?>
-                >
-                <?= $glo['real_name'] ?>
-            </label>
+            $uniqGloss = getGlossaryNames();
+            foreach ($uniqGloss as $glo) {
+                ?>
+                <label class="option btn <?= $_SESSION['gloss'] == $glo['name_id'] ? 'active' : '' ?>">
+                    <input onclick="updateGloss('<?= $glo['name_id'] ?>')" type="radio" name="options"
+                        id="option<?= $glo['name_id'] ?>" autocomplete="off" <?= $_SESSION['gloss'] == $glo['name_id'] ? 'checked' : '' ?>>
+                    <?= $glo['real_name'] ?>
+                </label>
             <?php } ?>
         </div>
     </div>
     <nav class="navbar bg-body-tertiary">
         <div class="container justify-content-center">
             <form class="d-flex" method="post">
-                <input class="form-control me-1" value="<?= $_POST['rechercher'] ?? "" ?>" type="search" name="rechercher"
-                    id="search" placeholder="rechercher..." />
+                <input class="form-control me-1" value="<?= $_POST['rechercher'] ?? "" ?>" type="search"
+                    name="rechercher" id="search" placeholder="rechercher..." />
                 <input class="btn btn-outline-success" type="hidden" name="mode" value="rechercher"></input>
                 <input class="btn btn-outline-success" type="submit" name="txt" value=" &#128269;"></input>
             </form>
@@ -194,57 +189,56 @@ require 'modele.php';
 
     <?php if ($showPagination): ?>
         <nav aria-label="navigation" class="navbar bg-body-tertiary pagination justify-content-center">
-            <form method="get" action="">
+            <form method="get" action="" style="width: 40px;">
                 <input type="hidden" name="nbpage" value="<?= max($numeroPageCourante - 1, 0) ?>"></input>
                 <input type="submit" class="btn btn-outline-success" value="&lsaquo;"></input>
             </form>
 
             <?php
-            $startPage = max(0, $numeroPageCourante - 4);
-            $endPage = min($nbPagesTotales, $numeroPageCourante + 4);
+            $startPage = max(0, $numeroPageCourante - 2);
+            $endPage = min($nbPagesTotales, $numeroPageCourante + 2);
 
             if ($startPage > 0) {
-                echo '<form method="get" action="">
+                echo '<form method="get" action="" style="width: 40px;">
                         <input type="hidden" name="nbpage" value="0"></input>
                         <input type="submit" class="btn btn-outline-success" value="1"></input>
                     </form>';
                 if ($startPage > 1) {
-                    echo '<span>...</span>';
+                    echo '<span style="width: 40px; display: inline-block;">...</span>';
                 }
             }
 
             for ($numPage = $startPage; $numPage <= $endPage; $numPage++):
                 ?>
                 <?php if ($numPage == $numeroPageCourante): ?>
-                    <form method="get" action="">
+                    <form method="get" action="" style="width: 40px;">
                         <input type="hidden" name="nbpage" value="<?= $numPage ?>"></input>
                         <input type="submit" class="btn btn-success" value="<?= $numPage + 1 ?>"></input>
                     </form>
                 <?php else: ?>
-                    <form method="get" action="">
+                    <form method="get" action="" style="width: 40px;">
                         <input type="hidden" name="nbpage" value="<?= $numPage ?>"></input>
                         <input type="submit" class="btn btn-outline-success" value="<?= $numPage + 1 ?>"></input>
                     </form>
                 <?php endif; ?>
             <?php endfor; ?>
-
-            <form method="get" action="">
-                <input type="hidden" name="nbpage" value="<?= min($numeroPageCourante + 1, $nbPagesTotales) ?>"></input>
-                <input type="submit" class="btn btn-outline-success" value="&rsaquo;"></input>
-            </form>
             <?php
-            if ($endPage < $nbPagesTotales) {
-                if ($endPage < $nbPagesTotales - 1) {
-                    echo '<span>...</span>';
-                }
-                echo '<form method="get" action="">
-                    <input type="hidden" name="nbpage" value="' . $nbPagesTotales . '"></input>
-                    <input type="submit" class="btn btn-outline-success" value="&raquo;"></input>
-                    </form>';
-            }
+                if ($endPage < $nbPagesTotales) {
+                    if ($endPage < $nbPagesTotales - 1) {
+                        echo '<span style="width: 40px; display: inline-block;">...</span>';
+                    }
+                    echo '<form method="get" action="" style="width: 40px;">
+                        <input type="hidden" name="nbpage" value="' . $nbPagesTotales . '"></input>
+                        <input type="submit" class="btn btn-outline-success" value="' . $nbPagesTotales+1 . '"></input>
+                        </form>';
             ?>
-
-
+                <form method="get" action="" style="width: 40px;">
+                    <input type="hidden" name="nbpage" value="<?= min($numeroPageCourante + 1, $nbPagesTotales) ?>"></input>
+                    <input type="submit" class="btn btn-outline-success" value="&rsaquo;"></input>
+                </form>
+            <?php
+                }
+            ?>
         </nav>
     <?php endif; ?>
 
@@ -266,7 +260,7 @@ require 'modele.php';
     <?php elseif ($mode == "modifier" && !$errormsg && !isAdmin()): ?>
         <h1 class="success-message">La traduction a correctement été ajoutée &agrave; la liste des suggestions.</h1>
     <?php endif; ?>
-    
+
     <header>
         <div class="container-fuide overflow-x-hidden text-black">
             <div class="row-gap d-flex align-items-center p-1 bg-success bg-opacity-50 text-wrap">
@@ -284,7 +278,7 @@ require 'modele.php';
                     <div class="col-2 pe-1">
                         <h6 class="text-center">Notes</h6>
                     </div>
-                <?php } 
+                <?php }
                 if (isAdmin()) { ?>
                     <div class="col-2 pe-1">
                         <h6 class="text-center">Notes</h6>
@@ -303,8 +297,8 @@ require 'modele.php';
 
         <?php foreach ($resultats as $vocabulaire):
             $rowType = $rowType == "odd" ? "even" : "odd";
-        ?>
-            <div class=" d-flex align-items-center p-1 row m-0 <?= $rowType ?>">
+            ?>
+            <div class="d-flex align-items-center p-1 row m-0 <?= $rowType ?>">
 
                 <!-- <p class="col-1 text-center p-0 m-0 text-break" id="en <?= $vocabulaire['id'] ?>">
                     <?= $vocabulaire['glossary'] ?>
@@ -341,19 +335,22 @@ require 'modele.php';
                         <input type="hidden" name="fr" value="<?= $vocabulaire['mot_fr'] ?>"></input>
                         <input type="hidden" name="inputnote" value="<?= $vocabulaire['note'] ?>"></input>
                         <input type="hidden" name="mode" value="modification"></input>
-                        <input type="hidden" name="rechercher" value="<?= isset($_POST['mode']) && $_POST['mode'] == 'rechercher' ? $_POST['rechercher'] : '' ?>"></input>
+                        <input type="hidden" name="rechercher"
+                            value="<?= isset($_POST['mode']) && $_POST['mode'] == 'rechercher' ? $_POST['rechercher'] : '' ?>"></input>
                         <input class="btn btn-outline-success" type="submit" name="txte" value="&#128394;"></input>
                     </form>
                 <?php } else if ($vocabulaire['mot_fr'] == '') { ?>
-                    <form method="post" action="" class="col-2 text-center p-0">
-                        <input type="hidden" name="id" value="<?= $vocabulaire['id'] ?>"></input>
-                        <input type="hidden" name="en" value="<?= $vocabulaire['mot_en'] ?>"></input>
-                        <input type="hidden" name="fr" value="<?= $vocabulaire['mot_fr'] ?>"></input>
-                        <input type="hidden" name="inputnote" value="<?= $vocabulaire['note'] ?>"></input>
-                        <input type="hidden" name="mode" value="modification"></input>
-                        <input type="hidden" name="rechercher" value="<?= isset($_POST['mode']) && $_POST['mode'] == 'rechercher' ? $_POST['rechercher'] : '' ?>"></input>
-                        <input class="btn btn-outline-success" type="submit" name="txte" value="&#128394;">&nbsp;&nbsp;&nbsp;Suggestion</input>
-                    </form>
+                        <form method="post" action="" class="col-2 text-center p-0">
+                            <input type="hidden" name="id" value="<?= $vocabulaire['id'] ?>"></input>
+                            <input type="hidden" name="en" value="<?= $vocabulaire['mot_en'] ?>"></input>
+                            <input type="hidden" name="fr" value="<?= $vocabulaire['mot_fr'] ?>"></input>
+                            <input type="hidden" name="inputnote" value="<?= $vocabulaire['note'] ?>"></input>
+                            <input type="hidden" name="mode" value="modification"></input>
+                            <input type="hidden" name="rechercher"
+                                value="<?= isset($_POST['mode']) && $_POST['mode'] == 'rechercher' ? $_POST['rechercher'] : '' ?>"></input>
+                            <input class="btn btn-outline-success" type="submit" name="txte"
+                                value="&#128394;">&nbsp;&nbsp;&nbsp;Suggestion</input>
+                        </form>
                 <?php } ?>
             </div>
         <?php endforeach; ?>
@@ -362,53 +359,55 @@ require 'modele.php';
     </header>
 
     <?php if ($showPagination): ?>
-        <nav aria-label="navigation" class="navbar bg-body-tertiary pagination justify-content-center">
-            <form method="get" action="">
+        <nav aria-label="navigation" class="navbar bg-body-tertiary pagination justify-content-around">
+            <form method="get" action="" style="width: 40px;">
                 <input type="hidden" name="nbpage" value="<?= max($numeroPageCourante - 1, 0) ?>"></input>
                 <input type="submit" class="btn btn-outline-success" value="&lsaquo;"></input>
             </form>
 
             <?php
-
             if ($startPage > 0) {
-                echo '<form method="get" action="">
+                echo '<form method="get" action="" style="width: 40px;">
                         <input type="hidden" name="nbpage" value="0"></input>
                         <input type="submit" class="btn btn-outline-success" value="1"></input>
                     </form>';
                 if ($startPage > 1) {
-                    echo '<span>...</span>';
+                    echo '<span style="width: 40px; display: inline-block;">...</span>';
                 }
             }
+
 
             for ($numPage = $startPage; $numPage <= $endPage; $numPage++):
                 ?>
                 <?php if ($numPage == $numeroPageCourante): ?>
-                    <form method="get" action="">
+                    <form method="get" action="" style="width: 40px;">
                         <input type="hidden" name="nbpage" value="<?= $numPage ?>"></input>
                         <input type="submit" class="btn btn-success" value="<?= $numPage + 1 ?>"></input>
                     </form>
                 <?php else: ?>
-                    <form method="get" action="">
+                    <form method="get" action="" style="width: 40px;">
                         <input type="hidden" name="nbpage" value="<?= $numPage ?>"></input>
                         <input type="submit" class="btn btn-outline-success" value="<?= $numPage + 1 ?>"></input>
                     </form>
                 <?php endif; ?>
             <?php endfor; ?>
 
-            <form method="get" action="">
-                <input type="hidden" name="nbpage" value="<?= min($numeroPageCourante + 1, $nbPagesTotales) ?>"></input>
-                <input type="submit" class="btn btn-outline-success" value="&rsaquo;"></input>
-            </form>
             <?php
-            if ($endPage < $nbPagesTotales) {
-                if ($endPage < $nbPagesTotales - 1) {
-                    echo '<span>...</span>';
+                if ($endPage < $nbPagesTotales) {
+                    if ($endPage < $nbPagesTotales - 1) {
+                        echo '<span style="width: 40px; display: inline-block;">...</span>';
+                    }
+                    echo '<form method="get" action="" style="width: 40px;">
+                        <input type="hidden" name="nbpage" value="' . $nbPagesTotales . '"></input>
+                        <input type="submit" class="btn btn-outline-success" value="' . $nbPagesTotales+1 . '"></input>
+                    </form>';
+                    ?>
+                <form method="get" action="" style="width: 40px;">
+                    <input type="hidden" name="nbpage" value="<?= min($numeroPageCourante + 1, $nbPagesTotales) ?>"></input>
+                    <input type="submit" class="btn btn-outline-success" value="&rsaquo;"></input>
+                </form>
+            <?php
                 }
-                echo '<form method="get" action="">
-                    <input type="hidden" name="nbpage" value="' . $nbPagesTotales . '"></input>
-                    <input type="submit" class="btn btn-outline-success" value="&raquo;"></input>
-                </form>';
-            }
             ?>
         </nav>
     <?php endif; ?>
@@ -422,14 +421,30 @@ require 'modele.php';
 </body>
 
 <script>
+    // function clearSelection() {
+    //     if (window.getSelection) {
+    //         window.getSelection().removeAllRanges();
+    //     } else if (document.selection && document.selection.empty) {
+    //         document.selection.empty();
+    //     }
+    // }
+
     document.addEventListener('DOMContentLoaded', (event) => {
         let collectionOfText = document.getElementsByClassName('text-break');
+        let collectionOfTextBoxes = document.getElementsByClassName('align-items-center');
 
         for (let i = 0; i < collectionOfText.length; i++) {
+            collectionOfTextBoxes[i].addEventListener('selectstart', event => {
+                event.preventDefault();
+            });
             collectionOfText[i].addEventListener('dblclick', (e) => {
                 let textToCopy = e.target.innerText;
                 navigator.clipboard.writeText(textToCopy).then(() => {
                     showTooltip(e, "Copié !");
+                    e.target.classList.add('highlight');
+                    setTimeout(() => {
+                        e.target.classList.remove('highlight');
+                    }, 1000); // Highlight duration: 1 second
                 });
             });
         }
@@ -437,7 +452,7 @@ require 'modele.php';
         let deleteForms = document.getElementsByClassName("deleteform");
 
         for (let df of deleteForms) {
-            df.onsubmit = async function(event) {
+            df.onsubmit = async function (event) {
                 event.preventDefault();
                 const form = event.target;
                 if (await validateDeletion(form)) {
@@ -455,13 +470,13 @@ require 'modele.php';
         modal.style.display = 'block';
 
         // Close the modal when the close button or cancel button is clicked
-        cancelBtn.onclick = function() {
+        cancelBtn.onclick = function () {
             modal.style.display = 'none';
             return false;
         };
 
         // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             if (event.target == modal) {
                 modal.style.display = 'none';
                 return false;
@@ -469,11 +484,11 @@ require 'modele.php';
         };
 
         return new Promise((resolve) => {
-            confirmBtn.onclick = function() {
+            confirmBtn.onclick = function () {
                 modal.style.display = 'none';
                 resolve(true);
             };
-            cancelBtn.onclick = function() {
+            cancelBtn.onclick = function () {
                 modal.style.display = 'none';
                 resolve(false);
             };
@@ -482,16 +497,18 @@ require 'modele.php';
 
     function showTooltip(event, message) {
         let tooltip = document.createElement('div');
+        tooltip.addEventListener('selectstart', event => {
+            event.preventDefault();
+        });
         // username == irandrianjanaka
         tooltip.className = '<?= $_SESSION['username'] == 'qroca' ? 'tooltip-glow' : 'tooltip' ?>';
         tooltip.innerText = message;
         document.body.appendChild(tooltip);
 
-        let x = event.clientX + window.scrollX;
-        let y = event.clientY + window.scrollY;
+        let rect = event.target.getBoundingClientRect();
 
-        tooltip.style.left = x - (tooltip.offsetWidth/2) + 'px';
-        tooltip.style.top = y - tooltip.offsetHeight - 10 + 'px';
+        tooltip.style.left = rect.right + window.scrollX + 'px';
+        tooltip.style.top = rect.top + window.scrollY + 10 + (rect.height / 2) - (tooltip.offsetHeight / 2) + 'px';
 
         setTimeout(() => {
             tooltip.classList.add('fade-out');
