@@ -183,64 +183,16 @@ require 'modele.php';
     <?php endif ?>
 
     <?php
-    if ($doesExist):
-        $errormsg = "Ce mot existe d&eacute;j&agrave; ou a d&eacute;j&agrave; &eacute;t&eacute; sugg&eacute;r&eacute; pour le glossaire suivant : \"" . $_SESSION['gloss'] . "\"" ?>
-    <?php endif; ?>
+    if ($doesExist) {
+        $errormsg = "Ce mot existe d&eacute;j&agrave; ou a d&eacute;j&agrave; &eacute;t&eacute; sugg&eacute;r&eacute; pour le glossaire suivant : \"" . $_SESSION['gloss'] . "\"";
+    }
+    ?>
 
-    <?php if ($showPagination): ?>
-        <nav aria-label="navigation" class="navbar bg-body-tertiary pagination justify-content-center">
-            <form method="get" action="" style="width: 40px;">
-                <input type="hidden" name="nbpage" value="<?= max($numeroPageCourante - 1, 0) ?>"></input>
-                <input type="submit" class="btn btn-outline-success" value="&lsaquo;"></input>
-            </form>
-
-            <?php
-            $startPage = max(0, $numeroPageCourante - 2);
-            $endPage = min($nbPagesTotales, $numeroPageCourante + 2);
-
-            if ($startPage > 0) {
-                echo '<form method="get" action="" style="width: 40px;">
-                        <input type="hidden" name="nbpage" value="0"></input>
-                        <input type="submit" class="btn btn-outline-success" value="1"></input>
-                    </form>';
-                if ($startPage > 1) {
-                    echo '<span style="width: 40px; display: inline-block;">...</span>';
-                }
-            }
-
-            for ($numPage = $startPage; $numPage <= $endPage; $numPage++):
-                ?>
-                <?php if ($numPage == $numeroPageCourante): ?>
-                    <form method="get" action="" style="width: 40px;">
-                        <input type="hidden" name="nbpage" value="<?= $numPage ?>"></input>
-                        <input type="submit" class="btn btn-success" value="<?= $numPage + 1 ?>"></input>
-                    </form>
-                <?php else: ?>
-                    <form method="get" action="" style="width: 40px;">
-                        <input type="hidden" name="nbpage" value="<?= $numPage ?>"></input>
-                        <input type="submit" class="btn btn-outline-success" value="<?= $numPage + 1 ?>"></input>
-                    </form>
-                <?php endif; ?>
-            <?php endfor; ?>
-            <?php
-                if ($endPage < $nbPagesTotales) {
-                    if ($endPage < $nbPagesTotales - 1) {
-                        echo '<span style="width: 40px; display: inline-block;">...</span>';
-                    }
-                    echo '<form method="get" action="" style="width: 40px;">
-                        <input type="hidden" name="nbpage" value="' . $nbPagesTotales . '"></input>
-                        <input type="submit" class="btn btn-outline-success" value="' . $nbPagesTotales+1 . '"></input>
-                        </form>';
-            ?>
-                <form method="get" action="" style="width: 40px;">
-                    <input type="hidden" name="nbpage" value="<?= min($numeroPageCourante + 1, $nbPagesTotales) ?>"></input>
-                    <input type="submit" class="btn btn-outline-success" value="&rsaquo;"></input>
-                </form>
-            <?php
-                }
-            ?>
-        </nav>
-    <?php endif; ?>
+    <?php
+        if ($showPagination) {
+            include('nav.php');
+        }
+    ?>
 
 
     <?php if (isset($_POST['rechercher'])) { ?>
@@ -300,18 +252,12 @@ require 'modele.php';
             ?>
             <div class="d-flex align-items-center p-1 row m-0 <?= $rowType ?>">
 
-                <!-- <p class="col-1 text-center p-0 m-0 text-break" id="en <?= $vocabulaire['id'] ?>">
-                    <?= $vocabulaire['glossary'] ?>
-                </p> -->
                 <p class="col-3 text-center p-0 m-0 text-break" id="en <?= $vocabulaire['id'] ?>">
                     <?= $vocabulaire['mot_en'] ?>
                 </p>
                 <p class="col-3 text-center p-0 m-0 text-break" id="fr <?= $vocabulaire['id'] ?>">
                     <?= $vocabulaire['mot_fr'] ?>
                 </p>
-                <!-- <p class="col-1 text-center p-0 m-0 text-break" id="note <?= $vocabulaire['id'] ?>">
-                    <?= $vocabulaire['note'] ?>
-                </p> -->
                 <?php if (!isAdmin()) { ?>
                     <p class="col-2 text-center pe-1 m-0 text-break" id="note <?= $vocabulaire['id'] ?>">
                         <?= $vocabulaire['note'] ?>
@@ -358,59 +304,11 @@ require 'modele.php';
 
     </header>
 
-    <?php if ($showPagination): ?>
-        <nav aria-label="navigation" class="navbar bg-body-tertiary pagination justify-content-around">
-            <form method="get" action="" style="width: 40px;">
-                <input type="hidden" name="nbpage" value="<?= max($numeroPageCourante - 1, 0) ?>"></input>
-                <input type="submit" class="btn btn-outline-success" value="&lsaquo;"></input>
-            </form>
-
-            <?php
-            if ($startPage > 0) {
-                echo '<form method="get" action="" style="width: 40px;">
-                        <input type="hidden" name="nbpage" value="0"></input>
-                        <input type="submit" class="btn btn-outline-success" value="1"></input>
-                    </form>';
-                if ($startPage > 1) {
-                    echo '<span style="width: 40px; display: inline-block;">...</span>';
-                }
-            }
-
-
-            for ($numPage = $startPage; $numPage <= $endPage; $numPage++):
-                ?>
-                <?php if ($numPage == $numeroPageCourante): ?>
-                    <form method="get" action="" style="width: 40px;">
-                        <input type="hidden" name="nbpage" value="<?= $numPage ?>"></input>
-                        <input type="submit" class="btn btn-success" value="<?= $numPage + 1 ?>"></input>
-                    </form>
-                <?php else: ?>
-                    <form method="get" action="" style="width: 40px;">
-                        <input type="hidden" name="nbpage" value="<?= $numPage ?>"></input>
-                        <input type="submit" class="btn btn-outline-success" value="<?= $numPage + 1 ?>"></input>
-                    </form>
-                <?php endif; ?>
-            <?php endfor; ?>
-
-            <?php
-                if ($endPage < $nbPagesTotales) {
-                    if ($endPage < $nbPagesTotales - 1) {
-                        echo '<span style="width: 40px; display: inline-block;">...</span>';
-                    }
-                    echo '<form method="get" action="" style="width: 40px;">
-                        <input type="hidden" name="nbpage" value="' . $nbPagesTotales . '"></input>
-                        <input type="submit" class="btn btn-outline-success" value="' . $nbPagesTotales+1 . '"></input>
-                    </form>';
-                    ?>
-                <form method="get" action="" style="width: 40px;">
-                    <input type="hidden" name="nbpage" value="<?= min($numeroPageCourante + 1, $nbPagesTotales) ?>"></input>
-                    <input type="submit" class="btn btn-outline-success" value="&rsaquo;"></input>
-                </form>
-            <?php
-                }
-            ?>
-        </nav>
-    <?php endif; ?>
+    <?php
+        if ($showPagination) {
+            include('nav.php');
+        }
+    ?>
     <div id="customModal" class="modal">
         <div class="modal-content">
             <p>Voulez-vous vraiment supprimer ce mot ?</p>
@@ -433,10 +331,12 @@ require 'modele.php';
         let collectionOfText = document.getElementsByClassName('text-break');
         let collectionOfTextBoxes = document.getElementsByClassName('align-items-center');
 
-        for (let i = 0; i < collectionOfText.length; i++) {
+        for (let i = 0; i < collectionOfTextBoxes.length; i++) {
             collectionOfTextBoxes[i].addEventListener('selectstart', event => {
                 event.preventDefault();
             });
+        }
+        for (let i = 0; i < collectionOfText.length; i++) {
             collectionOfText[i].addEventListener('dblclick', (e) => {
                 let textToCopy = e.target.innerText;
                 navigator.clipboard.writeText(textToCopy).then(() => {
