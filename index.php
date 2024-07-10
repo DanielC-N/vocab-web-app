@@ -161,7 +161,8 @@ require 'modele.php';
                         value="<?= ($_POST['inputnote']) ?>" name="note" placeholder="note" />
                     <input class="form-control me-1" type="hidden" name="id" value="<?= ($_POST['id']) ?>"> </input>
                     <input type="hidden" name="rechercher" value="<?= $_POST['rechercher'] ?>"></input>
-                    <input class="btn btn-outline-success" name="mode" value="modifier" type="submit"></input>
+                    <input type="hidden" name="mode" value="modifier"></input>
+                    <input class="btn btn-outline-success" value="<?= isAdmin() ? 'modifier' : 'valider' ?>" type="submit"></input>
                 </form>
             </div>
         </nav>
@@ -195,7 +196,7 @@ require 'modele.php';
     ?>
 
 
-    <?php if (isset($_POST['rechercher'])) { ?>
+    <?php if (isset($_POST['rechercher']) && $_POST['rechercher'] !== '') { ?>
         <ul class="pagination justify-content-left m-2">
             <li><a class="btn btn-outline-success" href="index.php"> Retour &agrave; la page d'accueil </a></li>
         </ul>
