@@ -1,7 +1,7 @@
 <nav aria-label="navigation" class="navbar bg-body-tertiary pagination justify-content-center">
     <?php
-    $startPage = max(0, $numeroPageCourante - 2);
-    $endPage = min($nbPagesTotales, $numeroPageCourante + 2);
+    $startPage = max(0, $numeroPageCourante - 5);
+    $endPage = min($nbPagesTotales, $numeroPageCourante + 5);
     if ($numeroPageCourante > 0) {
         ?>
         <form method="get" action="" style="width: 40px;">
@@ -20,20 +20,15 @@
         }
     }
 
-    for ($numPage = $startPage; $numPage <= $endPage; $numPage++):
-        if ($numPage == $numeroPageCourante): ?>
-            <form method="get" action="" style="width: 40px;">
-                <input type="hidden" name="nbpage" value="<?= $numPage ?>"></input>
-                <input type="submit" class="btn btn-success" value="<?= $numPage + 1 ?>"></input>
-            </form>
-        <?php else: ?>
-            <form method="get" action="" style="width: 40px;">
-                <input type="hidden" name="nbpage" value="<?= $numPage ?>"></input>
-                <input type="submit" class="btn btn-outline-success" value="<?= $numPage + 1 ?>"></input>
-            </form>
-        <?php endif; ?>
-    <?php endfor; ?>
-    <?php
+    for ($numPage = $startPage; $numPage <= $endPage; $numPage++) {
+        ?>
+        <form method="get" action="" style="width: 40px;">
+            <input type="hidden" name="nbpage" value="<?= $numPage ?>"></input>
+            <input type="submit" class="btn <?= $numPage == $numeroPageCourante ? 'btn-success' : 'btn-outline-success' ?>"
+                value="<?= $numPage + 1 ?>"></input>
+        </form>
+        <?php
+    }
     if ($endPage < $nbPagesTotales) {
         if ($endPage < $nbPagesTotales - 1) {
             echo '<span style="width: 40px; display: inline-block;">...</span>';
