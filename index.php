@@ -153,13 +153,13 @@ require 'modele.php';
         <nav class="navbar bg-body-tertiary">
             <div class="container justify-content-center">
                 <form class="d-flex" method="post">
-                    <input class="form-control me-1" id="en" type="text" class="text" value="<?= ($_POST['en']) ?>"
+                    <input class="form-control me-1" id="en" type="text" class="text" value="<?= $_POST['en'] ?>"
                         name="mot_en" placeholder="mot en anglais" readonly />
-                    <input class="form-control me-1" id="fr" type="text" class="text" value="<?= ($_POST['fr']) ?>"
-                        name="mot_fr" placeholder="mot en français" />
+                    <input <?= $mode == "modification" ? 'autofocus' : '' ?> class="form-control me-1" id="fr" type="text" class="text" value="<?= $_POST['fr'] ?>"
+                        name="mot_fr" placeholder="mot en français" required pattern=".*\S+.*"/>
                     <input class="form-control me-1" id="inputnote" type="text" class="text"
-                        value="<?= ($_POST['inputnote']) ?>" name="note" placeholder="note" />
-                    <input class="form-control me-1" type="hidden" name="id" value="<?= ($_POST['id']) ?>"> </input>
+                        value="<?= $_POST['inputnote'] ?>" name="note" placeholder="note" />
+                    <input class="form-control me-1" type="hidden" name="id" value="<?= $_POST['id'] ?>"> </input>
                     <input type="hidden" name="rechercher" value="<?= $_POST['rechercher'] ?>"></input>
                     <input type="hidden" name="mode" value="modifier"></input>
                     <input class="btn btn-outline-success" value="<?= isAdmin() ? 'modifier' : 'valider' ?>" type="submit"></input>
