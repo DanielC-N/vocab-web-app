@@ -100,8 +100,8 @@
             animation: slideIn 0.5s forwards;
         }
 
-        /* Puppy CSS Animation */
-        .puppy {
+        /* bubble CSS Animation */
+        .bubble {
             width: 50px;
             height: 50px;
             border-radius: 50%;
@@ -112,21 +112,21 @@
             animation: wagTail 1s infinite;
         }
 
-        .puppy::before, .puppy::after {
+        .bubble::before, .bubble::after {
             content: '';
             position: absolute;
             background: #6c9d8e;
             border-radius: 50%;
         }
 
-        .puppy::before {
+        .bubble::before {
             width: 20px;
             height: 20px;
             top: 0;
             left: -15px;
         }
 
-        .puppy::after {
+        .bubble::after {
             width: 12px;
             height: 12px;
             top: 15px;
@@ -153,19 +153,8 @@ include_once 'modele.php';
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (checkParams(['username', 'password', 'rights'])) {
-        $username = $_POST['username'];
         $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-        $rights = $_POST['rights'];
-
-        // Fonction pour insérer un nouvel utilisateur dans la base de données
-        function insertUser($username, $password, $rights) {
-            $bdd = getDBConnection();
-            $stmt = $bdd->prepare('INSERT INTO users (username, password, rights) VALUES (:username, :password, :rights)');
-            $stmt->execute(['username' => $username, 'password' => $password, 'rights' => $rights]);
-            $bdd = null;
-        }
-
-        insertUser($username, $password, $rights);
+        insertUser($_POST['username'], $password, $_POST['rights']);
     } else {
         $error = "Veuillez remplir tous les champs.";
     }
@@ -194,7 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </form>
     </div>
     <div class="success-message" id="success-message">
-        Utilisateur créé avec succès ! <div class="puppy"></div>
+        Utilisateur créé avec succès ! <div class="bubble"></div>
     </div>
     <script>
         <?php if ($_SERVER['REQUEST_METHOD'] == 'POST' && empty($error)): ?>

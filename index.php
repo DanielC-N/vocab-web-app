@@ -191,7 +191,7 @@ require 'modele.php';
 
     <?php
         if ($showPagination) {
-            include('nav.php');
+            include 'nav.php';
         }
     ?>
 
@@ -307,7 +307,7 @@ require 'modele.php';
 
     <?php
         if ($showPagination) {
-            include('nav.php');
+            include 'nav.php';
         }
     ?>
     <div id="customModal" class="modal">
@@ -361,6 +361,27 @@ require 'modele.php';
                 }
             };
         }
+
+        <?php
+            if ($_SESSION['username'] == 'irandrianjanaka') {
+        ?>
+        let sequence = ['r', 'i', 'c', 'k'];
+        let currentIndex = 0;
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === sequence[currentIndex]) {
+                currentIndex++;
+                if (currentIndex === sequence.length) {
+                    window.open('https://shattereddisk.github.io/rickroll/rickroll.mp4', '_blank');
+                    currentIndex = 0;
+                }
+            } else {
+                currentIndex = 0;
+            }
+        });
+        <?php
+            }
+        ?>
     });
 
     function validateDeletion(form) {
@@ -432,6 +453,8 @@ require 'modele.php';
         urlParams.set('nbpage', 0);
         window.location.search = urlParams.toString();
     }
+
+    
 </script>
 
 </html>

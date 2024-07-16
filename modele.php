@@ -232,3 +232,11 @@ function isAdmin() {
 
     return $rights === 'admin';
 }
+
+// Fonction pour insérer un nouvel utilisateur dans la base de données
+function insertUser($username, $password, $rights) {
+    $bdd = getDBConnection();
+    $stmt = $bdd->prepare('INSERT INTO users (username, password, rights) VALUES (:username, :password, :rights)');
+    $stmt->execute(['username' => $username, 'password' => $password, 'rights' => $rights]);
+    $bdd = null;
+}

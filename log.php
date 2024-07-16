@@ -52,7 +52,7 @@ include 'admin_check.php';
         $res = getWordsByOffsetLogWords($numeroPageCourante);
     } elseif ($mode == "non") {
         if (!checkParams(['mot_fr', 'mot_en', 'note', 'id'])) {
-            $errormsg = ("word not found");
+            $errormsg = "word not found";
         } else {
             refuseWord($_POST['id']);
         }
@@ -146,57 +146,7 @@ include 'admin_check.php';
             <?php endforeach; ?>
         </div>
 
-        <nav aria-label="Page navigation example" class="navbar bg-body-tertiary pagination justify-content-center">
-            <form method="get" action="">
-                <input type="hidden" name="nbpage" value="<?= max($numeroPageCourante - 1, 0) ?>"></input>
-                <input type="submit" class="btn btn-outline-success" value="&lsaquo;"></input>
-            </form>
-
-            <?php
-            $startPage = max(0, $numeroPageCourante - 1);
-            $endPage = min($nbPagesTotales, $numeroPageCourante + 1);
-
-            if ($startPage > 0) {
-                echo '<form method="get" action="">
-                        <input type="hidden" name="nbpage" value="0"></input>
-                        <input type="submit" class="btn btn-outline-success" value="1"></input>
-                    </form>';
-                if ($startPage > 1) {
-                    echo '<span>...</span>';
-                }
-            }
-
-            for ($numPage = $startPage; $numPage <= $endPage; $numPage++):
-                ?>
-                <?php if ($numPage == $numeroPageCourante): ?>
-                    <form method="get" action="">
-                        <input type="hidden" name="nbpage" value="<?= $numPage ?>"></input>
-                        <input type="submit" class="btn btn-success" value="<?= $numPage + 1 ?>"></input>
-                    </form>
-                <?php else: ?>
-                    <form method="get" action="">
-                        <input type="hidden" name="nbpage" value="<?= $numPage ?>"></input>
-                        <input type="submit" class="btn btn-outline-success" value="<?= $numPage + 1 ?>"></input>
-                    </form>
-                <?php endif; ?>
-            <?php endfor; ?>
-
-            <form method="get" action="">
-                <input type="hidden" name="nbpage" value="<?= min($numeroPageCourante + 1, $nbPagesTotales) ?>"></input>
-                <input type="submit" class="btn btn-outline-success" value="&rsaquo;"></input>
-            </form>
-            <?php
-            if ($endPage < $nbPagesTotales) {
-                if ($endPage < $nbPagesTotales - 1) {
-                    echo '<span>...</span>';
-                }
-                echo '<form method="get" action="">
-                    <input type="hidden" name="nbpage" value="' . $nbPagesTotales . '"></input>
-                    <input type="submit" class="btn btn-outline-success" value="&raquo;"></input>
-                    </form>';
-            }
-            ?>
-        </nav>
+        <?php $nbPagesTotales > 1 ? include 'nav.php' : "" ?>;
 
     </header>
 </body>
