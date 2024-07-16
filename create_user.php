@@ -166,7 +166,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         insertUser($username, $password, $rights);
-        echo "Utilisateur créé avec succès !";
     } else {
         $error = "Veuillez remplir tous les champs.";
     }
