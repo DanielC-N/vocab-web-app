@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Glossary</title>
+    <title>Login - Glossothek</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom CSS -->
@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="container login-container">
         <div class="col-md-6 col-lg-4">
             <div class="card">
-                <h3 class="card-title text-center">Glossary Login</h3>
+                <h3 class="card-title text-center">Glossothek Login</h3>
                 <div class="card-body">
                     <form method="POST" action="login.php">
                         <div class="form-group">
