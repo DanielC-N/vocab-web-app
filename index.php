@@ -24,7 +24,7 @@ require 'modele.php';
         }
     }
     $_SESSION['username'] = getUsername($_SESSION['user_id']);
-    $nbPagesTotales = floor(count(getBaseDD()) / 20);
+    $nbPagesTotales = floor(count(getBaseDD()) / 25);
     if (isset($_GET['nbpage']) && $_GET['nbpage'] >= $nbPagesTotales) {
         $_GET['nbpage'] = $nbPagesTotales;
     }
@@ -105,7 +105,7 @@ require 'modele.php';
             <div class="row">
                 <div class="col">
                     <form action="log.php">
-                        <button type="submit" class="btn btn-outline-success">Suggestions</button>
+                        <button type="submit" class="btn btn-outline-success">Suggestions (<?= count(getBaseDDLogWords()) ?>)</button>
                     </form>
                 </div>
                 <div class="col-auto ml-auto">
@@ -252,13 +252,14 @@ require 'modele.php';
             $rowType = $rowType == "odd" ? "even" : "odd";
             ?>
             <div class="d-flex align-items-center p-1 row m-0 <?= $rowType ?>">
-
-                <p class="col-3 text-center p-0 m-0 text-break" id="en <?= $vocabulaire['id'] ?>">
-                    <?= $vocabulaire['mot_en'] ?>
-                </p>
-                <p class="col-3 text-center p-0 m-0 text-break" id="fr <?= $vocabulaire['id'] ?>">
-                    <?= $vocabulaire['mot_fr'] ?>
-                </p>
+            <div class="col-3 text-center p-0 m-0 text-break position-relative">
+                <span class="copyword" id="en<?= $vocabulaire['id'] ?>"><?= $vocabulaire['mot_en'] ?></span>
+                <button class="btn btn-copy" data-target="en<?= $vocabulaire['id'] ?>" aria-label="Copier">📋</button>
+            </div>
+            <div class="col-3 text-center p-0 m-0 text-break position-relative">
+                <span class="copyword" id="fr<?= $vocabulaire['id'] ?>"><?= $vocabulaire['mot_fr'] ?></span>
+                <button class="btn btn-copy" data-target="fr<?= $vocabulaire['id'] ?>" aria-label="Copier">📋</button>
+            </div>
                 <?php if (!isAdmin()) { ?>
                     <p class="col-2 text-center pe-1 m-0 text-break" id="note <?= $vocabulaire['id'] ?>">
                         <?= $vocabulaire['note'] ?>
@@ -329,7 +330,7 @@ require 'modele.php';
     // }
 
     document.addEventListener('DOMContentLoaded', (event) => {
-        let collectionOfText = document.getElementsByClassName('text-break');
+        let collectionOfText = document.getElementsByClassName('copyword');
         let collectionOfTextBoxes = document.getElementsByClassName('align-items-center');
 
         for (let i = 0; i < collectionOfTextBoxes.length; i++) {
@@ -338,7 +339,7 @@ require 'modele.php';
             });
         }
         for (let i = 0; i < collectionOfText.length; i++) {
-            collectionOfText[i].addEventListener('dblclick', (e) => {
+            collectionOfText[i].addEventListener('click', (e) => {
                 let textToCopy = e.target.innerText;
                 navigator.clipboard.writeText(textToCopy).then(() => {
                     showTooltip(e, "Copié !");
@@ -360,6 +361,40 @@ require 'modele.php';
                     form.submit();
                 }
             };
+        }
+
+        const copyButtons = document.querySelectorAll('.btn-copy');
+
+        copyButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                const targetId = this.getAttribute('data-target');
+                const targetElement = document.getElementById(targetId);
+                const textToCopy = targetElement.textContent || targetElement.innerText;
+
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    showTooltip(e, "Copié !")
+                }).catch(err => {
+                    console.error('Erreur lors de la copie du texte: ', err);
+                });
+            });
+        });
+
+        for (let i = 0; i < copyButtons.length; i++) {
+            copyButtons[i].addEventListener('click', (e) => {
+                const targetId = copyButtons[i].getAttribute('data-target');
+                const targetElement = document.getElementById(targetId);
+                const textToCopy = targetElement.textContent || targetElement.innerText;
+
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    showTooltip(e, "Copié !");
+                    collectionOfText[i].classList.add('highlight');
+                    setTimeout(() => {
+                        collectionOfText[i].classList.remove('highlight');
+                    }, 1000); // Highlight duration: 1 second
+                }).catch(err => {
+                    console.error('Erreur lors de la copie du texte: ', err);
+                });
+            });
         }
 
         <?php

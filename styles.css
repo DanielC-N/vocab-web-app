@@ -283,3 +283,38 @@ input[type="radio"] {
     padding: 5px 0; /* Adjust padding as needed */
     display: inline-block;
 }
+
+.btn-copy {
+    margin-left: 5px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: #198754;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.btn-copy::after {
+    content: attr(aria-label);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #000;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s;
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+.btn-copy:hover::after {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s;
+}

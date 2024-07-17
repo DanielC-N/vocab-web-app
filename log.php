@@ -17,7 +17,7 @@ include 'admin_check.php';
         <div class="row">
             <div class="col">
                 <form action="index.php">
-                    <button type="submit" class="btn btn-outline-success">Retour au glossaire</button>
+                    <button type="submit" class="btn btn-outline-success">Retour aux glossaires</button>
                 </form>
             </div>
             <div class="col-auto ml-auto">
