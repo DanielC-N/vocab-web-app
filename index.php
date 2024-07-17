@@ -371,20 +371,6 @@ require 'modele.php';
 
         const copyButtons = document.querySelectorAll('.btn-copy');
 
-        copyButtons.forEach(button => {
-            button.addEventListener('click', function(e) {
-                const targetId = this.getAttribute('data-target');
-                const targetElement = document.getElementById(targetId);
-                const textToCopy = targetElement.textContent || targetElement.innerText;
-
-                navigator.clipboard.writeText(textToCopy).then(() => {
-                    showTooltip(e, "Copié !")
-                }).catch(err => {
-                    console.error('Erreur lors de la copie du texte: ', err);
-                });
-            });
-        });
-
         for (let i = 0; i < copyButtons.length; i++) {
             copyButtons[i].addEventListener('click', (e) => {
                 const targetId = copyButtons[i].getAttribute('data-target');
@@ -393,9 +379,9 @@ require 'modele.php';
 
                 navigator.clipboard.writeText(textToCopy).then(() => {
                     showTooltip(e, "Copié !");
-                    collectionOfText[i].classList.add('highlight');
+                    targetElement.classList.add('highlight');
                     setTimeout(() => {
-                        collectionOfText[i].classList.remove('highlight');
+                        targetElement.classList.remove('highlight');
                     }, 1000); // Highlight duration: 1 second
                 }).catch(err => {
                     console.error('Erreur lors de la copie du texte: ', err);
@@ -406,18 +392,34 @@ require 'modele.php';
         <?php
             if ($_SESSION['username'] == 'irandrianjanaka') {
         ?>
-        let sequence = ['r', 'i', 'c', 'k'];
-        let currentIndex = 0;
+        let sequenceR = ['r', 'i', 'c', 'k'];
+        let currentIndexR = 0;
 
         document.addEventListener('keydown', function(e) {
-            if (e.key === sequence[currentIndex]) {
-                currentIndex++;
-                if (currentIndex === sequence.length) {
+            if (e.key.toLowerCase() === sequenceR[currentIndexR]) {
+                currentIndexR++;
+                if (currentIndexR === sequenceR.length) {
                     window.open('https://shattereddisk.github.io/rickroll/rickroll.mp4', '_blank');
-                    currentIndex = 0;
+                    currentIndexR = 0;
                 }
             } else {
-                currentIndex = 0;
+                currentIndexR = 0;
+            }
+        });
+
+        let sequencePs = ['p', 's', 'a', 'u', 'm', 'e', '(', '&'];
+        let sequencePs2 = ['p', 's', 'a', 'u', 'm', 'e', '5', '1'];
+        let currentIndexPs = 0;
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key.toLowerCase() === sequencePs[currentIndexPs] || e.key.toLowerCase() === sequencePs2[currentIndexPs]) {
+                currentIndexPs++;
+                if (currentIndexPs === sequencePs.length) {
+                    window.open('https://www.youtube.com/watch?v=IPIjSFzJbi4', '_blank');
+                    currentIndexPs = 0;
+                }
+            } else {
+                currentIndexPs = 0;
             }
         });
         <?php
