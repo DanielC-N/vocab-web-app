@@ -249,16 +249,22 @@ require 'modele.php';
 
 
         <?php foreach ($resultats as $vocabulaire):
+            $isVocabEn = $vocabulaire['mot_en'] && trim($vocabulaire['mot_en']) != '';
+            $isVocabFr = $vocabulaire['mot_fr'] && trim($vocabulaire['mot_fr']) != '';
             $rowType = $rowType == "odd" ? "even" : "odd";
             ?>
             <div class="d-flex align-items-center p-1 row m-0 <?= $rowType ?>">
             <div class="col-3 text-center p-0 m-0 text-break position-relative">
                 <span class="copyword" id="en<?= $vocabulaire['id'] ?>"><?= $vocabulaire['mot_en'] ?></span>
+                <?php if ($isVocabEn) { ?>
                 <button class="btn btn-copy" data-target="en<?= $vocabulaire['id'] ?>" aria-label="Copier">📋</button>
+                <?php } ?>
             </div>
             <div class="col-3 text-center p-0 m-0 text-break position-relative">
                 <span class="copyword" id="fr<?= $vocabulaire['id'] ?>"><?= $vocabulaire['mot_fr'] ?></span>
+                <?php if ($isVocabFr) { ?>
                 <button class="btn btn-copy" data-target="fr<?= $vocabulaire['id'] ?>" aria-label="Copier">📋</button>
+                <?php } ?>
             </div>
                 <?php if (!isAdmin()) { ?>
                     <p class="col-2 text-center pe-1 m-0 text-break" id="note <?= $vocabulaire['id'] ?>">
