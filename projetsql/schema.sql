@@ -16,7 +16,7 @@ CREATE TABLE vocabulaire (
 -- ("pharisiens","pharisees","essai", "biblica key terms"),
 -- ("juifs","Jews","essai", "biblica key terms"),
 -- ("Flavius Josèphe","Flavius Josephus","essai", "biblica key terms"),
--- ("Gethsémané","Gethsemane","essai", "biblica key terms");
+-- ("Geths&eacute;man&eacute;","Gethsemane","essai", "biblica key terms");
 
 CREATE TABLE log_words (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -52,8 +52,8 @@ INSERT INTO glossNames (name_id, real_name) VALUES
 ("biblica key terms", "Biblica Key Terms"),
 ("glossaire unfoldingword", "Glossaire unfoldingWord"),
 ("nom propres", "Noms propres traduction ressources"),
-("repetitives uw","Phrases répétitives uW TNotes");
-("anglicismes","Anglicismes à ne pas faire");
+("repetitives uw","Phrases r&eacute;p&eacute;titives uW TNotes"),
+("anglicismes","Anglicismes &agrave; ne pas faire");
 
 
 LOAD DATA INFILE 'biblica_key_terms.csv' INTO TABLE vocabulaire FIELDS TERMINATED BY '\t' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\n' (mot_en, mot_fr, glossary);
@@ -65,6 +65,6 @@ LOAD DATA INFILE 'anglicismes.csv' INTO TABLE vocabulaire FIELDS TERMINATED BY '
 
 repetitives uw :
 INSERT INTO vocabulaire (mot_en,mot_fr,note,glossary) VALUES ("See:","Voir :","","repetitives uw");
-INSERT INTO vocabulaire (mot_en,mot_fr,note,glossary) VALUES ("Alternate translation:","Traduction alternative :","Toujours laisser au singulier, même lorsque plusieurs traductions alternatives sont proposées (car ces propositions sont exclusives).","repetitives uw");
-INSERT INTO vocabulaire (mot_en,mot_fr,note,glossary) VALUES ("If it would be helpful in your language, you could use an equivalent expression from your language or state the meaning plainly.","Si c’est utile dans votre langue, vous pouvez utiliser une expression équivalente dans votre langue, ou formuler la chose de façon explicite.","","repetitives uw");
-INSERT INTO vocabulaire (mot_en,mot_fr,note,glossary) VALUES ("If it would be helpful in your language, you could [...]", "Si c'est utile dans votre langue, vous pouvez", "C'est un début de phrase habituel dans les uW TNotes. Il y a plusieurs variantes possibles pour la suite de la phrase. En tout cas, ne pas conserver de formes conditionnelles « si c'était... vous pourriez... ».", "repetitives uw");
+INSERT INTO vocabulaire (mot_en,mot_fr,note,glossary) VALUES ("Alternate translation:","Traduction alternative :","Toujours laisser au singulier, m&ecirc;me lorsque plusieurs traductions alternatives sont propos&eacute;es (car ces propositions sont exclusives).","repetitives uw");
+INSERT INTO vocabulaire (mot_en,mot_fr,note,glossary) VALUES ("If it would be helpful in your language, you could use an equivalent expression from your language or state the meaning plainly.","Si c'est utile dans votre langue, vous pouvez utiliser une expression &eacute;quivalente dans votre langue, ou formuler la chose de fa&ccedil;on explicite.","","repetitives uw");
+INSERT INTO vocabulaire (mot_en,mot_fr,note,glossary) VALUES ("If it would be helpful in your language, you could [...]", "Si c'est utile dans votre langue, vous pouvez", "C'est un d&eacute;but de phrase habituel dans les uW TNotes. Il y a plusieurs variantes possibles pour la suite de la phrase. En tout cas, ne pas conserver de formes conditionnelles &laquo; si c'&eacute;tait... vous pourriez... &raquo;.", "repetitives uw");
