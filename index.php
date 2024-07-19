@@ -24,7 +24,7 @@ require 'modele.php';
         }
     }
     $_SESSION['username'] = getUsername($_SESSION['user_id']);
-    $nbPagesTotales = floor(count(getBaseDD()) / 25);
+    $nbPagesTotales = floor(count(getBaseDD()) / 40);
     if (isset($_GET['nbpage']) && $_GET['nbpage'] >= $nbPagesTotales) {
         $_GET['nbpage'] = $nbPagesTotales;
     }
@@ -105,7 +105,8 @@ require 'modele.php';
             <div class="row">
                 <div class="col">
                     <form action="log.php">
-                        <button type="submit" class="btn btn-outline-success">Suggestions (<?= count(getBaseDDLogWords()) ?>)</button>
+                        <button type="submit" class="btn btn-outline-success">Suggestions
+                            (<?= count(getBaseDDLogWords()) ?>)</button>
                     </form>
                 </div>
                 <div class="col-auto ml-auto">
@@ -155,14 +156,16 @@ require 'modele.php';
                 <form class="d-flex" method="post">
                     <input class="form-control me-1" id="en" type="text" class="text" value="<?= $_POST['en'] ?>"
                         name="mot_en" placeholder="mot en anglais" readonly />
-                    <input <?= $mode == "modification" ? 'autofocus' : '' ?> class="form-control me-1" id="fr" type="text" class="text" value="<?= $_POST['fr'] ?>"
-                        name="mot_fr" placeholder="mot en français" required pattern=".*\S+.*"/>
+                    <input <?= $mode == "modification" ? 'autofocus' : '' ?> class="form-control me-1" id="fr" type="text"
+                        class="text" value="<?= $_POST['fr'] ?>" name="mot_fr" placeholder="mot en français" required
+                        pattern=".*\S+.*" />
                     <input class="form-control me-1" id="inputnote" type="text" class="text"
                         value="<?= $_POST['inputnote'] ?>" name="note" placeholder="note" />
                     <input class="form-control me-1" type="hidden" name="id" value="<?= $_POST['id'] ?>"> </input>
                     <input type="hidden" name="rechercher" value="<?= $_POST['rechercher'] ?>"></input>
                     <input type="hidden" name="mode" value="modifier"></input>
-                    <input class="btn btn-outline-success" value="<?= isAdmin() ? 'modifier' : 'valider' ?>" type="submit"></input>
+                    <input class="btn btn-outline-success" value="<?= isAdmin() ? 'modifier' : 'valider' ?>"
+                        type="submit"></input>
                 </form>
             </div>
         </nav>
@@ -172,9 +175,9 @@ require 'modele.php';
             <div class="container justify-content-center">
                 <form class="d-flex" method="post">
                     <input class="form-control me-1" id="en" type="text" class="text" name="mot_en" maxlength="70"
-                        placeholder="mot anglais" />
+                        placeholder="anglais" />
                     <input class="form-control me-1" id="fr" type="text" class="text" name="mot_fr" maxlength="70"
-                        placeholder="mot français" />
+                        placeholder="français" />
                     <input class="form-control me-1" id="inputnote" type="text" class="text" name="note" maxlength="70"
                         placeholder="note" />
                     <input class="btn btn-outline-success" id="ajouter" name="mode" value="ajouter" type="submit"></input>
@@ -190,9 +193,9 @@ require 'modele.php';
     ?>
 
     <?php
-        if ($showPagination) {
-            include 'nav.php';
-        }
+    if ($showPagination) {
+        include 'nav.php';
+    }
     ?>
 
 
@@ -221,20 +224,21 @@ require 'modele.php';
                     <h6 class="text-center">Catégorie</h6>
                 </div> -->
                 <div class="col-3 p-0">
-                    <h6 class="text-center">Mots anglais</h6>
+                    <h6 class="text-center">Anglais</h6>
                 </div>
                 <div class="col-3 p-0">
-                    <h6 class="text-center">Mots français</h6>
+                    <h6 class="text-center">Français</h6>
                 </div>
                 <?php if (!isAdmin()) { ?>
 
                     <div class="col-2 pe-1">
-                        <h6 class="text-center">Notes</h6>
+                        <h6 class="text-center"><?= $_SESSION['gloss'] == 'anglicismes' ? "Mauvaise traduction" : "Notes" ?>
+                        </h6>
                     </div>
-                <?php }
-                if (isAdmin()) { ?>
+                <?php } else { ?>
                     <div class="col-2 pe-1">
-                        <h6 class="text-center">Notes</h6>
+                        <h6 class="text-center"><?= $_SESSION['gloss'] == 'anglicismes' ? "Mauvaise traduction" : "Notes" ?>
+                        </h6>
                     </div>
                     <div class="col-1 pe-1">
                         <h6 class="text-center">Effacer</h6>
@@ -254,18 +258,20 @@ require 'modele.php';
             $rowType = $rowType == "odd" ? "even" : "odd";
             ?>
             <div class="d-flex align-items-center p-1 row m-0 <?= $rowType ?>">
-            <div class="col-3 text-center p-0 m-0 text-break position-relative">
-                <span class="copyword" id="en<?= $vocabulaire['id'] ?>"><?= $vocabulaire['mot_en'] ?></span>
-                <?php if ($isVocabEn) { ?>
-                <button class="btn btn-copy" data-target="en<?= $vocabulaire['id'] ?>" aria-label="Copier">📋</button>
-                <?php } ?>
-            </div>
-            <div class="col-3 text-center p-0 m-0 text-break position-relative">
-                <span class="copyword" id="fr<?= $vocabulaire['id'] ?>"><?= $vocabulaire['mot_fr'] ?></span>
-                <?php if ($isVocabFr) { ?>
-                <button class="btn btn-copy" data-target="fr<?= $vocabulaire['id'] ?>" aria-label="Copier">📋</button>
-                <?php } ?>
-            </div>
+                <div class="col-3 d-flex align-items-center justify-content-center p-0 m-0 text-break position-relative">
+                    <span class="copyword" id="en<?= $vocabulaire['id'] ?>"><?= $vocabulaire['mot_en'] ?></span>
+                    <?php if ($isVocabEn) { ?>
+                        <button class="btn btn-copy ms-2" data-target="en<?= $vocabulaire['id'] ?>"
+                            aria-label="Copier">📋</button>
+                    <?php } ?>
+                </div>
+                <div class="col-3 d-flex align-items-center justify-content-center p-0 m-0 text-break position-relative">
+                    <span class="copyword" id="fr<?= $vocabulaire['id'] ?>"><?= $vocabulaire['mot_fr'] ?></span>
+                    <?php if ($isVocabFr) { ?>
+                        <button class="btn btn-copy ms-2" data-target="fr<?= $vocabulaire['id'] ?>"
+                            aria-label="Copier">📋</button>
+                    <?php } ?>
+                </div>
                 <?php if (!isAdmin()) { ?>
                     <p class="col-2 text-center pe-1 m-0 text-break" id="note <?= $vocabulaire['id'] ?>">
                         <?= $vocabulaire['note'] ?>
@@ -276,7 +282,6 @@ require 'modele.php';
                     </p>
                 <?php }
                 if (isAdmin()) { ?>
-
                     <form action="" method="post" class="col-1 pe-1 p-0 text-center deleteform">
                         <input type="hidden" name="id" value="<?= $vocabulaire['id'] ?>"></input>
                         <input type="hidden" name="mode" value="effacer"></input>
@@ -313,9 +318,9 @@ require 'modele.php';
     </header>
 
     <?php
-        if ($showPagination) {
-            include 'nav.php';
-        }
+    if ($showPagination) {
+        include 'nav.php';
+    }
     ?>
     <div id="customModal" class="modal">
         <div class="modal-content">
@@ -339,11 +344,11 @@ require 'modele.php';
         let collectionOfText = document.getElementsByClassName('copyword');
         let collectionOfTextBoxes = document.getElementsByClassName('align-items-center');
 
-        for (let i = 0; i < collectionOfTextBoxes.length; i++) {
-            collectionOfTextBoxes[i].addEventListener('selectstart', event => {
-                event.preventDefault();
-            });
-        }
+        // for (let i = 0; i < collectionOfTextBoxes.length; i++) {
+        //     collectionOfTextBoxes[i].addEventListener('selectstart', event => {
+        //         event.preventDefault();
+        //     });
+        // }
         for (let i = 0; i < collectionOfText.length; i++) {
             collectionOfText[i].addEventListener('click', (e) => {
                 let textToCopy = e.target.innerText;
@@ -390,40 +395,43 @@ require 'modele.php';
         }
 
         <?php
-            if ($_SESSION['username'] == 'irandrianjanaka') {
-        ?>
-        let sequenceR = ['r', 'i', 'c', 'k'];
-        let currentIndexR = 0;
+        if ($_SESSION['username'] == 'irandrianjanaka') {
+            ?>
+            let sequenceR = ['r', 'i', 'c', 'k'];
+            let currentIndexR = 0;
 
-        document.addEventListener('keydown', function(e) {
-            if (e.key.toLowerCase() === sequenceR[currentIndexR]) {
-                currentIndexR++;
-                if (currentIndexR === sequenceR.length) {
-                    window.open('https://shattereddisk.github.io/rickroll/rickroll.mp4', '_blank');
+            document.addEventListener('keydown', function (e) {
+                if (e.key.toLowerCase() === sequenceR[currentIndexR]) {
+                    currentIndexR++;
+                    if (currentIndexR === sequenceR.length) {
+                        window.open('https://shattereddisk.github.io/rickroll/rickroll.mp4', '_blank');
+                        currentIndexR = 0;
+                    }
+                } else {
                     currentIndexR = 0;
                 }
-            } else {
-                currentIndexR = 0;
-            }
-        });
+            });
 
-        let sequencePs = ['p', 's', 'a', 'u', 'm', 'e', '(', '&'];
-        let sequencePs2 = ['p', 's', 'a', 'u', 'm', 'e', '5', '1'];
-        let currentIndexPs = 0;
+            let sequences = [['p', 's', 'a', 'u', 'm', 'e', '(', '&'], ['p', 's', 'a', 'u', 'm', 'e', '5', '1']];
+            let currentIndex = [0, 0];
 
-        document.addEventListener('keydown', function(e) {
-            if (e.key.toLowerCase() === sequencePs[currentIndexPs] || e.key.toLowerCase() === sequencePs2[currentIndexPs]) {
-                currentIndexPs++;
-                if (currentIndexPs === sequencePs.length) {
-                    window.open('https://www.youtube.com/watch?v=IPIjSFzJbi4', '_blank');
-                    currentIndexPs = 0;
+            document.addEventListener('keydown', e => {
+                let key = e.key.toLowerCase();
+
+                for (let i = 0; i < sequences.length; i++) {
+                    if (key === sequences[i][currentIndex[i]]) {
+                        currentIndex[i]++;
+                        if (currentIndex[i] === sequences[i].length) {
+                            window.open('https://www.youtube.com/watch?v=IPIjSFzJbi4', '_blank');
+                            currentIndex[i] = 0;
+                        }
+                    } else {
+                        currentIndex[i] = 0;
+                    }
                 }
-            } else {
-                currentIndexPs = 0;
-            }
-        });
-        <?php
-            }
+            });
+            <?php
+        }
         ?>
     });
 
@@ -497,7 +505,7 @@ require 'modele.php';
         window.location.search = urlParams.toString();
     }
 
-    
+
 </script>
 
 </html>
