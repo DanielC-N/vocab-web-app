@@ -42,6 +42,7 @@ require 'modele.php';
     $rowType = 'odd';
     $doesExist = false;
     $showPagination = !isset($_POST['rechercher']) || $_POST['rechercher'] === '';
+    $suggestionsNumber = count(getBaseDDLogWords());
 
     if (!isset($mode) || $mode == "modification") {
         $resultats = getWordsByOffset($numeroPageCourante);
@@ -104,9 +105,11 @@ require 'modele.php';
         <div class="container">
             <div class="row">
                 <div class="col">
-                    <form action="log.php">
-                        <button type="submit" class="btn btn-outline-success">Suggestions
-                            (<?= count(getBaseDDLogWords()) ?>)</button>
+                    <form action="log.php" class="suggestions-btn">
+                        <button type="submit" class="btn btn-outline-success">Suggestions</button>
+                        <div id="suggestions-popup" class="suggestions-popup">
+                            <?= $suggestionsNumber ?>
+                        </div>
                     </form>
                 </div>
                 <div class="col-auto ml-auto">
@@ -360,6 +363,19 @@ require 'modele.php';
                     }, 1000); // Highlight duration: 1 second
                 });
             });
+        }
+
+        let suggestionCount = parseInt('<?= $suggestionsNumber ?>');
+
+        if (suggestionCount > 0) {
+            var popup = document.getElementById('suggestions-popup');
+            popup.classList.add('show', 'popup-slide');
+
+            setInterval(function() {
+                popup.classList.remove('popup-slide');
+                void popup.offsetWidth; // Trigger reflow
+                popup.classList.add('popup-slide');
+            }, 20000); // 20 seconds interval
         }
 
         let deleteForms = document.getElementsByClassName("deleteform");
